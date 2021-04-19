@@ -8,8 +8,16 @@
     "build": "webpack --mode development",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+    "repository": {
+    "type": "git",
+    "url": "git+https://github.com/omyasn/geek-gather.git"
+  },
   "author": "Myasnikova Olga <omyasn91@gmal.com>",
   "license": "ISC",
+    "bugs": {
+    "url": "https://github.com/omyasn/geek-gather/issues"
+  },
+  "homepage": "https://github.com/omyasn/geek-gather#readme",
   "devDependencies": {
     "@babel/cli": "^7.13.14",
     "@babel/core": "^7.13.15",
