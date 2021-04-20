@@ -6,8 +6,8 @@ module.exports = {
     target: 'node',
     externals: [nodeExternals()],
     output: {
-        path: path.resolve('dist'),
-        filename: 'index.js',
+        path: path.resolve('public'),
+        filename: 'server.js',
     },
 
     module: {
