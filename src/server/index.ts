@@ -1,4 +1,4 @@
-import express from 'express';
+import * as express from 'express';
 import severRenderMiddleware from './severRenderMiddleware';
 
 const PORT = process.env.PORT || 3000;

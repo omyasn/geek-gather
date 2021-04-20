@@ -1,15 +1,19 @@
 const path = require("path");
 
 module.exports = {
-    entry: "./src/index.js",
+    entry: "./src/index.tsx",
     mode: "development",
     module: {
         rules: [
             {
-                test: /\.(js|jsx)$/,
+                test: /\.(ts|js)x?$/,
                 exclude: /(node_modules)/,
                 loader: "babel-loader",
-                options: { presets: ["@babel/env"] }
+            },
+            {
+                test: /\.js$/,
+                use: ["source-map-loader"],
+                enforce: "pre"
             },
             {
                 test: /\.css$/,
@@ -17,7 +21,9 @@ module.exports = {
             }
         ],
     },
-    resolve: { extensions: ["*", ".js", ".jsx"] },
+    resolve: {
+        extensions: ["*", ".js", ".jsx", ".json", ".ts", ".tsx"]
+    },
     output: {
         path: path.resolve(__dirname, "public/"),
         publicPath: "/public/",
