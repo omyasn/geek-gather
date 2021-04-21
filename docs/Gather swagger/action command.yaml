@@ -1,0 +1,104 @@
+swagger: '2.0'
+info:
+  description: Api Documentation
+  version: '1.0'
+  title: Api Documentation
+  termsOfService: 'urn:tos'
+  contact: {}
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0'
+host: 'localhost:8090'
+basePath: /
+tags:
+  - name: action-controller
+    description: Action Controller
+paths:
+  /actions:
+    post:
+      tags:
+        - action-controller
+      summary: createAction
+      operationId: createActionUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - in: body
+          name: action
+          description: action
+          required: true
+          schema:
+            $ref: '#/definitions/ActionInfo'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResourceWithUrl«ActionInfo»'
+      deprecated: false
+  '/actions/{action-id}':
+    patch:
+      tags:
+        - action-controller
+      summary: updateAction
+      operationId: updateActionUsingPATCH
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - in: body
+          name: action
+          description: action
+          required: true
+          schema:
+            $ref: '#/definitions/ActionInfo'
+        - name: action-id
+          in: path
+          description: action-id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResourceWithUrl«ActionInfo»'
+      deprecated: false
+definitions:
+  ActionInfo:
+    type: object
+    properties:
+      active:
+        type: boolean
+        example: true
+      beginDate:
+        type: string
+        example: 2020-04-14T12-37-55 Europe/Moscow
+      capacity:
+        type: integer
+        format: int32
+      endDate:
+        type: string
+        example: 2020-04-15T12-30-01 Europe/Moscow
+      gameRules:
+        type: string
+      info:
+        type: string
+      locationId:
+        type: string
+      shortInfo:
+        type: string
+      title:
+        type: string
+    title: ActionInfo
+  ResourceWithUrl«ActionInfo»:
+    type: object
+    properties:
+      id:
+        type: string
+      resourceContent:
+        $ref: '#/definitions/ActionInfo'
+      url:
+        type: string
+    title: ResourceWithUrl«ActionInfo»

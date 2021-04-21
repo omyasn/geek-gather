@@ -1,13 +1,12 @@
 import * as express from 'express';
-import severRenderMiddleware from './severRenderMiddleware';
+import main from './routes/main';
 
-const PORT = process.env.PORT || 3000;
 const app = express();
 
+app.use(express.json());
 app.use(express.static('./public'));
 
-app.get('/', severRenderMiddleware);
+app.get('/', main);
+// app.get('/search', severRenderMiddleware);
 
-app.listen(PORT, () => {
-  console.log(`Server is listening on port ${PORT}`);
-});
+export default app;

@@ -1,0 +1,107 @@
+swagger: '2.0'
+info:
+  description: Api Documentation
+  version: '1.0'
+  title: Api Documentation
+  termsOfService: 'urn:tos'
+  contact: {}
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0'
+host: 'localhost:8094'
+basePath: /
+tags:
+  - name: search-controller
+    description: Search Controller
+paths:
+  /filter:
+    get:
+      tags:
+        - search-controller
+      summary: search
+      operationId: searchUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: search
+          in: query
+          description: 'Custom Query Language. Supported operations: equal(key:value), negate(key!value), greater and less (key>value / key<value), like and contains(key:\*word / key:word\* / key:\*word\*), in(key:value1,value2,value3)'
+          required: false
+          type: string
+          allowEmptyValue: false
+          x-example: 'capacity:100,200,300;beginDate>2020-01-01T10-00-00;'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/SearchActionEntity'
+      deprecated: false
+definitions:
+  SearchActionEntity:
+    type: object
+    properties:
+      active:
+        type: boolean
+      beginDate:
+        type: string
+        format: date-time
+      capacity:
+        type: integer
+        format: int32
+      endDate:
+        type: string
+        format: date-time
+      gameRules:
+        type: string
+      id:
+        type: string
+      info:
+        type: string
+      location:
+        $ref: '#/definitions/SearchLocationEntity'
+      locationBeginDate:
+        type: string
+        format: date-time
+      locationEndDate:
+        type: string
+        format: date-time
+      shortInfo:
+        type: string
+      title:
+        type: string
+    title: SearchActionEntity
+  SearchLocationEntity:
+    type: object
+    properties:
+      additionalInfo:
+        type: string
+      addressLine1:
+        type: string
+      addressLine2:
+        type: string
+      capacity:
+        type: integer
+        format: int32
+      city:
+        type: string
+      country:
+        type: string
+      id:
+        type: string
+      index:
+        type: string
+      info:
+        type: string
+      name:
+        type: string
+      paintballSize:
+        type: string
+      paintballType:
+        type: string
+      state:
+        type: string
+      timeZone:
+        type: string
+    title: SearchLocationEntity

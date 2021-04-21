@@ -1,0 +1,133 @@
+swagger: '2.0'
+info:
+  description: Api Documentation
+  version: '1.0'
+  title: Api Documentation
+  termsOfService: 'urn:tos'
+  contact: {}
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0'
+host: 'localhost:8093'
+basePath: /
+tags:
+  - name: location-view-controller
+    description: Location View Controller
+paths:
+  /locations:
+    get:
+      tags:
+        - location-view-controller
+      summary: search
+      operationId: searchUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: search
+          in: query
+          description: search
+          required: false
+          type: string
+          allowEmptyValue: false
+          x-example: 'city:Moscow;type:sport,forest'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ResourceWithUrl«LocationEntity»'
+      deprecated: false
+  '/locations/{id}':
+    get:
+      tags:
+        - location-view-controller
+      summary: getContent
+      operationId: getContentUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResourceWithUrl«LocationEntity»'
+      deprecated: false
+definitions:
+  LocationEntity:
+    type: object
+    discriminator: '@type'
+    properties:
+      additionalInfo:
+        type: string
+      addressLine1:
+        type: string
+      addressLine2:
+        type: string
+      capacity:
+        type: integer
+        format: int32
+      city:
+        type: string
+      country:
+        type: string
+      id:
+        type: string
+      index:
+        type: string
+      info:
+        type: string
+      name:
+        type: string
+      state:
+        type: string
+    title: LocationEntity
+  PaintballLocationEntity:
+    title: PaintballLocationEntity
+    allOf:
+      - $ref: '#/definitions/LocationEntity'
+      - type: object
+        properties:
+          additionalInfo:
+            type: string
+          addressLine1:
+            type: string
+          addressLine2:
+            type: string
+          capacity:
+            type: integer
+            format: int32
+          city:
+            type: string
+          country:
+            type: string
+          id:
+            type: string
+          index:
+            type: string
+          info:
+            type: string
+          name:
+            type: string
+          size:
+            type: string
+          state:
+            type: string
+          type:
+            type: string
+        title: PaintballLocationEntity
+  ResourceWithUrl«LocationEntity»:
+    type: object
+    properties:
+      id:
+        type: string
+      resourceContent:
+        $ref: '#/definitions/LocationEntity'
+      url:
+        type: string
+    title: ResourceWithUrl«LocationEntity»

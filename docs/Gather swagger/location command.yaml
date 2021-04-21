@@ -1,0 +1,162 @@
+swagger: '2.0'
+info:
+  description: Api Documentation
+  version: '1.0'
+  title: Api Documentation
+  termsOfService: 'urn:tos'
+  contact: {}
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0'
+host: 'localhost:8092'
+basePath: /
+tags:
+  - name: location-controller
+    description: Location Controller
+paths:
+  /locations:
+    post:
+      tags:
+        - location-controller
+      summary: createAction
+      operationId: createActionUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - in: body
+          name: location
+          description: |-
+            {
+              "additionalInfo": "string",
+              "addressLine1": "string",
+              "addressLine2": "string",
+              "capacity": 0,
+              "city": "string",
+              "country": "string",
+              "index": "string",
+              "info": "string",
+              "name": "string",
+              "state": "string",
+              "@ttype": "PaintballLocationInfo"
+            }
+          required: false
+          schema:
+            $ref: '#/definitions/LocationInfo'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResourceWithUrl«LocationInfo»'
+      deprecated: false
+  '/locations/{location-id}':
+    patch:
+      tags:
+        - location-controller
+      summary: updateAction
+      operationId: updateActionUsingPATCH
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - in: body
+          name: location
+          description: |-
+            {
+              "additionalInfo": "string",
+              "addressLine1": "string",
+              "addressLine2": "string",
+              "capacity": 0,
+              "city": "string",
+              "country": "string",
+              "index": "string",
+              "info": "string",
+              "name": "string",
+              "state": "string",
+              "@ttype": "PaintballLocationInfo"
+            }
+          required: false
+          schema:
+            $ref: '#/definitions/LocationInfo'
+        - name: location-id
+          in: path
+          description: location-id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResourceWithUrl«LocationInfo»'
+      deprecated: false
+definitions:
+  LocationInfo:
+    type: object
+    discriminator: '@ttype'
+    properties:
+      additionalInfo:
+        type: string
+      addressLine1:
+        type: string
+      addressLine2:
+        type: string
+      capacity:
+        type: integer
+        format: int32
+      city:
+        type: string
+      country:
+        type: string
+      index:
+        type: string
+      info:
+        type: string
+      name:
+        type: string
+      state:
+        type: string
+    title: LocationInfo
+  PaintballLocationInfo:
+    title: PaintballLocationInfo
+    allOf:
+      - $ref: '#/definitions/LocationInfo'
+      - type: object
+        properties:
+          additionalInfo:
+            type: string
+          addressLine1:
+            type: string
+          addressLine2:
+            type: string
+          capacity:
+            type: integer
+            format: int32
+          city:
+            type: string
+          country:
+            type: string
+          index:
+            type: string
+          info:
+            type: string
+          name:
+            type: string
+          size:
+            type: string
+          state:
+            type: string
+          type:
+            type: string
+        title: PaintballLocationInfo
+  ResourceWithUrl«LocationInfo»:
+    type: object
+    properties:
+      id:
+        type: string
+      resourceContent:
+        $ref: '#/definitions/LocationInfo'
+      url:
+        type: string
+    title: ResourceWithUrl«LocationInfo»

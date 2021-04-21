@@ -1,8 +1,17 @@
+export interface IHtmlPageParams {
+    title: string;
+    description: string;
+}
+
+interface IParams extends IHtmlPageParams {
+    rootString: string;
+}
+
 export default ({
     title,
     description,
     rootString,
-}) => {
+}: IParams):String => {
     return `
         <!DOCTYPE html>
         <html lang="ru">
@@ -16,7 +25,6 @@ export default ({
 
             <body>
                 <div id="root">${rootString}</div>
-                <h1>Greate new world!</h1>
                 <script src="./client.js"></script>
             </body>
         </html>

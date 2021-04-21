@@ -1,0 +1,98 @@
+swagger: '2.0'
+info:
+  description: Api Documentation
+  version: '1.0'
+  title: Api Documentation
+  termsOfService: 'urn:tos'
+  contact: {}
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0'
+host: 'localhost:8091'
+basePath: /
+tags:
+  - name: action-view-controller
+    description: Action View Controller
+paths:
+  /actions:
+    get:
+      tags:
+        - action-view-controller
+      summary: search
+      operationId: searchUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: search
+          in: query
+          description: 'Custom Query Language. Supported operations: equal(key:value), negate(key!value), greater and less (key>value / key<value), like(key:\*word / key:word\* / key:\*word\*), in(key:value1,value2,value3)'
+          required: false
+          type: string
+          allowEmptyValue: false
+          x-example: 'capacity:100,200,300;beginDate>2020-01-01T10-00-00;'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ResourceWithUrl«ActionEntity»'
+      deprecated: false
+  '/actions/{id}':
+    get:
+      tags:
+        - action-view-controller
+      summary: getContent
+      operationId: getContentUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResourceWithUrl«ActionEntity»'
+      deprecated: false
+definitions:
+  ActionEntity:
+    type: object
+    properties:
+      active:
+        type: boolean
+      beginDate:
+        type: string
+        format: date-time
+      capacity:
+        type: integer
+        format: int32
+      endDate:
+        type: string
+        format: date-time
+      gameRules:
+        type: string
+      id:
+        type: string
+      info:
+        type: string
+      locationId:
+        type: string
+      shortInfo:
+        type: string
+      title:
+        type: string
+    title: ActionEntity
+  ResourceWithUrl«ActionEntity»:
+    type: object
+    properties:
+      id:
+        type: string
+      resourceContent:
+        $ref: '#/definitions/ActionEntity'
+      url:
+        type: string
+    title: ResourceWithUrl«ActionEntity»
