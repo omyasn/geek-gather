@@ -1,6 +1,7 @@
 export interface IHtmlPageParams {
     title: string;
     description: string;
+    pageName: string;
 }
 
 interface IParams extends IHtmlPageParams {
@@ -11,6 +12,7 @@ export default ({
     title,
     description,
     rootString,
+    pageName,
 }: IParams):String => {
     return `
         <!DOCTYPE html>
@@ -25,7 +27,7 @@ export default ({
 
             <body>
                 <div id="root">${rootString}</div>
-                <script src="./client.js"></script>
+                <script src="./js/${pageName}.bundle.js"></script>
             </body>
         </html>
     `;

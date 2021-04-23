@@ -1,7 +1,9 @@
 const path = require("path");
 
 module.exports = {
-    entry: "./src/client/index.tsx",
+    entry: {
+        main: ['./src/client/pages/Main/index.ts'],
+    },
     mode: "development",
     module: {
         rules: [
@@ -22,11 +24,11 @@ module.exports = {
         ],
     },
     resolve: {
-        extensions: ["*", ".js", ".jsx", ".json", ".ts", ".tsx"]
+        extensions: [".js", ".jsx", ".json", ".ts", ".tsx"]
     },
     output: {
         path: path.resolve(__dirname, "public/"),
         publicPath: "/public/",
-        filename: "client.js"
+        filename: "js/[name].bundle.js"
     },
 };

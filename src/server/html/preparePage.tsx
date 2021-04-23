@@ -11,6 +11,7 @@ export default ({
         PageComponent,
         title,
         description,
+        pageName,
     }: IPageParams ):String => {
     const basePage = (
         <BasePage>
@@ -21,6 +22,7 @@ export default ({
     const fullHtml = getHtml({
         title,
         description,
+        pageName,
         rootString: reactHtml,
     });
 
