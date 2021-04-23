@@ -4,7 +4,7 @@ import BasePage from '../../client/BasePage';
 import getHtml, { IHtmlPageParams } from './getHtml';
 
 export interface IPageParams extends IHtmlPageParams {
-    PageComponent: React.ComponentType;
+    PageComponent: React.ComponentType<any>;
 }
 
 export default ({
@@ -12,6 +12,7 @@ export default ({
         title,
         description,
         pageName,
+        initialData,
     }: IPageParams ):String => {
     const basePage = (
         <BasePage>
@@ -23,6 +24,7 @@ export default ({
         title,
         description,
         pageName,
+        initialData,
         rootString: reactHtml,
     });
 

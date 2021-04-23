@@ -1,7 +1,10 @@
+import * as serializeJavascript from 'serialize-javascript';
+
 export interface IHtmlPageParams {
     title: string;
     description: string;
     pageName: string;
+    initialData: object;
 }
 
 interface IParams extends IHtmlPageParams {
@@ -13,7 +16,9 @@ export default ({
     description,
     rootString,
     pageName,
+    initialData,
 }: IParams):String => {
+
     return `
         <!DOCTYPE html>
         <html lang="ru">
@@ -29,6 +34,10 @@ export default ({
                 <div id="root">${rootString}</div>
                 <script src="./js/${pageName}.bundle.js"></script>
             </body>
+
+            <script>
+                __INITIAL_DATA__=${serializeJavascript(initialData)}
+            </script>
         </html>
     `;
 };
