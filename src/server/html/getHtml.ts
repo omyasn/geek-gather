@@ -32,12 +32,13 @@ export default ({
 
             <body>
                 <div id="root">${rootString}</div>
-                <script src="./js/${pageName}.bundle.js"></script>
             </body>
 
             <script>
-                __INITIAL_DATA__=${serializeJavascript(initialData)}
+                window.__INITIAL_DATA__=${serializeJavascript(initialData)};
             </script>
+
+            <script src="./js/${pageName}.bundle.js"></script>
         </html>
     `;
 };

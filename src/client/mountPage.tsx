@@ -11,7 +11,7 @@ export default ({
 }: Params) => {
     console.log('CLIENT!');
 
-    const initialData = window.__INITIAL_DATA__ || {};
+    const initialData = window.__INITIAL_DATA__;
 
     hydrate(
         <BasePage>

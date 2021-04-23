@@ -16,7 +16,9 @@ export default ({
     }: IPageParams ):String => {
     const basePage = (
         <BasePage>
-            <PageComponent />
+            <PageComponent
+                {...initialData}
+            />
         </BasePage>
     );
     const reactHtml = renderToString(basePage);

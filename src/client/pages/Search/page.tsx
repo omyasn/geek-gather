@@ -94,8 +94,6 @@ const SearchPage = ({
     filterMinPriceLimitsOptions,
     filterCapacityLimitsOptions
 }: IPageProps) => {
-    console.log(new Set(['АПГ']));
-
     const [ filterHostValues, setFilterHostValues ] = useState(new Set(['АПГ']));
     const onHostFilterClick = onOptionsFilterChange(filterHostValues, setFilterHostValues);
 
