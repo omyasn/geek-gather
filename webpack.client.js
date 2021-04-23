@@ -3,6 +3,7 @@ const path = require("path");
 module.exports = {
     entry: {
         main: ['./src/client/pages/Main/index.ts'],
+        search: ['./src/client/pages/Search/index.ts'],
     },
     mode: "development",
     module: {
