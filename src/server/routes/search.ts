@@ -2,7 +2,7 @@ import * as React from 'react';
 import { RequestHandler  } from 'express';
 import severRenderAndSend from '../severRenderAndSend';
 import { IPageParams } from '../html/preparePage';
-import { IBackendDataItem } from '../../client/commonTypes';
+import { IBackendHanana } from '../../common/commonTypes';
 import SearchPage, { IPageProps } from '../../client/pages/Search/page';
 import { listOfEvents } from '../../client/mockdata';
 
@@ -22,7 +22,7 @@ import { listOfEvents } from '../../client/mockdata';
 
 const getBackendData = (): IPageProps => {
     // здесь должен быть запрос на бекенд, сейчас мок
-    const backendData: IBackendDataItem[] = listOfEvents;
+    const backendData: IBackendHanana[] = listOfEvents;
     const allHananas = backendData.map(({id, resourceContent }) => ({
         id,
         ...resourceContent,

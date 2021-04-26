@@ -8,7 +8,7 @@ export interface IHananaProps {
 
 export type IHanana = { id: number } & IHananaProps;
 
-export interface IBackendDataItem {
+export interface IBackendHanana {
     id: number;
     resourceContent: IHananaProps;
 }

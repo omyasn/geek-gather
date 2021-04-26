@@ -4,7 +4,7 @@ import BasePage from '../../client/BasePage';
 import getHtml, { IHtmlPageParams } from './getHtml';
 
 export interface IPageParams extends IHtmlPageParams {
-    PageComponent: React.ComponentType<any>;
+    PageComponent: React.ComponentType<object>;
 }
 
 export default ({

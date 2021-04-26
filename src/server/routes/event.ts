@@ -5,7 +5,7 @@ import severRenderAndSend from '../severRenderAndSend';
 import { IPageParams } from '../html/preparePage';
 import EventPage, { IPageProps } from '../../client/pages/Event/page';
 import { mockDetailsOfEvent, mockLocationInfo } from '../../client/mockdata';
-import { IHananaDetails, ILocation } from '../../client/commonTypes';
+import { IHananaDetails, ILocation } from '../../common/commonTypes';
 
 interface IBackendDetails {
     id: number;

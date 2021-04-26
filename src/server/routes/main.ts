@@ -4,7 +4,7 @@ import severRenderAndSend from '../severRenderAndSend';
 import { IPageParams } from '../html/preparePage';
 import MainPage, { IPageProps } from '../../client/pages/Main/page';
 import { listOfEvents } from '../../client/mockdata';
-import { IBackendDataItem } from '../../client/commonTypes';
+import { IBackendHanana } from '../../common/commonTypes';
 
  const main: RequestHandler = (req, res, next) => {
     const initialData = getBackendData();
@@ -20,7 +20,7 @@ import { IBackendDataItem } from '../../client/commonTypes';
 };
 
 const getBackendData = ():IPageProps => {
-    const backendData: IBackendDataItem[] = listOfEvents;
+    const backendData: IBackendHanana[] = listOfEvents;
     const allHananas = backendData.map(({id, resourceContent }) => ({
         id,
         ...resourceContent,

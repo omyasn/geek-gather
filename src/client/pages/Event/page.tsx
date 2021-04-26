@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IHananaDetails, ILocation } from '../../commonTypes';
+import { IHananaDetails, ILocation } from '../../../common/commonTypes';
 
 export interface IPageProps {
     details: IHananaDetails;
