@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IHanana } from '../../commonTypes';
+import { IHanana } from '../../../common/commonTypes';
 
 export interface IPageProps {
     eventsList: IHanana[],

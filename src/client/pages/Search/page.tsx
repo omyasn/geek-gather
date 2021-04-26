@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState, ChangeEvent } from 'react';
 import FilterOptions from '../../components/FilterOptions/index';
 import FilterLimits, { IFilterLimitsOptions } from '../../components/FilterLimits/index';
-import { IHanana } from '../../commonTypes';
+import { IHanana } from '../../../common/commonTypes';
 
 interface IFiltersValues {
     optionFilters: {
