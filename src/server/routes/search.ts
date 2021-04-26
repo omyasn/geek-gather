@@ -2,7 +2,7 @@ import * as React from 'react';
 import { RequestHandler  } from 'express';
 import severRenderAndSend from '../severRenderAndSend';
 import { IPageParams } from '../html/preparePage';
-import { IBackendDataItem } from './commonTypes';
+import { IBackendDataItem } from '../../client/commonTypes';
 import SearchPage, { IPageProps } from '../../client/pages/Search/page';
 import { listOfEvents } from '../../client/mockdata';
 

@@ -14,15 +14,17 @@ const MainPage: React.FunctionComponent<IPageProps> = ({
         <h1>Выбери событие</h1>
         {eventsList.map(hanana => (
             <div key={hanana.id}>
-                <p>{hanana.title}</p>
-                <div>
-                    {'Дата: '}
-                    <span>{hanana.beginDate}</span>
-                </div>
-                <div>
-                    {'Участники: '}
-                    <span>{hanana.capacity}</span>
-                </div>
+                <a href={`/event/${hanana.id}`}>
+                    <p>{hanana.title}</p>
+                    <div>
+                        {'Дата: '}
+                        <span>{hanana.beginDate}</span>
+                    </div>
+                    <div>
+                        {'Участники: '}
+                        <span>{hanana.capacity}</span>
+                    </div>
+                </a>
             </div>
         ))}
     </div>

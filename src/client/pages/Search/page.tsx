@@ -78,13 +78,13 @@ const filterHananas = (hananas: IHanana[], filtersValues: IFiltersValues) => {
 };
 
 
-const SearchPage = ({
+const SearchPage: React.FunctionComponent<IPageProps> = ({
     hananas,
     filterHostOptions,
     filterBeginDateOptions,
     filterMinPriceLimitsOptions,
     filterCapacityLimitsOptions
-}: IPageProps) => {
+}) => {
     const [ filterHostValues, setFilterHostValues ] = useState(new Set(['АПГ']));
     const onHostFilterClick = onOptionsFilterChange(filterHostValues, setFilterHostValues);
 

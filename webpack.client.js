@@ -4,6 +4,7 @@ module.exports = {
     entry: {
         main: ['./src/client/pages/Main/index.ts'],
         search: ['./src/client/pages/Search/index.ts'],
+        event: ['./src/client/pages/Event/index.ts'],
     },
     mode: "development",
     module: {
