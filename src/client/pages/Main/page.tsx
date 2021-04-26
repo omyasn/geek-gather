@@ -1,8 +1,30 @@
 import * as React from 'react';
+import { IHanana } from '../../commonTypes';
 
-const MainPage = () => (
+export interface IPageProps {
+    eventsList: IHanana[],
+}
+
+const MainPage: React.FunctionComponent<IPageProps> = ({
+    eventsList,
+}) => (
     <div>
-        This is Main
+        <a href="/search">Поиск</a>
+        <br/>
+        <h1>Выбери событие</h1>
+        {eventsList.map(hanana => (
+            <div key={hanana.id}>
+                <p>{hanana.title}</p>
+                <div>
+                    {'Дата: '}
+                    <span>{hanana.beginDate}</span>
+                </div>
+                <div>
+                    {'Участники: '}
+                    <span>{hanana.capacity}</span>
+                </div>
+            </div>
+        ))}
     </div>
 );
 

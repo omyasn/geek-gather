@@ -2,13 +2,9 @@ import * as React from 'react';
 import { RequestHandler  } from 'express';
 import severRenderAndSend from '../severRenderAndSend';
 import { IPageParams } from '../html/preparePage';
-import SearchPage, { IHananaProps, IPageProps } from '../../client/pages/Search/page';
+import { IBackendDataItem } from './commonTypes';
+import SearchPage, { IPageProps } from '../../client/pages/Search/page';
 import { listOfEvents } from '../../client/mockdata';
-
-interface IBackendDataItem {
-    id: number;
-    resourceContent: IHananaProps;
-}
 
  const search: RequestHandler = (req, res, next) => {
     const initialData = getBackendData();

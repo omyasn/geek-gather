@@ -2,16 +2,7 @@ import * as React from 'react';
 import { useState, ChangeEvent } from 'react';
 import FilterOptions from '../../components/FilterOptions/index';
 import FilterLimits, { IFilterLimitsOptions } from '../../components/FilterLimits/index';
-
-export interface IHananaProps {
-    title: string;
-    beginDate: string;
-    capacity: number;
-    minPrice: number;
-    host: string;
-}
-
-type IHanana = { id: number } & IHananaProps;
+import { IHanana } from '../../commonTypes';
 
 interface IFiltersValues {
     optionFilters: {
