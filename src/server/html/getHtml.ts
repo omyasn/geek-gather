@@ -27,6 +27,9 @@ export default ({
                 <meta name="viewport" content="width=device-width, initial-scale=1">
 
                 <meta name="description" content="${description}">
+
+                <link rel="stylesheet" href="./css/${pageName}.css">
+
                 <title>${title}</title>
             </head>
 
@@ -39,6 +42,7 @@ export default ({
             </script>
 
             <script src="./js/${pageName}.bundle.js"></script>
+
         </html>
     `;
 };

@@ -11,3 +11,8 @@ interface ObjectConstructor {
 interface Window {
   __INITIAL_DATA__: string;
 }
+
+declare module '*.css' {
+    const content: Record<string, string>;
+    export default content;
+}

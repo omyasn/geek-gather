@@ -1,17 +1,18 @@
 import * as React from 'react';
 import { IHanana } from '../../../common/commonTypes';
+import styles from './styles.css';
 
 export interface IPageProps {
     eventsList: IHanana[],
 }
 
-const MainPage: React.FunctionComponent<IPageProps> = ({
+const MainPage: React.FC<IPageProps> = ({
     eventsList,
 }) => (
     <div>
         <a href="/search">Поиск</a>
         <br/>
-        <h1>Выбери событие</h1>
+        <h1 className={styles.main}>Выбери событие</h1>
         {eventsList.map(hanana => (
             <div key={hanana.id}>
                 <a href={`/event/${hanana.id}`}>

@@ -3,6 +3,7 @@ import { useState, ChangeEvent } from 'react';
 import FilterOptions from '../../components/FilterOptions/index';
 import FilterLimits, { IFilterLimitsOptions } from '../../components/FilterLimits/index';
 import { IHanana } from '../../../common/commonTypes';
+import styles from './styles.css';
 
 interface IFiltersValues {
     optionFilters: {
@@ -78,7 +79,7 @@ const filterHananas = (hananas: IHanana[], filtersValues: IFiltersValues) => {
 };
 
 
-const SearchPage: React.FunctionComponent<IPageProps> = ({
+const SearchPage: React.FC<IPageProps> = ({
     hananas,
     filterHostOptions,
     filterBeginDateOptions,
@@ -120,7 +121,7 @@ const SearchPage: React.FunctionComponent<IPageProps> = ({
 
     return (
         <div>
-            <div>It's search Page!</div>
+            <div className={styles.kek}>It's search Page!</div>
 
             <div>
                 <div>

@@ -7,12 +7,12 @@ export interface FilterOptionsProps<T> {
     onOptionChange: (currentItem: T) => (e: React.SyntheticEvent) => void;
 }
 
-const FilterOptions = ({
+const FilterOptions: React.FC<FilterOptionsProps<string>> = ({
     name,
     filterOptions = [],
     filterValues,
     onOptionChange,
-}: FilterOptionsProps<string>) => {
+}) => {
     return (
         <div>
             <p>{name}</p>

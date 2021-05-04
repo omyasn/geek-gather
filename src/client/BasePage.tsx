@@ -1,10 +1,12 @@
 import * as React from 'react';
 
 interface BasePageProps {
-    children: React.ReactNode
+    
 }
 
-const BasePage = ({ children }: BasePageProps) => (
+const BasePage: React.FC<React.PropsWithChildren<BasePageProps>> = ({
+    children
+}) => (
     <div>
         <header>Header</header>
             {children}

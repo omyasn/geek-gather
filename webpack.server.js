@@ -16,9 +16,19 @@ module.exports = {
                 test: /\.(ts|js)x?$/,
                 use: 'babel-loader',
             },
+            {
+                test: /\.css$/,
+                loader: "css-loader",
+                options: {
+                    modules: {
+                        exportOnlyLocals: true,
+                    },
+                },
+                
+            }
         ],
     },
     resolve: {
-        extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
+        extensions: ['.js', '.jsx', '.json', '.ts', '.tsx', '.css'],
     },
 };

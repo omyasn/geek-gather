@@ -6,7 +6,7 @@ export interface IPageProps {
     location: ILocation;
 }
 
-const EventPage: React.FunctionComponent<IPageProps> = ({
+const EventPage: React.FC<IPageProps> = ({
     details,
     location,
 }) => (

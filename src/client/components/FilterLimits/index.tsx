@@ -1,4 +1,5 @@
 import * as React from 'react';
+import styles from './styles.css';
 
 // TODO использовать константрые имена из enum в других типах
 // enum LimitsNames {
@@ -17,14 +18,14 @@ export interface FilterLimitsProps {
     onLimitsChange: (minOrMax: string) => (e: React.SyntheticEvent) => void;
 }
 
-const FilterLimits = ({
+const FilterLimits: React.FC<FilterLimitsProps> = ({
     name,
     filterLimits,
     onLimitsChange,
-}: FilterLimitsProps) => {
+}) => {
     return (
         <div>
-            <p>{name}</p>
+            <p className={styles.lol}>{name}</p>
             <label>
                 Min: 
                 <input

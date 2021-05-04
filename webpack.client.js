@@ -1,4 +1,5 @@
 const path = require("path");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
     entry: {
@@ -6,7 +7,11 @@ module.exports = {
         search: ['./src/client/pages/Search/index.ts'],
         event: ['./src/client/pages/Event/index.ts'],
     },
+    devtool: 'inline-source-map',
     mode: "development",
+    plugins: [ new MiniCssExtractPlugin({
+        filename: "css/[name].css"
+    }) ],
     module: {
         rules: [
             {
@@ -21,12 +26,19 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                use: ["style-loader", "css-loader"]
+                use: [{
+                    loader: MiniCssExtractPlugin.loader,
+                }, {
+                    loader: "css-loader",
+                    options: {
+                        modules: true,
+                    },
+                }],
             }
         ],
     },
     resolve: {
-        extensions: [".js", ".jsx", ".json", ".ts", ".tsx"]
+        extensions: [".js", ".jsx", ".json", ".ts", ".tsx", ".css"]
     },
     output: {
         path: path.resolve(__dirname, "public/"),
