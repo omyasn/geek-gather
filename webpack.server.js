@@ -1,13 +1,19 @@
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 
+const isProd = process.env.NODE_ENV === 'production';
+
 module.exports = {
+    mode: 'none',
     entry: './src/index.ts',
     target: 'node',
+    devtool: isProd ? undefined : 'inline-source-map',
     externals: [nodeExternals()],
     output: {
-        path: path.resolve('public'),
+        path: path.resolve(__dirname, 'public/'),
+        publicPath: '/',
         filename: 'server.js',
+        assetModuleFilename: 'images/[hash][ext][query]',
     },
 
     module: {
@@ -18,13 +24,17 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                loader: "css-loader",
+                loader: 'css-loader',
                 options: {
                     modules: {
                         exportOnlyLocals: true,
                     },
                 },
                 
+            },
+            {
+                test: /\.(png|svg|jpg|jpeg|gif)$/i,
+                type: 'asset',
             }
         ],
     },

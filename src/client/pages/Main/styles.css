@@ -2,3 +2,7 @@
     background-color: aquamarine;
     color: cornflowerblue;
 }
+
+.image {
+    background: url('./cat.jpg');
+}

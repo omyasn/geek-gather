@@ -21,7 +21,7 @@ const MainPage: React.FC<IPageProps> = ({
                         {'Дата: '}
                         <span>{hanana.beginDate}</span>
                     </div>
-                    <div>
+                    <div className={styles.image}>
                         {'Участники: '}
                         <span>{hanana.capacity}</span>
                     </div>

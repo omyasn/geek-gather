@@ -1,5 +1,7 @@
-const path = require("path");
+const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+const isProd = process.env.NODE_ENV === 'production';
 
 module.exports = {
     entry: {
@@ -7,42 +9,47 @@ module.exports = {
         search: ['./src/client/pages/Search/index.ts'],
         event: ['./src/client/pages/Event/index.ts'],
     },
-    devtool: 'inline-source-map',
-    mode: "development",
+    devtool: isProd ? undefined : 'source-map',
+    mode: isProd ? 'production' : 'development',
     plugins: [ new MiniCssExtractPlugin({
-        filename: "css/[name].css"
+        filename: 'css/[name].css'
     }) ],
     module: {
         rules: [
             {
                 test: /\.(ts|js)x?$/,
                 exclude: /(node_modules)/,
-                loader: "babel-loader",
+                loader: 'babel-loader',
             },
             {
                 test: /\.js$/,
-                use: ["source-map-loader"],
-                enforce: "pre"
+                use: ['source-map-loader'],
+                enforce: 'pre'
             },
             {
                 test: /\.css$/,
                 use: [{
                     loader: MiniCssExtractPlugin.loader,
                 }, {
-                    loader: "css-loader",
+                    loader: 'css-loader',
                     options: {
                         modules: true,
                     },
                 }],
+            },
+            {
+                test: /\.(png|svg|jpg|jpeg|gif)$/i,
+                type: 'asset',
             }
         ],
     },
     resolve: {
-        extensions: [".js", ".jsx", ".json", ".ts", ".tsx", ".css"]
+        extensions: ['.js', '.jsx', '.json', '.ts', '.tsx', '.css']
     },
     output: {
-        path: path.resolve(__dirname, "public/"),
-        publicPath: "/public/",
-        filename: "js/[name].bundle.js"
+        path: path.resolve(__dirname, 'public/'),
+        publicPath: '/',
+        filename: 'js/[name].bundle.js',
+        assetModuleFilename: 'images/[hash][ext][query]'
     },
 };
