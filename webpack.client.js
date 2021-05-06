@@ -1,5 +1,7 @@
 const path = require('path');
+const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 const isProd = process.env.NODE_ENV === 'production';
 
@@ -9,16 +11,32 @@ module.exports = {
         search: ['./src/client/pages/Search/index.ts'],
         event: ['./src/client/pages/Event/index.ts'],
     },
-    devtool: isProd ? undefined : 'source-map',
+    devtool: isProd ? 'source-map' : 'inline-source-map',
     mode: isProd ? 'production' : 'development',
-    plugins: [ new MiniCssExtractPlugin({
-        filename: 'css/[name].css'
-    }) ],
+    plugins: [ 
+        new MiniCssExtractPlugin({
+            filename: 'css/[name].css'
+        }),
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+        }),
+    ],
+    resolve: {
+        extensions: ['.js', '.jsx', '.json', '.ts', '.tsx', '.css']
+    },
+    output: {
+        path: path.resolve(__dirname, 'public/'),
+        publicPath: '/',
+        filename: 'js/[name].bundle.js',
+        assetModuleFilename: 'images/[hash][ext][query]'
+    },
+
     module: {
         rules: [
             {
                 test: /\.(ts|js)x?$/,
                 exclude: /(node_modules)/,
+                include: path.resolve(__dirname, 'src'),
                 loader: 'babel-loader',
             },
             {
@@ -28,28 +46,47 @@ module.exports = {
             },
             {
                 test: /\.css$/,
+                include: path.resolve(__dirname, 'src'),
                 use: [{
                     loader: MiniCssExtractPlugin.loader,
                 }, {
                     loader: 'css-loader',
                     options: {
                         modules: true,
+                        importLoaders: 1,
+                    },
+                }, {
+                    loader: 'postcss-loader',
+                    options: {
+                        postcssOptions: {
+                            plugins: [
+                                [
+                                    'postcss-preset-env', {
+                                        autoprefixer: { grid: true }
+                                    }
+                                ]
+                            ],
+                        },
                     },
                 }],
             },
             {
                 test: /\.(png|svg|jpg|jpeg|gif)$/i,
+                include: path.resolve(__dirname, 'src'),
                 type: 'asset',
             }
         ],
     },
-    resolve: {
-        extensions: ['.js', '.jsx', '.json', '.ts', '.tsx', '.css']
-    },
-    output: {
-        path: path.resolve(__dirname, 'public/'),
-        publicPath: '/',
-        filename: 'js/[name].bundle.js',
-        assetModuleFilename: 'images/[hash][ext][query]'
+    optimization: {
+        splitChunks: {
+            cacheGroups: {
+                vendor: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: 'vendors',
+                    chunks: 'all',
+                },
+            },
+        },
+        minimizer: [`...`, new CssMinimizerPlugin()],
     },
 };

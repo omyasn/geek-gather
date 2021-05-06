@@ -42,6 +42,7 @@ export default ({
             </script>
 
             <script src="./js/${pageName}.bundle.js"></script>
+            <script src="./js/vendors.bundle.js"></script>
 
         </html>
     `;

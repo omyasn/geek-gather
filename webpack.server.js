@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
 
 const isProd = process.env.NODE_ENV === 'production';
@@ -7,7 +8,6 @@ module.exports = {
     mode: 'none',
     entry: './src/index.ts',
     target: 'node',
-    devtool: isProd ? undefined : 'inline-source-map',
     externals: [nodeExternals()],
     output: {
         path: path.resolve(__dirname, 'public/'),
@@ -15,30 +15,52 @@ module.exports = {
         filename: 'server.js',
         assetModuleFilename: 'images/[hash][ext][query]',
     },
+    resolve: {
+        extensions: ['.js', '.jsx', '.json', '.ts', '.tsx', '.css'],
+    },
+    plugins: [ 
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+        }),
+    ],
 
     module: {
         rules: [
             {
                 test: /\.(ts|js)x?$/,
+                include: path.resolve(__dirname, 'src'),
                 use: 'babel-loader',
             },
             {
                 test: /\.css$/,
-                loader: 'css-loader',
-                options: {
-                    modules: {
-                        exportOnlyLocals: true,
+                include: path.resolve(__dirname, 'src'),
+                use: [{
+                    loader: 'css-loader',
+                    options: {
+                        modules: {
+                            exportOnlyLocals: true,
+                        },
                     },
-                },
-                
+                }, {
+                    loader: 'postcss-loader',
+                    options: {
+                        postcssOptions: {
+                            plugins: [
+                                [
+                                    'postcss-preset-env', {
+                                        autoprefixer: { grid: true }
+                                    }
+                                ]
+                            ],
+                        },
+                    },
+                }],
             },
             {
                 test: /\.(png|svg|jpg|jpeg|gif)$/i,
+                include: path.resolve(__dirname, 'src'),
                 type: 'asset',
             }
         ],
-    },
-    resolve: {
-        extensions: ['.js', '.jsx', '.json', '.ts', '.tsx', '.css'],
     },
 };
