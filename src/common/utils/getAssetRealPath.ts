@@ -6,7 +6,7 @@ type AssetsData = {
     }
 }
 
-export default (path: string): string => {
+export const getAssetRealPath = (assetsData: AssetsData) => (path: string): string => {
     const fullName = path.split('/').pop();
     const nameParts = fullName.split('.');
     const ext = nameParts.pop();
@@ -17,4 +17,6 @@ export default (path: string): string => {
     : `${name}.${ext}`;
 
     return asset;
-};
+}
+
+export default getAssetRealPath(assetsData);
