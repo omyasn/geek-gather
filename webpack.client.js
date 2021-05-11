@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const AssetsPlugin = require('assets-webpack-plugin');
 
 const isProd = process.env.NODE_ENV === 'production';
 
@@ -15,11 +16,9 @@ module.exports = {
     mode: isProd ? 'production' : 'development',
     plugins: [ 
         new MiniCssExtractPlugin({
-            filename: 'css/[name].css'
+            filename: isProd ? 'css/[name].[contenthash].css' : 'css/[name].css',
         }),
-        new webpack.DefinePlugin({
-            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-        }),
+        new AssetsPlugin(),
     ],
     resolve: {
         extensions: ['.js', '.jsx', '.json', '.ts', '.tsx', '.css']
@@ -27,8 +26,8 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, 'public/'),
         publicPath: '/',
-        filename: 'js/[name].bundle.js',
-        assetModuleFilename: 'images/[hash][ext][query]'
+        filename: isProd ? 'js/[name].bundle.[contenthash].js' : 'js/[name].bundle.js',
+        assetModuleFilename: 'images/[name].[hash][ext][query]'
     },
 
     module: {

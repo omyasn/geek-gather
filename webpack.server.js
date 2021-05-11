@@ -13,7 +13,7 @@ module.exports = {
         path: path.resolve(__dirname, 'public/'),
         publicPath: '/',
         filename: 'server.js',
-        assetModuleFilename: 'images/[hash][ext][query]',
+        assetModuleFilename: 'images/[name].[hash][ext][query]',
     },
     resolve: {
         extensions: ['.js', '.jsx', '.json', '.ts', '.tsx', '.css'],

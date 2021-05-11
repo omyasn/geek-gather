@@ -1,4 +1,5 @@
 import * as serializeJavascript from 'serialize-javascript';
+import getAssetRealPath from '../../common/utils/getAssetRealPath';
 
 export interface IHtmlPageParams {
     title: string;
@@ -28,7 +29,7 @@ export default ({
 
                 <meta name="description" content="${description}">
 
-                <link rel="stylesheet" href="./css/${pageName}.css">
+                <link rel="stylesheet" href="${getAssetRealPath(`css/${pageName}.css`)}">
 
                 <title>${title}</title>
             </head>
@@ -41,8 +42,8 @@ export default ({
                 window.__INITIAL_DATA__=${serializeJavascript(initialData)};
             </script>
 
-            <script src="./js/${pageName}.bundle.js"></script>
-            <script src="./js/vendors.bundle.js"></script>
+            <script src="${getAssetRealPath(`js/${pageName}.bundle.js`)}"></script>
+            <script src="${getAssetRealPath(`js/vendors.bundle.js`)}"></script>
 
         </html>
     `;

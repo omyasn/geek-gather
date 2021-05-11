@@ -34,6 +34,7 @@
     "@types/serialize-javascript": "^5.0.0",
     "@types/webpack": "^5.28.0",
     "@types/webpack-node-externals": "^2.5.1",
+    "assets-webpack-plugin": "^7.1.0",
     "babel-loader": "^8.2.2",
     "cross-env": "^7.0.3",
     "css-loader": "^5.2.3",
