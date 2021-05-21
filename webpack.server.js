@@ -39,6 +39,7 @@ module.exports = {
                     options: {
                         modules: {
                             exportOnlyLocals: true,
+                            localIdentName: '[local]__[hash:base64:10]',
                         },
                     },
                 }, {

@@ -11,6 +11,7 @@ module.exports = {
         main: ['./src/client/pages/Main/index.ts'],
         search: ['./src/client/pages/Search/index.ts'],
         event: ['./src/client/pages/Event/index.ts'],
+        about: ['./src/client/pages/About/index.ts'],
     },
     devtool: isProd ? 'source-map' : 'inline-source-map',
     mode: isProd ? 'production' : 'development',
@@ -51,7 +52,9 @@ module.exports = {
                 }, {
                     loader: 'css-loader',
                     options: {
-                        modules: true,
+                        modules: {
+                             localIdentName: '[local]__[hash:base64:10]',
+                        },
                         importLoaders: 1,
                     },
                 }, {

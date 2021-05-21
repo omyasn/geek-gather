@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { renderToString } from 'react-dom/server';
-import BasePage from '../../client/BasePage';
+import BasePage from '../../client/components/BasePage';
 import getHtml, { IHtmlPageParams } from './getHtml';
 
 export interface IPageParams extends IHtmlPageParams {

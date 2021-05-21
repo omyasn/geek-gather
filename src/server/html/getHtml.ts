@@ -34,7 +34,7 @@ export default ({
                 <title>${title}</title>
             </head>
 
-            <body>
+            <body style="margin: 0;">
                 <div id="root">${rootString}</div>
             </body>
 

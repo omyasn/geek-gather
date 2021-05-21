@@ -1,6 +1,6 @@
 import * as React from "react";
 import { hydrate } from "react-dom";
-import BasePage from './BasePage';
+import BasePage from './components/BasePage';
 
 interface Params {
     PageComponent: React.ComponentType<any>;

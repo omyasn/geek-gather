@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { RequestHandler  } from 'express';
 import severRenderAndSend from '../severRenderAndSend';
 import { IPageParams } from '../html/preparePage';
