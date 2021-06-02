@@ -17,3 +17,8 @@ declare module '*.css' {
     export default content;
 }
 
+declare module "*.png" {
+  const value: any;
+  export default value;
+}
+
