@@ -40,7 +40,6 @@ const defaultNavigation: NavItem[] = [{
         name: 'basics',
         icon: faBaseballBall,
         link: '/basics',
-        className: styles.hideOnSmall,
     }, {
         title: 'О нас',
         name: 'about',

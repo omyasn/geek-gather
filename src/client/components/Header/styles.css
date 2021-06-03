@@ -45,7 +45,7 @@
 }
 
 @media screen and (max-width: 660px) {
-    .hideOnSmall {
+    .hideOnSmall, .title {
         display: none;
     }
 
@@ -55,6 +55,7 @@
 
     .navIcon {
         margin-right: 0;
-        font-size: 24px;
+        font-size: 26px;
+        margin-right: 8px;
     }
 }
