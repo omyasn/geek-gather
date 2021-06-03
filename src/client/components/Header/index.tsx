@@ -15,36 +15,35 @@ interface NavItem {
     title: string;
     name: string;
     icon: IconDefinition;
-    link: string;
+    url: string;
     className?: string;
 };
 
 interface Props {
     className?: string;
     navItems: NavItem[];
-    
 }
 
 const defaultNavigation: NavItem[] = [{
         title: 'Поиск',
         name: 'search',
         icon: faSearch,
-        link: '/search',
+        url: '/search',
     }, {
         title: 'Календарь',
         name: 'calendar',
         icon: faCalendarDay,
-        link: '/calendar',
+        url: '/calendar',
     }, {
         title: 'Основы',
         name: 'basics',
         icon: faBaseballBall,
-        link: '/basics',
+        url: '/basics',
     }, {
         title: 'О нас',
         name: 'about',
         icon: faFingerprint,
-        link: '/about',
+        url: '/about',
         className: styles.hideOnSmall,
     }
 ];
@@ -63,7 +62,7 @@ const Header: React.FC<Props> = ({
                 <a
                     className={cn(styles.navItem, navItem.className)}
                     key={navItem.name}
-                    href={navItem.link}
+                    href={navItem.url}
                 >
                     <FontAwesomeIcon
                         className={styles.navIcon}
