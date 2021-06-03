@@ -11,12 +11,5 @@
 }
 
 .item {
-    color: #e6ebe1;
-    font-size: 16px;
-    text-decoration: none;
     margin-bottom: 8px;
-}
-
-.item:hover {
-    color: #6c2c24;
 }

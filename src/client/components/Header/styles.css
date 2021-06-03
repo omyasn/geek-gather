@@ -28,16 +28,11 @@
 .navItem {
     display: flex;
     margin-right: 16px;
-    color: #e6ebe1;
     text-transform: uppercase;
-    text-decoration: none;
     font-size: 18px;
     white-space: nowrap;
 }
 
-.navItem:hover {
-    color: #6c2c24;
-}
 
 .navIcon {
     margin-right: 4px;

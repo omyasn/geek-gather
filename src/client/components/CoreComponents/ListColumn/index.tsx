@@ -1,6 +1,7 @@
 import * as React from 'react';
 import cn from 'classnames';
 
+import Link from '../Link';
 import styles from './styles.css';
 
 interface Props {
@@ -21,13 +22,13 @@ const ListColumn: React.FC<Props> = ({ className, title, listItems }) => (
             <div className={styles.title}>{title}</div>
         }
         {listItems.map(listItem => (
-            <a
+            <Link
                 key={listItem.name}
-                href={listItem.url}
                 className={styles.item}
+                url={listItem.url}
             >
                 {listItem.title}
-            </a>
+            </Link>
         ))}
     </div>
 );

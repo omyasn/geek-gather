@@ -1,7 +1,7 @@
 import * as React from 'react';
 import cn from 'classnames';
 
-import ListColumn from './ListColumn';
+import ListColumn from '../CoreComponents/ListColumn';
 
 import styles from './styles.css';
 

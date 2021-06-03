@@ -8,6 +8,7 @@ import {
     faBaseballBall,
     faFingerprint,
 } from '@fortawesome/free-solid-svg-icons';
+import Link from '../CoreComponents/Link';
 import logo from './logo.png';
 import styles from './styles.css';
 
@@ -59,10 +60,10 @@ const Header: React.FC<Props> = ({
         </a>
         <nav className={styles.group}>
             {navItems.map(navItem => (
-                <a
+                <Link
                     className={cn(styles.navItem, navItem.className)}
                     key={navItem.name}
-                    href={navItem.url}
+                    url={navItem.url}
                 >
                     <FontAwesomeIcon
                         className={styles.navIcon}
@@ -71,7 +72,7 @@ const Header: React.FC<Props> = ({
                     <span className={styles.navTitle}>
                         {navItem.title}
                     </span>
-                </a>
+                </Link>
             ))}
         </nav>
     </header>
