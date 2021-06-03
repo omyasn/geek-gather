@@ -26,14 +26,35 @@
 }
 
 .navItem {
-    display: block;
-    margin-right: 12px;
+    display: flex;
+    margin-right: 16px;
     color: #e6ebe1;
     text-transform: uppercase;
     text-decoration: none;
     font-size: 18px;
+    white-space: nowrap;
 }
 
 .navItem:hover {
     color: #6c2c24;
+}
+
+.navIcon {
+    margin-right: 4px;
+    font-size: 18px;
+}
+
+@media screen and (max-width: 660px) {
+    .hideOnSmall {
+        display: none;
+    }
+
+    .navTitle {
+        display: none;
+    }
+
+    .navIcon {
+        margin-right: 0;
+        font-size: 24px;
+    }
 }

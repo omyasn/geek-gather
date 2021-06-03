@@ -1,5 +1,5 @@
-import * as React from "react";
-import { hydrate } from "react-dom";
+import * as React from 'react';
+import { hydrate } from 'react-dom';
 import BasePage from './components/BasePage';
 
 interface Params {

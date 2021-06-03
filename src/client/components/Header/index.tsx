@@ -1,15 +1,22 @@
 import * as React from 'react';
 import cn from 'classnames';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+    IconDefinition,
+    faSearch,
+    faCalendarDay,
+    faBaseballBall,
+    faFingerprint,
+} from '@fortawesome/free-solid-svg-icons';
 import logo from './logo.png';
-
 import styles from './styles.css';
 
 interface NavItem {
     title: string;
     name: string;
-    icon: string;
+    icon: IconDefinition;
     link: string;
+    className?: string;
 };
 
 interface Props {
@@ -21,23 +28,25 @@ interface Props {
 const defaultNavigation: NavItem[] = [{
         title: 'Поиск',
         name: 'search',
-        icon: '',
+        icon: faSearch,
         link: '/search',
     }, {
         title: 'Календарь',
         name: 'calendar',
-        icon: '',
+        icon: faCalendarDay,
         link: '/calendar',
     }, {
         title: 'Основы',
         name: 'basics',
-        icon: '',
+        icon: faBaseballBall,
         link: '/basics',
+        className: styles.hideOnSmall,
     }, {
         title: 'О нас',
         name: 'about',
-        icon: '',
+        icon: faFingerprint,
         link: '/about',
+        className: styles.hideOnSmall,
     }
 ];
 
@@ -53,14 +62,17 @@ const Header: React.FC<Props> = ({
         <nav className={styles.group}>
             {navItems.map(navItem => (
                 <a
-                    className={styles.navItem}
+                    className={cn(styles.navItem, navItem.className)}
                     key={navItem.name}
                     href={navItem.link}
                 >
-                    {
-                    //icon use font awesome
-                    }
-                    {navItem.title}
+                    <FontAwesomeIcon
+                        className={styles.navIcon}
+                        icon={navItem.icon}
+                    />
+                    <span className={styles.navTitle}>
+                        {navItem.title}
+                    </span>
                 </a>
             ))}
         </nav>
