@@ -1,8 +1,22 @@
 .footer {
+    padding: 28px 30px;
+    background-color: #64960a;
+    font-family:  Arial, sans-serif;
+}
+
+.nav {
     display: flex;
     justify-content: space-between;
-    padding: 28px 30px;
-    background: rgb(2,0,36);
-    background: linear-gradient(0deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 67%);
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    padding: 0 20px;
+}
+
+.navItem {
+    font-size: 14px;
+    margin: 0 10px;
+}
+
+@media screen and (max-width: 660px) {
+    .nav {
+        padding: 0;
+    }
 }

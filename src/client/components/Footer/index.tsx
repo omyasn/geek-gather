@@ -2,6 +2,7 @@ import * as React from 'react';
 import cn from 'classnames';
 
 import ListColumn from '../CoreComponents/ListColumn';
+import Link from '../CoreComponents/Link';
 
 import styles from './styles.css';
 
@@ -30,12 +31,17 @@ const listItems = [{
 
 const Footer: React.FC<Props> = ({ className }) => (
     <footer className={cn(styles.footer, className)}>
-        <div>
-            Subscribe
-        </div>
-        <div>
-            <ListColumn title="Сайт" listItems={listItems} />
-            <div> Contacts </div>
+        {/* <ListColumn title="Сайт" listItems={listItems} /> */}
+        <div className={styles.nav}>
+            {listItems.map(listItem => (
+                <Link 
+                    key={listItem.name}
+                    url={listItem.url}
+                    className={styles.navItem}
+                >
+                    {listItem.title}
+                </Link>
+            ))}
         </div>
     </footer>
 );
