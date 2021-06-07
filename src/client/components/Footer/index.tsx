@@ -1,7 +1,6 @@
 import * as React from 'react';
 import cn from 'classnames';
 
-import ListColumn from '../CoreComponents/ListColumn';
 import Link from '../CoreComponents/Link';
 
 import styles from './styles.css';
@@ -31,7 +30,6 @@ const listItems = [{
 
 const Footer: React.FC<Props> = ({ className }) => (
     <footer className={cn(styles.footer, className)}>
-        {/* <ListColumn title="Сайт" listItems={listItems} /> */}
         <div className={styles.nav}>
             {listItems.map(listItem => (
                 <Link 
@@ -43,6 +41,7 @@ const Footer: React.FC<Props> = ({ className }) => (
                 </Link>
             ))}
         </div>
+        <div className={styles.copy}>&#169; Все права защищены</div>
     </footer>
 );
 
