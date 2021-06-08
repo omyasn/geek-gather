@@ -1,0 +1,53 @@
+.text {
+    font-family: 'Nunito', sans-serif;
+    margin-bottom: 4px;
+}
+
+.block {
+    display: block;
+}
+
+.xs {
+    font-size: 12px;
+}
+
+.s {
+    font-size: 14px;
+}
+
+.m {
+    font-size: 16px;
+}
+
+.l {
+    font-size: 20px;
+}
+
+.xl {
+    font-size: 24px;
+}
+
+.header {
+    font-family: 'Cuprum', sans-serif;
+    margin-bottom: 6px;
+
+    &.xs {
+        font-size: 24px;
+    }
+
+    &.s {
+        font-size: 34px;
+    }
+
+    &.m {
+        font-size: 48px;
+    }
+
+    &.l {
+        font-size: 60px;
+    }
+
+    &.xl {
+        font-size: 96px;
+    }
+}

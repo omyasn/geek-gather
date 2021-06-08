@@ -4,8 +4,8 @@ import cn from 'classnames';
 import styles from './styles.css';
 
 interface Props {
-    className?: string;
     url: string;
+    className?: string;
 }
 
 const Link: React.FC<Props> = ({ className, url, children,...rest }) => (

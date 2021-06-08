@@ -32,6 +32,9 @@ export default ({
                 <link rel="stylesheet" href="${getAssetRealPath(`css/${pageName}.css`)}">
 
                 <title>${title}</title>
+
+                <link rel="preconnect" href="https://fonts.gstatic.com">
+                <link href="https://fonts.googleapis.com/css2?family=Cuprum:wght@500&family=Nunito&display=swap" rel="stylesheet">
             </head>
 
             <body style="margin: 0;">

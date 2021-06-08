@@ -32,7 +32,7 @@ module.exports = {
                 use: 'babel-loader',
             },
             {
-                test: /\.css$/,
+                test: /\.(scss|css)$/,
                 include: path.resolve(__dirname, 'src'),
                 use: [{
                     loader: 'css-loader',
@@ -55,6 +55,8 @@ module.exports = {
                             ],
                         },
                     },
+                }, {
+                    loader: 'sass-loader',
                 }],
             },
             {
