@@ -1,3 +1,5 @@
+@import '../../theme.scss';
+
 .list {
     display: flex;
     flex-direction: column;
@@ -6,7 +8,7 @@
 .title {
     text-transform: uppercase;
     font-size: 20px;
-    color: #89cff0;
+    color: $text-accent;
     margin-bottom: 12px;
 }
 

@@ -22,7 +22,7 @@ interface NavItem {
 
 interface Props {
     className?: string;
-    navItems: NavItem[];
+    navItems?: NavItem[];
 }
 
 const defaultNavigation: NavItem[] = [{

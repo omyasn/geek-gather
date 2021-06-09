@@ -1,6 +1,8 @@
+@import '../../theme.scss';
+
 .footer {
     padding: 28px 30px;
-    background-color: #64960a;
+    background-color: $main-green;
     font-family:  Arial, sans-serif;
 }
 
@@ -17,7 +19,7 @@
 
 .copy {
     margin: 20px 0 0 10px;
-    color: #e6ebe1;
+    color: $text-light;
     font-size: 14px;
 }
 

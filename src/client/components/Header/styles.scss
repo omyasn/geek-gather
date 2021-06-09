@@ -1,10 +1,12 @@
+@import '../../theme.scss';
+
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 6px 10px;
-    background-color: #64960a;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    background-color: $main-green;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; 
 }
 
 .group {
@@ -21,7 +23,7 @@
 
 .title {
     display: inline-block;
-    color: #e6ebe1;
+    color: $text-light;
     font-size: 36px;
 }
 

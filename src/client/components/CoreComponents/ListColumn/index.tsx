@@ -2,7 +2,7 @@ import * as React from 'react';
 import cn from 'classnames';
 
 import Link from '../Link';
-import styles from './styles.css';
+import styles from './styles.scss';
 
 interface Props {
     className?: string;
@@ -25,7 +25,7 @@ const ListColumn: React.FC<Props> = ({ className, title, listItems }) => (
             <Link
                 key={listItem.name}
                 className={styles.item}
-                url={listItem.url}
+                href={listItem.url}
             >
                 {listItem.title}
             </Link>

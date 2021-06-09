@@ -2,7 +2,7 @@ import * as React from 'react';
 import Header from '../Header';
 import Footer from '../Footer';
 
-import styles from './styles.css';
+import styles from './styles.scss';
 
 interface BasePageProps {
     
