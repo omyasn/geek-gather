@@ -3,7 +3,7 @@ import cn from 'classnames';
 
 import Link from '../CoreComponents/Link';
 
-import styles from './styles.css';
+import styles from './styles.scss';
 
 interface Props {
     className?: string;

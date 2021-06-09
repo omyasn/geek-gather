@@ -1,5 +1,5 @@
 import * as serializeJavascript from 'serialize-javascript';
-import getAssetRealPath from '../../common/utils/getAssetRealPath';
+import getAssetRealPath from '../utils/getAssetRealPath';
 
 export interface IHtmlPageParams {
     title: string;

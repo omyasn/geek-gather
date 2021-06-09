@@ -4,10 +4,10 @@
   "description": "",
   "main": "public/server.js",
   "scripts": {
-    "clean": "rm -rf public",
-    "dev:build": "npm run clean && cross-env NODE_ENV=development webpack -w --stats-children",
+    "clean": "rm -rf public && rm webpack-assets.json",
+    "dev:build": "cross-env NODE_ENV=development webpack -w --stats-children",
     "dev:start": "nodemon ./public/server.js",
-    "dev": "npm-run-all --parallel dev:start dev:build",
+    "dev": "npm run clean && npm-run-all --parallel dev:start dev:build",
     "build": "cross-env NODE_ENV=production webpack",
     "start": "npm run clean && npm run build && node ./public/server.js",
     "test": "jest"

@@ -4,8 +4,8 @@ import ThumbnailCard from '../../components/CoreComponents/ThumbnailCard';
 import Text from '../../components/CoreComponents/Text';
 import TopImage from '../../components/TopImage';
 
-import Dinn from './images/IMG_8643.jpg';
-import Olga from './images/IMG_8658.jpg';
+import Dinn from './images/dinn.jpg';
+import Olga from './images/olga.jpg';
 import bg from './images/leaves.jpg';
 
 import styles from './styles.scss';
