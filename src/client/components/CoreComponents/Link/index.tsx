@@ -1,21 +1,22 @@
 import * as React from 'react';
 import cn from 'classnames';
 
-import styles from './styles.css';
+import Text from '../Text';
+import styles from './styles.scss';
 
-interface Props {
-    url: string;
+interface Props extends React.HTMLProps<HTMLAnchorElement> {
+    href: string;
     className?: string;
 }
 
-const Link: React.FC<Props> = ({ className, url, children,...rest }) => (
-    <a
-        href={url}
+const Link: React.FC<Props> = ({ className, children,...rest }) => (
+    <Text
+        tag='a'
         className={cn(styles.link, className)}
         {...rest}
     >
         {children}
-    </a>
+    </Text>
 );
 
 export default Link;

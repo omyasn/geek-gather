@@ -18,21 +18,30 @@ const AboutPage: React.FC = ({
             image={bg}
             title='О нас'
             subTitle='Кто мы и какая наша история, а также контакты'
+            className={styles.topImage}
         />
 
-        <ThumbnailCard
-            image={Dinn}
-            title='Dinn Diallo'
-        >
-            All about Dinn
-        </ThumbnailCard>
+        <div className={styles.cards}>
+            <ThumbnailCard
+                image={Dinn}
+                title='Dinn Diallo'
+                className={styles.card}
+            >
+                All about Dinn
+            </ThumbnailCard>
 
-        <ThumbnailCard
-            image={Olga}
-            title='Olga Myasnikova'
-        >
-            All about Olga
-        </ThumbnailCard>
+            <ThumbnailCard
+                image={Olga}
+                title='Olga Myasnikova'
+                className={styles.card}
+            >
+                All about Olga
+            </ThumbnailCard>
+        </div>
+
+        <Text block className={styles.story}>
+            Наша история <p>создания</p> сайта &#176;
+        </Text>
     </div>
 );
 

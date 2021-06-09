@@ -34,7 +34,7 @@ const Footer: React.FC<Props> = ({ className }) => (
             {listItems.map(listItem => (
                 <Link 
                     key={listItem.name}
-                    url={listItem.url}
+                    href={listItem.url}
                     className={styles.navItem}
                 >
                     {listItem.title}

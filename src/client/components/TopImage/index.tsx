@@ -22,9 +22,9 @@ const TopImage: React.FC<Props> = ({
     <div className={cn(styles.wrapper, className)} {...rest}>
         <img src={image} className={styles.image} />
         <div className={styles.content}>
-            <Text header block size='xl'>{title}</Text>
+            <Text header block textSize='xl'>{title}</Text>
             {!subTitle ? '' : 
-                <Text block size='xl'>{subTitle}</Text>
+                <Text block textSize='xl'>{subTitle}</Text>
             }
         </div>
     </div>

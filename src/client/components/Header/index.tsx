@@ -10,7 +10,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import Link from '../CoreComponents/Link';
 import logo from './logo.png';
-import styles from './styles.css';
+import styles from './styles.scss';
 
 interface NavItem {
     title: string;
@@ -63,7 +63,7 @@ const Header: React.FC<Props> = ({
                 <Link
                     className={cn(styles.navItem, navItem.className)}
                     key={navItem.name}
-                    url={navItem.url}
+                    href={navItem.url}
                 >
                     <FontAwesomeIcon
                         className={styles.navIcon}
