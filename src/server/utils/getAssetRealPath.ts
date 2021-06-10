@@ -1,6 +1,4 @@
 import * as fs from 'fs';
-//import path from 'path';
-//import * as assetsData from '../../../webpack-assets.json';
 
 type AssetsData = {
     [key: string]: {
@@ -8,16 +6,21 @@ type AssetsData = {
     }
 }
 
-export const getAssetRealPath = (path: string): string => {
+const getAssets = ():AssetsData => {
+    return JSON.parse(fs.readFileSync(
+		'webpack-assets.json',
+		'utf-8',
+	));
+}
+
+export const getAssetRealPath = (getAssets: () => AssetsData) =>
+(path: string): string => {
     const fullName = path.split('/').pop();
     const nameParts = fullName.split('.');
     const ext = nameParts.pop();
     const name = nameParts[0];
 
-    const assetsData = JSON.parse(fs.readFileSync(
-		'webpack-assets.json',
-		'utf-8',
-	));
+    const assetsData = getAssets();
 
     const asset = (assetsData as AssetsData)[name]
     ? (assetsData as AssetsData)[name][ext]
@@ -30,4 +33,4 @@ export const getAssetRealPath = (path: string): string => {
     return `${name}.${ext}`;
 }
 
-export default getAssetRealPath;
+export default getAssetRealPath(getAssets);
