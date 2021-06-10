@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { RequestHandler  } from 'express';
 import severRenderAndSend from '../severRenderAndSend';
 import { IPageParams } from '../html/preparePage';
@@ -6,7 +5,51 @@ import { IBackendHanana } from '../../common/commonTypes';
 import SearchPage, { IPageProps } from '../../client/pages/Search/page';
 import { listOfEvents } from '../../client/mockdata';
 
- const search: RequestHandler = (req, res, next) => {
+
+const getBackendData = (): IPageProps => {
+    // здесь должен быть запрос на бекенд, сейчас мок
+    const backendData: IBackendHanana[] = listOfEvents;
+    const allHananas = backendData.map(({id, resourceContent }) => ({
+        id,
+        ...resourceContent,
+    }));
+
+    let filterHostOptions = new Set<string>();
+    let filterBeginDateOptions = new Set<string>();
+    let filterMinPriceLimitsOptions = [ Infinity, 0 ];
+    let filterCapacityLimitsOptions = [ Infinity, 0 ];
+
+    allHananas.forEach(hanana => {
+        filterHostOptions.add(hanana.host);
+        filterBeginDateOptions.add(hanana.beginDate);
+
+        filterMinPriceLimitsOptions = setMinMax(filterMinPriceLimitsOptions, hanana.minPrice);
+        filterCapacityLimitsOptions = setMinMax(filterCapacityLimitsOptions, hanana.capacity);
+    });
+
+
+    return {
+        hananas: allHananas,
+        filterHostOptions: Array.from(filterHostOptions).sort(),
+        filterBeginDateOptions: Array.from(filterBeginDateOptions).sort(),
+        filterMinPriceLimitsOptions,
+        filterCapacityLimitsOptions,
+    };
+}
+
+const setMinMax = (arr: number[], el: number): number[] => {
+        if (el < arr[0]) {
+            arr[0] = el;
+        }
+
+        if (el > arr[1]) {
+            arr[1] = el;
+        }
+
+        return arr;
+}
+
+const search: RequestHandler = (req, res, next) => {
     const initialData = getBackendData();
 
     const pageParams: IPageParams = {
@@ -18,38 +61,6 @@ import { listOfEvents } from '../../client/mockdata';
     };
 
     return severRenderAndSend(req, res, next, pageParams);
-}
-
-const getBackendData = (): IPageProps => {
-    // здесь должен быть запрос на бекенд, сейчас мок
-    const backendData: IBackendHanana[] = listOfEvents;
-    const allHananas = backendData.map(({id, resourceContent }) => ({
-        id,
-        ...resourceContent,
-    }));
-
-    // определяем возможные значения в фильтрах
-    const filterHost = new Set(allHananas.map(hanana => hanana.host));
-    const filterHostOptions = Array.from(filterHost).sort();
-
-    const filterBeginDate = new Set(allHananas.map(hanana => hanana.beginDate));
-    const filterBeginDateOptions = Array.from(filterBeginDate).sort();
-
-    const filterMinPrice = allHananas.map(hanana => hanana.minPrice);
-    const filterMinPriceLimitsOptions = [Math.min(...filterMinPrice), Math.max(...filterMinPrice)];
-
-    const filterCapacity = allHananas.map(hanana => hanana.capacity);
-    const filterCapacityLimitsOptions = [Math.min(...filterCapacity), Math.max(...filterCapacity)];
-
-
-
-    return {
-        hananas: allHananas,
-        filterHostOptions,
-        filterBeginDateOptions,
-        filterMinPriceLimitsOptions,
-        filterCapacityLimitsOptions,
-    };
 }
 
 export default search;

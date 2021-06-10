@@ -3,7 +3,7 @@ import { useState, ChangeEvent } from 'react';
 import FilterOptions from '../../components/FilterOptions/index';
 import FilterLimits, { IFilterLimitsOptions } from '../../components/FilterLimits/index';
 import { IHanana } from '../../../common/commonTypes';
-import styles from './styles.css';
+import styles from './styles.scss';
 
 interface IFiltersValues {
     optionFilters: {
@@ -27,8 +27,8 @@ export interface IPageProps {
 
 const onOptionsFilterChange = (filterValues: Set<string>, setFilterValue: (newVal: Set<string>) => void) => 
     (value: string) =>
-    (e: ChangeEvent<HTMLInputElement>): void => {
-        const isChecked = e.target.checked;
+    ({ target }: ChangeEvent<HTMLInputElement>): void => {
+        const isChecked = target.checked;
 
         const newFilterValues = new Set(filterValues);
         if (isChecked) {
@@ -49,7 +49,7 @@ const onLimitsFilterChange = (filterLimits: IFilterLimitsOptions, setFilterLimit
 });
 
 
-
+// из всех событий получаем события подходящие под фильтры
 const filterHananas = (hananas: IHanana[], filtersValues: IFiltersValues) => {
     const optionsNames = Object.keys(filtersValues.optionFilters);
     const limitsNames = Object.keys(filtersValues.limitsFilters);
