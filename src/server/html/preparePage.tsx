@@ -5,6 +5,7 @@ import getHtml, { IHtmlPageParams } from './getHtml';
 
 export interface IPageParams extends IHtmlPageParams {
     PageComponent: React.ComponentType<object>;
+    store?: any; // TODO
 }
 
 export default ({
@@ -13,9 +14,12 @@ export default ({
         description,
         pageName,
         initialData,
+        store,
     }: IPageParams ):String => {
     const basePage = (
-        <BasePage>
+        <BasePage 
+            store={store}
+        >
             <PageComponent
                 {...initialData}
             />

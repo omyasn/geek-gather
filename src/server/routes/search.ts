@@ -2,7 +2,10 @@ import { RequestHandler  } from 'express';
 import severRenderAndSend from '../severRenderAndSend';
 import { IPageParams } from '../html/preparePage';
 import { IBackendHanana } from '../../common/commonTypes';
+
+// TODO перенести файлы использующиеся на сервере из client в папку common
 import SearchPage, { IPageProps } from '../../client/pages/Search/page';
+import store from '../../client/pages/Search/store';
 import { listOfEvents } from '../../client/mockdata';
 
 
@@ -54,6 +57,7 @@ const search: RequestHandler = (req, res, next) => {
 
     const pageParams: IPageParams = {
         initialData,
+        store,
         title: 'Search',
         description: 'My search',
         pageName: 'search',

@@ -1,14 +1,31 @@
 import * as React from 'react';
 import { useState, ChangeEvent } from 'react';
+import { Dispatch } from '@reduxjs/toolkit';
+import { useAppDispatch,  useAppSelector } from './hooks';
 import FilterOptions from '../../components/FilterOptions/index';
 import FilterLimits, { IFilterLimitsOptions } from '../../components/FilterLimits/index';
 import { IHanana } from '../../../common/commonTypes';
+
+import {
+    addOption,
+    removeOption,
+    selectFilterHost,
+    selectFilterBeginDate,
+
+    FilterState,
+} from './filtersSlice';
+
 import styles from './styles.scss';
+
+// TODO разделить логику фильтров, отрисовку страницы итд 
+
+
+
 
 interface IFiltersValues {
     optionFilters: {
-        host: Set<string>;
-        beginDate: Set<string>;
+        host: string[];
+        beginDate: string[];
     };
     limitsFilters: {
         minPrice: IFilterLimitsOptions;
@@ -25,20 +42,31 @@ export interface IPageProps {
 };
 
 
-const onOptionsFilterChange = (filterValues: Set<string>, setFilterValue: (newVal: Set<string>) => void) => 
-    (value: string) =>
+// const onOptionsFilterChange = (filterValues: Set<string>, setFilterValue: (newVal: Set<string>) => void) => 
+//     (value: string) =>
+//     ({ target }: ChangeEvent<HTMLInputElement>): void => {
+//         const isChecked = target.checked;
+
+//         const newFilterValues = new Set(filterValues);
+//         if (isChecked) {
+//             newFilterValues.add(value);
+//         } else {
+//             newFilterValues.delete(value);
+//         }
+
+//         setFilterValue(newFilterValues);
+// };
+
+const newOnOptionsFilterChange = (name: keyof FilterState, dispatch: Dispatch) => 
+    (value: string) => 
     ({ target }: ChangeEvent<HTMLInputElement>): void => {
         const isChecked = target.checked;
-
-        const newFilterValues = new Set(filterValues);
         if (isChecked) {
-            newFilterValues.add(value);
+            dispatch(addOption({ name, value }));
         } else {
-            newFilterValues.delete(value);
+             dispatch(removeOption({ name, value }));
         }
-
-        setFilterValue(newFilterValues);
-};
+    };
 
 const onLimitsFilterChange = (filterLimits: IFilterLimitsOptions, setFilterLimits: (newLimits: IFilterLimitsOptions) => void) =>
     (minOrMax: string) =>
@@ -51,6 +79,7 @@ const onLimitsFilterChange = (filterLimits: IFilterLimitsOptions, setFilterLimit
 
 // из всех событий получаем события подходящие под фильтры
 const filterHananas = (hananas: IHanana[], filtersValues: IFiltersValues) => {
+    // TODO filtersValues должно браться из типа
     const optionsNames = Object.keys(filtersValues.optionFilters);
     const limitsNames = Object.keys(filtersValues.limitsFilters);
 
@@ -59,8 +88,8 @@ const filterHananas = (hananas: IHanana[], filtersValues: IFiltersValues) => {
 
         optionsNames.forEach(filterName => {
             result = result && 
-                ((filtersValues.optionFilters[filterName].size > 0 && filtersValues.optionFilters[filterName].has(hanana[filterName])) || 
-                filtersValues.optionFilters[filterName].size === 0)
+                ((filtersValues.optionFilters[filterName].length > 0 && filtersValues.optionFilters[filterName].includes(hanana[filterName])) || 
+                filtersValues.optionFilters[filterName].length === 0)
         });
 
         
@@ -86,11 +115,20 @@ const SearchPage: React.FC<IPageProps> = ({
     filterMinPriceLimitsOptions,
     filterCapacityLimitsOptions
 }) => {
-    const [ filterHostValues, setFilterHostValues ] = useState(new Set(['АПГ']));
-    const onHostFilterClick = onOptionsFilterChange(filterHostValues, setFilterHostValues);
+    // const [ filterHostValues, setFilterHostValues ] = useState(new Set(['АПГ']));
+    // const onHostFilterClick = onOptionsFilterChange(filterHostValues, setFilterHostValues);
 
-    const [ filterBeginDateValues, setFilterBeginDateValues ] = useState(new Set([]));
-    const onBeginDateFilterClick = onOptionsFilterChange(filterBeginDateValues, setFilterBeginDateValues);
+    const dispatch = useAppDispatch();
+
+    const filterHostValues = useAppSelector(selectFilterHost);
+    const onHostFilterClick = newOnOptionsFilterChange('host', dispatch);
+
+    // const [ filterBeginDateValues, setFilterBeginDateValues ] = useState(new Set([]));
+    // const onBeginDateFilterClick = onOptionsFilterChange(filterBeginDateValues, setFilterBeginDateValues);
+
+    const filterBeginDateValues = useAppSelector(selectFilterBeginDate);
+    const onBeginDateFilterClick = newOnOptionsFilterChange('beginDate', dispatch);
+
 
     const [ filterMinPriceLimits, setFilterMinPriceLimits ] = useState({ 
         min: Number(filterMinPriceLimitsOptions[0]),

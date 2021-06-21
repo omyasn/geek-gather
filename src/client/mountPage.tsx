@@ -4,17 +4,21 @@ import BasePage from './components/BasePage';
 
 interface Params {
     PageComponent: React.ComponentType<any>;
+    store?: any; // TODO
 };
 
 export default ({
     PageComponent,
+    store,
 }: Params) => {
     console.log('CLIENT!');
 
     const initialData = window.__INITIAL_DATA__;
 
     hydrate(
-        <BasePage>
+        <BasePage
+            store={store}
+        >
             <PageComponent
                 {...initialData}
             />

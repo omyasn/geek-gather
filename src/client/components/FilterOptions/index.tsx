@@ -3,7 +3,7 @@ import * as React from 'react';
 export interface FilterOptionsProps<T> {
     name: string;
     filterOptions: T[];
-    filterValues: Set<T>;
+    filterValues: string[];
     onOptionChange: (currentItem: T) => (e: React.SyntheticEvent) => void;
 }
 
@@ -20,7 +20,7 @@ const FilterOptions: React.FC<FilterOptionsProps<string>> = ({
                 <label key={item}>
                     <input
                         type="checkbox"
-                        checked={filterValues.has(item)}
+                        checked={filterValues.includes(item)}
                         value={item}
                         onChange={onOptionChange(item)}
                     />
