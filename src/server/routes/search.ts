@@ -19,15 +19,15 @@ const getBackendData = (): IPageProps => {
 
     let filterHostOptions = new Set<string>();
     let filterBeginDateOptions = new Set<string>();
-    let filterMinPriceLimitsOptions = [ Infinity, 0 ];
-    let filterCapacityLimitsOptions = [ Infinity, 0 ];
+    let filterMinPriceRangeOptions = [ Infinity, 0 ];
+    let filterCapacityRangeOptions = [ Infinity, 0 ];
 
     allHananas.forEach(hanana => {
         filterHostOptions.add(hanana.host);
         filterBeginDateOptions.add(hanana.beginDate);
 
-        filterMinPriceLimitsOptions = setMinMax(filterMinPriceLimitsOptions, hanana.minPrice);
-        filterCapacityLimitsOptions = setMinMax(filterCapacityLimitsOptions, hanana.capacity);
+        filterMinPriceRangeOptions = setMinMax(filterMinPriceRangeOptions, hanana.minPrice);
+        filterCapacityRangeOptions = setMinMax(filterCapacityRangeOptions, hanana.capacity);
     });
 
 
@@ -35,8 +35,8 @@ const getBackendData = (): IPageProps => {
         hananas: allHananas,
         filterHostOptions: Array.from(filterHostOptions).sort(),
         filterBeginDateOptions: Array.from(filterBeginDateOptions).sort(),
-        filterMinPriceLimitsOptions,
-        filterCapacityLimitsOptions,
+        filterMinPriceRangeOptions,
+        filterCapacityRangeOptions,
     };
 }
 

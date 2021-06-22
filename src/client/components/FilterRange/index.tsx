@@ -7,21 +7,21 @@ import styles from './styles.css';
 //     MAX ='max',
 // }
 
-export interface IFilterLimitsOptions {
+export interface FilterRangeOptions {
     min: number;
     max: number;
 };
 
-export interface FilterLimitsProps {
+export interface FilterRangeProps {
     name: string;
-    filterLimits: IFilterLimitsOptions;
-    onLimitsChange: (minOrMax: string) => (e: React.SyntheticEvent) => void;
+    filterRange: FilterRangeOptions;
+    onRangeChange: (edge: keyof FilterRangeOptions) => (e: React.SyntheticEvent) => void;
 }
 
-const FilterLimits: React.FC<FilterLimitsProps> = ({
+const FilterRange: React.FC<FilterRangeProps> = ({
     name,
-    filterLimits,
-    onLimitsChange,
+    filterRange,
+    onRangeChange,
 }) => {
     return (
         <div>
@@ -30,8 +30,8 @@ const FilterLimits: React.FC<FilterLimitsProps> = ({
                 Min: 
                 <input
                     type="number"
-                    value={filterLimits.min}
-                    onChange={onLimitsChange('min')}
+                    value={filterRange.min}
+                    onChange={onRangeChange('min')}
                 />
             </label>
 
@@ -39,12 +39,12 @@ const FilterLimits: React.FC<FilterLimitsProps> = ({
                 Max: 
                 <input
                     type="number"
-                    value={filterLimits.max}
-                    onChange={onLimitsChange('max')}
+                    value={filterRange.max}
+                    onChange={onRangeChange('max')}
                 />
             </label>
         </div>
     );
 };
 
-export default FilterLimits;
+export default FilterRange;

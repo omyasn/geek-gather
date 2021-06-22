@@ -3,7 +3,7 @@ import { useState, ChangeEvent } from 'react';
 import { Dispatch } from '@reduxjs/toolkit';
 import { useAppDispatch,  useAppSelector } from './hooks';
 import FilterOptions from '../../components/FilterOptions/index';
-import FilterLimits, { IFilterLimitsOptions } from '../../components/FilterLimits/index';
+import FilterRange, { FilterRangeOptions } from '../../components/FilterRange/index';
 import { IHanana } from '../../../common/commonTypes';
 
 import {
@@ -11,53 +11,38 @@ import {
     removeOption,
     selectFilterHost,
     selectFilterBeginDate,
+    selectOptionFilters,
+    OptionFiltersState,
+} from './optionFiltersSlice';
 
-    FilterState,
-} from './filtersSlice';
+import {
+    changeRange,
+    selectFilterCapacity,
+    selectFilterMinPrice,
+    selectRangeFilters,
+    RangeFiltersState,
+} from './rangeFiltersSlice';
 
 import styles from './styles.scss';
 
 // TODO разделить логику фильтров, отрисовку страницы итд 
 
 
-
-
-interface IFiltersValues {
-    optionFilters: {
-        host: string[];
-        beginDate: string[];
-    };
-    limitsFilters: {
-        minPrice: IFilterLimitsOptions;
-        capacity: IFilterLimitsOptions;
-    };
+interface FiltersValues {
+    optionFilters: OptionFiltersState;
+    rangeFilters: RangeFiltersState;
 }
 
 export interface IPageProps {
     hananas: IHanana[];
     filterHostOptions: string[];
     filterBeginDateOptions: string[];
-    filterMinPriceLimitsOptions: number[];
-    filterCapacityLimitsOptions: number[];  
+    filterMinPriceRangeOptions: number[];
+    filterCapacityRangeOptions: number[];  
 };
 
 
-// const onOptionsFilterChange = (filterValues: Set<string>, setFilterValue: (newVal: Set<string>) => void) => 
-//     (value: string) =>
-//     ({ target }: ChangeEvent<HTMLInputElement>): void => {
-//         const isChecked = target.checked;
-
-//         const newFilterValues = new Set(filterValues);
-//         if (isChecked) {
-//             newFilterValues.add(value);
-//         } else {
-//             newFilterValues.delete(value);
-//         }
-
-//         setFilterValue(newFilterValues);
-// };
-
-const newOnOptionsFilterChange = (name: keyof FilterState, dispatch: Dispatch) => 
+const onOptionsFilterChange = (name: keyof OptionFiltersState, dispatch: Dispatch) => 
     (value: string) => 
     ({ target }: ChangeEvent<HTMLInputElement>): void => {
         const isChecked = target.checked;
@@ -68,20 +53,17 @@ const newOnOptionsFilterChange = (name: keyof FilterState, dispatch: Dispatch) =
         }
     };
 
-const onLimitsFilterChange = (filterLimits: IFilterLimitsOptions, setFilterLimits: (newLimits: IFilterLimitsOptions) => void) =>
-    (minOrMax: string) =>
-    ({ target }: ChangeEvent<HTMLInputElement>) =>
-        setFilterLimits({
-            ...filterLimits,
-            [minOrMax]: Number(target.value),
-});
-
+const onRangeFilterChange = (name: keyof RangeFiltersState, dispatch: Dispatch) => 
+    (edge: keyof FilterRangeOptions) =>
+    ({ target }: ChangeEvent<HTMLInputElement>) => {
+        dispatch(changeRange({ name, edge, value: Number(target.value)}))
+    };
 
 // из всех событий получаем события подходящие под фильтры
-const filterHananas = (hananas: IHanana[], filtersValues: IFiltersValues) => {
+const filterHananas = (hananas: IHanana[], filtersValues: FiltersValues) => {
     // TODO filtersValues должно браться из типа
     const optionsNames = Object.keys(filtersValues.optionFilters);
-    const limitsNames = Object.keys(filtersValues.limitsFilters);
+    const rangesNames = Object.keys(filtersValues.rangeFilters);
 
     const filtredHananas = hananas.filter(hanana => {
         let result = true;
@@ -93,11 +75,11 @@ const filterHananas = (hananas: IHanana[], filtersValues: IFiltersValues) => {
         });
 
         
-        limitsNames.forEach(filterName => {
+        rangesNames.forEach(filterName => {
             result = result && 
             (
-                (!filtersValues.limitsFilters[filterName].min || filtersValues.limitsFilters[filterName].min <= Number(hanana[filterName])) &&
-                (!filtersValues.limitsFilters[filterName].max || filtersValues.limitsFilters[filterName].max >= Number(hanana[filterName]))
+                (!filtersValues.rangeFilters[filterName].min || filtersValues.rangeFilters[filterName].min <= Number(hanana[filterName])) &&
+                (!filtersValues.rangeFilters[filterName].max || filtersValues.rangeFilters[filterName].max >= Number(hanana[filterName]))
             )
         });
 
@@ -110,50 +92,49 @@ const filterHananas = (hananas: IHanana[], filtersValues: IFiltersValues) => {
 
 const SearchPage: React.FC<IPageProps> = ({
     hananas,
+    // TODO это надо использовать для предустановки фильтров
     filterHostOptions,
     filterBeginDateOptions,
-    filterMinPriceLimitsOptions,
-    filterCapacityLimitsOptions
+    filterMinPriceRangeOptions, 
+    filterCapacityRangeOptions,
 }) => {
-    // const [ filterHostValues, setFilterHostValues ] = useState(new Set(['АПГ']));
-    // const onHostFilterClick = onOptionsFilterChange(filterHostValues, setFilterHostValues);
-
     const dispatch = useAppDispatch();
 
     const filterHostValues = useAppSelector(selectFilterHost);
-    const onHostFilterClick = newOnOptionsFilterChange('host', dispatch);
-
-    // const [ filterBeginDateValues, setFilterBeginDateValues ] = useState(new Set([]));
-    // const onBeginDateFilterClick = onOptionsFilterChange(filterBeginDateValues, setFilterBeginDateValues);
+    const onHostFilterClick = onOptionsFilterChange('host', dispatch);
 
     const filterBeginDateValues = useAppSelector(selectFilterBeginDate);
-    const onBeginDateFilterClick = newOnOptionsFilterChange('beginDate', dispatch);
+    const onBeginDateFilterClick = onOptionsFilterChange('beginDate', dispatch);
 
 
-    const [ filterMinPriceLimits, setFilterMinPriceLimits ] = useState({ 
-        min: Number(filterMinPriceLimitsOptions[0]),
-        max: Number(filterMinPriceLimitsOptions[1])
-    });
-    const onMinPriceLimitsChange = onLimitsFilterChange(filterMinPriceLimits, setFilterMinPriceLimits);
+// TODO Предустановка значений фильтров в state
 
-    const [ filterCapacityLimits, setFilterCapacityLimits ] = useState({
-        min: Number(filterCapacityLimitsOptions[0]),
-        max: Number(filterCapacityLimitsOptions[1])
-    });
-    const onCapacityLimitsChange = onLimitsFilterChange(filterCapacityLimits, setFilterCapacityLimits);
+    // const [ filterMinPriceLimits, setFilterMinPriceLimits ] = useState({ 
+    //     min: Number(filterMinPriceLimitsOptions[0]),
+    //     max: Number(filterMinPriceLimitsOptions[1])
+    // });
+    // const onMinPriceLimitsChange = onLimitsFilterChange(filterMinPriceLimits, setFilterMinPriceLimits);
 
+    const filterMinPriceRange = useAppSelector(selectFilterMinPrice);
+    const onMinPriceRangeChange = onRangeFilterChange('minPrice', dispatch);
+
+    // const [ filterCapacityLimits, setFilterCapacityLimits ] = useState({
+    //     min: Number(filterCapacityLimitsOptions[0]),
+    //     max: Number(filterCapacityLimitsOptions[1])
+    // });
+    // const onCapacityLimitsChange = onLimitsFilterChange(filterCapacityLimits, setFilterCapacityLimits);
+
+    const filterCapacityRange = useAppSelector(selectFilterCapacity);
+    const onCapacityRangeChange = onRangeFilterChange('capacity', dispatch);
+
+// TODO combine selectors?
+    const currentFilters = useAppSelector(state => ({
+        optionFilters: selectOptionFilters(state),
+        rangeFilters: selectRangeFilters(state),
+    }));
     const filtredHananas = filterHananas(
         hananas,
-        {
-            optionFilters: {
-                host: filterHostValues,
-                beginDate: filterBeginDateValues,
-            },
-            limitsFilters: {
-                minPrice: filterMinPriceLimits,
-                capacity: filterCapacityLimits,
-            },
-        }
+        currentFilters,
     );
 
 
@@ -177,16 +158,16 @@ const SearchPage: React.FC<IPageProps> = ({
                         onOptionChange={onBeginDateFilterClick}
                     />
                 
-                    <FilterLimits
+                    <FilterRange
                         name="MinPrice"
-                        filterLimits={filterMinPriceLimits}
-                        onLimitsChange={onMinPriceLimitsChange}
+                        filterRange={filterMinPriceRange}
+                        onRangeChange={onMinPriceRangeChange}
                     />
 
-                    <FilterLimits
+                    <FilterRange
                         name="Capacity"
-                        filterLimits={filterCapacityLimits}
-                        onLimitsChange={onCapacityLimitsChange}
+                        filterRange={filterCapacityRange}
+                        onRangeChange={onCapacityRangeChange}
                     />
                 </div>
 

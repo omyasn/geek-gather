@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
-import filtersReducer from './filtersSlice';
+import optionFiltersReducer from './optionFiltersSlice';
+import rangeFiltersReducer from './rangeFiltersSlice';
 
 const store = configureStore({
   reducer: {
-      filters: filtersReducer,
+    optionFilters: optionFiltersReducer,
+    rangeFilters: rangeFiltersReducer,
   }
 });
 
