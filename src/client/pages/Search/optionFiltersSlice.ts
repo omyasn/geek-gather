@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { RootState } from './store';
+import type { RootStateType } from './store';
 
 export interface OptionFiltersState {
     host: string[];
@@ -13,9 +13,13 @@ interface OptionFilterPayload {
 
 // TODO Должно приходить с бекенда
 const initialState: OptionFiltersState = {
-    host: ['АПГ'],
+    host: [],
     beginDate: [],
 };
+
+
+// export const addOption = createAction<OptionFilterPayload>('optionFilters/addOption');
+// export const removeOption = createAction<OptionFilterPayload>('optionFilters/removeOption');
 
 export const optionFiltersSlice = createSlice({
     name: 'optionFilters',
@@ -34,9 +38,9 @@ export const optionFiltersSlice = createSlice({
     },
 });
 
-export const selectFilterHost = (state: RootState) => state.optionFilters.host;
-export const selectFilterBeginDate = (state: RootState) => state.optionFilters.beginDate;
-export const selectOptionFilters = (state: RootState) => state.optionFilters;
+export const selectFilterHost = (state: RootStateType) => state.optionFilters.host;
+export const selectFilterBeginDate = (state: RootStateType) => state.optionFilters.beginDate;
+export const selectOptionFilters = (state: RootStateType) => state.optionFilters;
 
 export const { addOption, removeOption } = optionFiltersSlice.actions;
 export default optionFiltersSlice.reducer;

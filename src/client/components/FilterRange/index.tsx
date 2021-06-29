@@ -1,12 +1,6 @@
 import * as React from 'react';
 import styles from './styles.css';
 
-// TODO использовать константрые имена из enum в других типах
-// enum LimitsNames {
-//     MIN ='min',
-//     MAX ='max',
-// }
-
 export interface FilterRangeOptions {
     min: number;
     max: number;

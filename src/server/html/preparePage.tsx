@@ -26,11 +26,15 @@ export default ({
         </BasePage>
     );
     const reactHtml = renderToString(basePage);
+
+    const preloadedState = store ? store.getState() : {};
+
     const fullHtml = getHtml({
         title,
         description,
         pageName,
         initialData,
+        preloadedState,
         rootString: reactHtml,
     });
 

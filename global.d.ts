@@ -10,6 +10,7 @@ interface ObjectConstructor {
 
 interface Window {
   __INITIAL_DATA__: string;
+  __PRELOADED_STATE__: string;
 }
 
 declare module '*.css' {

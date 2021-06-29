@@ -33,12 +33,15 @@ interface FiltersValues {
     rangeFilters: RangeFiltersState;
 }
 
-export interface IPageProps {
-    hananas: IHanana[];
+export interface FiltersVariants {
     filterHostOptions: string[];
     filterBeginDateOptions: string[];
     filterMinPriceRangeOptions: number[];
     filterCapacityRangeOptions: number[];  
+}
+
+export interface IPageProps extends FiltersVariants {
+    hananas: IHanana[];
 };
 
 
@@ -61,7 +64,6 @@ const onRangeFilterChange = (name: keyof RangeFiltersState, dispatch: Dispatch) 
 
 // из всех событий получаем события подходящие под фильтры
 const filterHananas = (hananas: IHanana[], filtersValues: FiltersValues) => {
-    // TODO filtersValues должно браться из типа
     const optionsNames = Object.keys(filtersValues.optionFilters);
     const rangesNames = Object.keys(filtersValues.rangeFilters);
 
@@ -127,7 +129,6 @@ const SearchPage: React.FC<IPageProps> = ({
     const filterCapacityRange = useAppSelector(selectFilterCapacity);
     const onCapacityRangeChange = onRangeFilterChange('capacity', dispatch);
 
-// TODO combine selectors?
     const currentFilters = useAppSelector(state => ({
         optionFilters: selectOptionFilters(state),
         rangeFilters: selectRangeFilters(state),

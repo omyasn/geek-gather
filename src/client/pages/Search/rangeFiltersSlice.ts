@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { FilterRangeOptions } from '../../components/FilterRange'
-import type { RootState } from './store';
+import { FilterRangeOptions } from '../../components/FilterRange';
+import type { RootStateType } from './store';
 
 // TODO положить эти файлы в фича папку с компонентами
-// TODO переименовать limits to range
+
 export interface RangeFiltersState {
     minPrice: FilterRangeOptions;
     capacity: FilterRangeOptions;
@@ -40,9 +40,9 @@ export const rangeFiltersSlice = createSlice({
     },
 });
 
-export const selectFilterMinPrice = (state: RootState) => state.rangeFilters.minPrice;
-export const selectFilterCapacity = (state: RootState) => state.rangeFilters.capacity;
-export const selectRangeFilters = (state: RootState) => state.rangeFilters;
+export const selectFilterMinPrice = (state: RootStateType) => state.rangeFilters.minPrice;
+export const selectFilterCapacity = (state: RootStateType) => state.rangeFilters.capacity;
+export const selectRangeFilters = (state: RootStateType) => state.rangeFilters;
 
 export const { changeRange } = rangeFiltersSlice.actions;
 export default rangeFiltersSlice.reducer;

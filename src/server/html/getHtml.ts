@@ -10,6 +10,7 @@ export interface IHtmlPageParams {
 
 interface IParams extends IHtmlPageParams {
     rootString: string;
+    preloadedState: any; // TODO
 }
 
 export default ({
@@ -18,6 +19,7 @@ export default ({
     rootString,
     pageName,
     initialData,
+    preloadedState,
 }: IParams):String => {
 
     return `
@@ -43,6 +45,7 @@ export default ({
 
             <script>
                 window.__INITIAL_DATA__=${serializeJavascript(initialData)};
+                window.__PRELOADED_STATE__=${serializeJavascript(preloadedState)};
             </script>
 
             <script src="${getAssetRealPath(`js/${pageName}.bundle.js`)}"></script>
