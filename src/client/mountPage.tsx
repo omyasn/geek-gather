@@ -5,11 +5,13 @@ import BasePage from './components/BasePage';
 interface Params {
     PageComponent: React.ComponentType<any>;
     createAppStore?: any; // TODO
+    history?: any; // TODO
 };
 
 export default ({
     PageComponent,
     createAppStore = () => {},
+    history = {}
 }: Params) => {
     console.log('CLIENT!');
 
@@ -24,6 +26,7 @@ export default ({
             store={store}
         >
             <PageComponent
+                history={history}
                 {...initialData}
             />
         </BasePage>,

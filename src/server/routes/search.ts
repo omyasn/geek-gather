@@ -62,7 +62,8 @@ const getPreloadedState = (req: Request, filrersVariants: FiltersVariants): Root
     return result;
 };
 
-const parseOptionsFilterValues = (queryValue: any, filrerVariants: string[]): string[] => {
+// TODO вынести в общее место
+export const parseOptionsFilterValues = (queryValue: any, filrerVariants: string[]): string[] => {
     if (!queryValue || typeof queryValue !== 'string') {
         return [];
     }
@@ -71,7 +72,7 @@ const parseOptionsFilterValues = (queryValue: any, filrerVariants: string[]): st
     return values.filter(val => filrerVariants.includes(val));
 } 
 
-const parseRangeFilterValues = (queryValue: any, filrerVariants: number[]): FilterRangeOptions => {
+export const parseRangeFilterValues = (queryValue: any, filrerVariants: number[]): FilterRangeOptions => {
     if (!queryValue || typeof queryValue !== 'string') {
         return {
             min: filrerVariants[0],
