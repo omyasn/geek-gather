@@ -1,6 +1,8 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, ThunkAction, AnyAction } from '@reduxjs/toolkit';
+import { BrowserHistory } from 'history';
 import type { RootStateType } from './store';
 
+// TODO initialState приходит с бекенда, нельзя ли брать тип оттуда?
 export interface OptionFiltersState {
     host: string[];
     beginDate: string[];
@@ -11,15 +13,10 @@ interface OptionFilterPayload {
     value: string;
 }
 
-// TODO Должно приходить с бекенда
 const initialState: OptionFiltersState = {
     host: [],
     beginDate: [],
 };
-
-
-// export const addOption = createAction<OptionFilterPayload>('optionFilters/addOption');
-// export const removeOption = createAction<OptionFilterPayload>('optionFilters/removeOption');
 
 export const optionFiltersSlice = createSlice({
     name: 'optionFilters',
@@ -43,4 +40,48 @@ export const selectFilterBeginDate = (state: RootStateType) => state.optionFilte
 export const selectOptionFilters = (state: RootStateType) => state.optionFilters;
 
 export const { addOption, removeOption } = optionFiltersSlice.actions;
+
+export const addOptionWithHistory = ({ name, value }:OptionFilterPayload): ThunkAction<void, RootStateType, BrowserHistory, AnyAction> => 
+    (dispatch, getState, history) => {
+        dispatch(addOption({ name, value }));
+
+        console.log(history);
+
+        const query = new URLSearchParams(history.location.search);
+    
+        if (query.has(name)) {
+            let param = query.get(name).split(',');
+            param.push(value);
+            query.set(name, param.join(','));
+        } else {
+            query.append(name, value);
+        }
+        
+        history.replace({search: `?${query.toString()}`})
+};
+
+export const removeOptionWithHistory = ({ name, value }:OptionFilterPayload): ThunkAction<void, RootStateType, BrowserHistory, AnyAction> => 
+    (dispatch, getState, history) => {
+        dispatch(removeOption({ name, value }));
+
+        const query = new URLSearchParams(history.location.search);
+        
+        if (!query.has(name)) {
+            return;
+        }
+        
+        let param = query.get(name).split(',');
+        param = param.filter(e => e !== value);
+
+        if (param.length) {
+            query.set(name, param.join(','));
+        } else {
+            query.delete(name);
+        }
+        history.replace({search: `?${query.toString()}`}) 
+};
+
+
+
+
 export default optionFiltersSlice.reducer;

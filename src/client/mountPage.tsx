@@ -5,13 +5,11 @@ import BasePage from './components/BasePage';
 interface Params {
     PageComponent: React.ComponentType<any>;
     createAppStore?: any; // TODO
-    history?: any; // TODO
 };
 
 export default ({
     PageComponent,
     createAppStore = () => {},
-    history = {}
 }: Params) => {
     console.log('CLIENT!');
 
@@ -20,13 +18,12 @@ export default ({
     delete window.__INITIAL_DATA__;
     delete window.__PRELOADED_STATE__;
 
-    const store = createAppStore(preloadedState);
+    const store = createAppStore(preloadedState, true);
     hydrate(
         <BasePage
             store={store}
         >
             <PageComponent
-                history={history}
                 {...initialData}
             />
         </BasePage>,
