@@ -7,6 +7,7 @@ export const listOfEvents =[
 			capacity: 3000,
 			minPrice: 700,
 			host: 'АПГ',
+			location: 'Иркутск',
 		},
 		
 	},
@@ -18,6 +19,7 @@ export const listOfEvents =[
 			capacity: 200,
 			minPrice: 1000,
 			host: 'АПГ',
+			location: 'Москва',
 		},
 		
 	},
@@ -29,6 +31,7 @@ export const listOfEvents =[
 			capacity: 200,
 			minPrice: 2000,
 			host: 'Loonarbaboon',
+			location: 'Иркутск',
 		},
 		
 	},
@@ -40,6 +43,7 @@ export const listOfEvents =[
 			capacity: 100,
 			minPrice: 600,
 			host: 'Loonarbaboon',
+			location: 'Москва',
 		},
 		
 	},
@@ -51,6 +55,7 @@ export const listOfEvents =[
 			capacity: 100,
 			minPrice: 550,
 			host: 'Loonarbaboon',
+			location: 'Иркутск',
 		},
 		
 	}

@@ -94,6 +94,17 @@ const filterHananas = (hananas: IHanana[], filtersValues: FiltersValues) => {
 };
 
 
+const getActiveFiltersOptions = (hananas: IHanana[], optionfiltersValues: OptionFiltersState) => {
+    const hananasFilterByHost = hananas.filter(hanana => optionfiltersValues.host.includes(hanana.host));
+    const beginDateAct = new Set(hananasFilterByHost.map(hanana => hanana.beginDate));
+
+    const hananasFilterByBD = hananas.filter(hanana => optionfiltersValues.beginDate.includes(hanana.beginDate));
+    const hostAct = new Set(hananasFilterByBD.map(hanana => hanana.host));
+
+    // TODO можно и сет оставить
+    return [ Array.from(hostAct), Array.from(beginDateAct) ];
+};
+
 const SearchPage: React.FC<IPageProps> = ({
     hananas,
     filterHostOptions,
@@ -117,9 +128,16 @@ const SearchPage: React.FC<IPageProps> = ({
         optionFilters: selectOptionFilters(state),
         rangeFilters: selectRangeFilters(state),
     }));
+
     const filtredHananas = filterHananas(
         hananas,
         currentFilters,
+    );
+
+    const optionFilt = useAppSelector(selectOptionFilters);
+    const [hostActiveOptions, beginDateActiveOptions] = getActiveFiltersOptions(
+        hananas,
+        optionFilt
     );
 
 
@@ -133,6 +151,7 @@ const SearchPage: React.FC<IPageProps> = ({
                         name="Host"
                         filterOptions={filterHostOptions}
                         filterValues={filterHostValues}
+                        filterActiveOptions={hostActiveOptions}
                         onOptionChange={onHostFilterClick}
                     />
 
@@ -140,6 +159,7 @@ const SearchPage: React.FC<IPageProps> = ({
                         name="BeginDate"
                         filterOptions={filterBeginDateOptions}
                         filterValues={filterBeginDateValues}
+                        filterActiveOptions={beginDateActiveOptions}
                         onOptionChange={onBeginDateFilterClick}
                     />
                 
