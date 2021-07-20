@@ -4,6 +4,7 @@ export interface IHananaProps {
     capacity: number;
     minPrice: number;
     host: string;
+    location: string;
 }
 
 export type IHanana = { id: number } & IHananaProps;

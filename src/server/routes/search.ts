@@ -20,15 +20,18 @@ const getBackendData = (): IHanana[]  => {
     return allHananas;
 };
 
+// TODO refactor
 const getFiltersVariants = (hananas: IHanana[]): FiltersVariants => {
     let filterHostOptions = new Set<string>();
     let filterBeginDateOptions = new Set<string>();
+    let filterLocationOptions = new Set<string>();
     let filterMinPriceRangeOptions = [ Infinity, 0 ];
     let filterCapacityRangeOptions = [ Infinity, 0 ];
 
     hananas.forEach(hanana => {
         filterHostOptions.add(hanana.host);
         filterBeginDateOptions.add(hanana.beginDate);
+        filterLocationOptions.add(hanana.location);
 
         filterMinPriceRangeOptions = setMinMax(filterMinPriceRangeOptions, hanana.minPrice);
         filterCapacityRangeOptions = setMinMax(filterCapacityRangeOptions, hanana.capacity);
@@ -38,6 +41,7 @@ const getFiltersVariants = (hananas: IHanana[]): FiltersVariants => {
     return {
         filterHostOptions: Array.from(filterHostOptions).sort(),
         filterBeginDateOptions: Array.from(filterBeginDateOptions).sort(),
+        filterLocationOptions: Array.from(filterLocationOptions).sort(),
         filterMinPriceRangeOptions,
         filterCapacityRangeOptions,
     };
@@ -45,13 +49,14 @@ const getFiltersVariants = (hananas: IHanana[]): FiltersVariants => {
 
 
 const getPreloadedState = (req: Request, filrersVariants: FiltersVariants): RootStateType => {
-    const { host, beginDate, minPrice, capacity } = req.query;
+    const { host, beginDate, minPrice, capacity, location } = req.query;
     // host=АПГ,lol&beginDate=21.01.2021,07.12.2022&minPrice=0-3000&capacity=2-300
 
     const result:RootStateType = {
         optionFilters: {
             host: parseOptionsFilterValues(host, filrersVariants.filterHostOptions),
             beginDate: parseOptionsFilterValues(beginDate, filrersVariants.filterBeginDateOptions),
+            location: parseOptionsFilterValues(location, filrersVariants.filterLocationOptions),
         },
         rangeFilters: {
             minPrice: parseRangeFilterValues(minPrice, filrersVariants.filterMinPriceRangeOptions),

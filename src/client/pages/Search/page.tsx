@@ -12,6 +12,7 @@ import {
     removeOptionWithHistory,
     selectFilterHost,
     selectFilterBeginDate,
+    selectFilterLocation,
     selectOptionFilters,
     OptionFiltersState,
 } from './optionFiltersSlice';
@@ -36,6 +37,7 @@ interface FiltersValues {
 export interface FiltersVariants {
     filterHostOptions: string[];
     filterBeginDateOptions: string[];
+    filterLocationOptions: string[];
     filterMinPriceRangeOptions: number[];
     filterCapacityRangeOptions: number[];  
 }
@@ -94,21 +96,57 @@ const filterHananas = (hananas: IHanana[], filtersValues: FiltersValues) => {
 };
 
 
-const getActiveFiltersOptions = (hananas: IHanana[], optionfiltersValues: OptionFiltersState) => {
-    const hananasFilterByHost = hananas.filter(hanana => optionfiltersValues.host.includes(hanana.host));
-    const beginDateAct = new Set(hananasFilterByHost.map(hanana => hanana.beginDate));
+const getActiveFiltersOptions = (hananas: IHanana[], optionFiltersValues: OptionFiltersState) => {
+    const allFiltersNames = Object.keys(optionFiltersValues);
+    const usingFiltersNames = allFiltersNames.filter(f => optionFiltersValues[f].length > 0);
 
-    const hananasFilterByBD = hananas.filter(hanana => optionfiltersValues.beginDate.includes(hanana.beginDate));
-    const hostAct = new Set(hananasFilterByBD.map(hanana => hanana.host));
+    const result: any = {
+        host: {},
+        beginDate: {},
+        location: {},
+    };
 
-    // TODO можно и сет оставить
-    return [ Array.from(hostAct), Array.from(beginDateAct) ];
-};
+    const finalRes: any = {
+        host: [],
+        beginDate: [],
+        location: [],
+    };
+
+    hananas.forEach(hanana => {
+        usingFiltersNames.forEach(filterName => {
+            if (optionFiltersValues[filterName].includes(hanana[filterName])) {
+                allFiltersNames.filter(f => f !== filterName).forEach(otherFilter => {
+                    result[otherFilter][hanana[otherFilter]] = result[otherFilter][hanana[otherFilter]] ? result[otherFilter][hanana[otherFilter]] + 1 : 1;
+                });
+            }
+        });
+    });
+
+    console.log(result);
+
+    for (const filt in result) {
+        for (const val in result[filt]) {
+            let limit = usingFiltersNames.length;
+            if (usingFiltersNames.includes(filt as keyof OptionFiltersState)) {
+                limit = limit - 1;
+            }
+
+            if (result[filt][val] >= limit){
+                finalRes[filt].push(val);
+            }
+        }
+    }
+
+    return finalRes;
+}
+
+
 
 const SearchPage: React.FC<IPageProps> = ({
     hananas,
     filterHostOptions,
     filterBeginDateOptions,   
+    filterLocationOptions,   
 }) => {
     const dispatch = useAppDispatch();
 
@@ -117,6 +155,9 @@ const SearchPage: React.FC<IPageProps> = ({
 
     const filterBeginDateValues = useAppSelector(selectFilterBeginDate);
     const onBeginDateFilterClick = onOptionsFilterChange('beginDate', dispatch);
+
+    const filterLocationValues = useAppSelector(selectFilterLocation);
+    const onLocationFilterClick = onOptionsFilterChange('location', dispatch);
 
     const filterMinPriceRange = useAppSelector(selectFilterMinPrice);
     const onMinPriceRangeChange = onRangeFilterChange('minPrice', dispatch);
@@ -135,7 +176,7 @@ const SearchPage: React.FC<IPageProps> = ({
     );
 
     const optionFilt = useAppSelector(selectOptionFilters);
-    const [hostActiveOptions, beginDateActiveOptions] = getActiveFiltersOptions(
+    const activeFiltersValues = getActiveFiltersOptions(
         hananas,
         optionFilt
     );
@@ -151,7 +192,7 @@ const SearchPage: React.FC<IPageProps> = ({
                         name="Host"
                         filterOptions={filterHostOptions}
                         filterValues={filterHostValues}
-                        filterActiveOptions={hostActiveOptions}
+                        filterActiveOptions={activeFiltersValues.host}
                         onOptionChange={onHostFilterClick}
                     />
 
@@ -159,8 +200,16 @@ const SearchPage: React.FC<IPageProps> = ({
                         name="BeginDate"
                         filterOptions={filterBeginDateOptions}
                         filterValues={filterBeginDateValues}
-                        filterActiveOptions={beginDateActiveOptions}
+                        filterActiveOptions={activeFiltersValues.beginDate}
                         onOptionChange={onBeginDateFilterClick}
+                    />
+
+                    <FilterOptions
+                        name="Location"
+                        filterOptions={filterLocationOptions}
+                        filterValues={filterLocationValues}
+                        filterActiveOptions={activeFiltersValues.location}
+                        onOptionChange={onLocationFilterClick}
                     />
                 
                     <FilterRange
@@ -184,6 +233,7 @@ const SearchPage: React.FC<IPageProps> = ({
                             <div>Capacity: {hanana.capacity}</div>
                             <div>MinPrice: {hanana.minPrice}</div>
                             <div>Host: {hanana.host}</div>
+                            <div>Location: {hanana.location}</div>
                         </div>
                     ))}
                 </div>

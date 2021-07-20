@@ -6,6 +6,7 @@ import type { RootStateType } from './store';
 export interface OptionFiltersState {
     host: string[];
     beginDate: string[];
+    location: string[];
 }
 
 interface OptionFilterPayload {
@@ -16,6 +17,7 @@ interface OptionFilterPayload {
 const initialState: OptionFiltersState = {
     host: [],
     beginDate: [],
+    location: [],
 };
 
 export const optionFiltersSlice = createSlice({
@@ -37,6 +39,7 @@ export const optionFiltersSlice = createSlice({
 
 export const selectFilterHost = (state: RootStateType) => state.optionFilters.host;
 export const selectFilterBeginDate = (state: RootStateType) => state.optionFilters.beginDate;
+export const selectFilterLocation = (state: RootStateType) => state.optionFilters.location;
 export const selectOptionFilters = (state: RootStateType) => state.optionFilters;
 
 export const { addOption, removeOption } = optionFiltersSlice.actions;
@@ -44,8 +47,6 @@ export const { addOption, removeOption } = optionFiltersSlice.actions;
 export const addOptionWithHistory = ({ name, value }:OptionFilterPayload): ThunkAction<void, RootStateType, BrowserHistory, AnyAction> => 
     (dispatch, getState, history) => {
         dispatch(addOption({ name, value }));
-
-        console.log(history);
 
         const query = new URLSearchParams(history.location.search);
     

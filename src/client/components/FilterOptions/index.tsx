@@ -19,7 +19,7 @@ const FilterOptions: React.FC<FilterOptionsProps<string>> = ({
         <div>
             <p>{name}</p>
             {filterOptions.map((item) => (
-                <label key={item} style={{ color: filterActiveOptions.includes(item) ? 'black' : 'gray' }}>
+                <label key={item} style={{ color: (filterActiveOptions.length === 0 || filterActiveOptions.includes(item)) ? 'black' : 'gray' }}>
                     <input
                         type="checkbox"
                         checked={filterValues.includes(item)}
