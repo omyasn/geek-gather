@@ -99,61 +99,6 @@ const isHananaPassFilters = (hanana: IHanana, filtersValues: FiltersValues) => {
     return result;
 };
 
-
-const getActiveFiltersOptions = (hananas: IHanana[], optionFiltersValues: OptionFiltersState) => {
-    const allFiltersNames = Object.keys(optionFiltersValues);
-    const usingFiltersNames = allFiltersNames.filter(f => optionFiltersValues[f].length > 0);
-
-    const result: any = {
-        host: {},
-        beginDate: {},
-        location: {},
-        color: {},
-    };
-
-    const result1: any = {
-        host: {},
-        beginDate: {},
-        location: {},
-        color: {},
-    };
-
-    const finalRes: any = {
-        host: [],
-        beginDate: [],
-        location: [],
-        color: [],
-    };
- 
-    hananas.forEach(hanana => {
-        usingFiltersNames.forEach((filterName, filterNumber) => {
-            if (optionFiltersValues[filterName].includes(hanana[filterName])) {
-                allFiltersNames.filter(f => f !== filterName).forEach(otherFilter => {
-                    result[otherFilter][hanana[otherFilter]] = result[otherFilter][hanana[otherFilter]] ? result[otherFilter][hanana[otherFilter]] + 1 : 1;
-                });
-            }
-        });
-    });
-
-    for (const filt in result) {
-        for (const val in result[filt]) {
-            let limit = usingFiltersNames.length;
-            if (usingFiltersNames.includes(filt as keyof OptionFiltersState)) {
-                limit = limit - 1;
-            }
-
-            if (result[filt][val] >= limit){
-                finalRes[filt].push(val);
-            }
-        }
-    }
-
- console.log('OLD', finalRes);
-    return finalRes;
-}
-
-
-
 const getActives = (hananas: IHanana[], optionFiltersValues: OptionFiltersState, filtredHananas: IHanana[]) => {
     const allFiltersNames = Object.keys(optionFiltersValues);
     const usingFiltersNames = allFiltersNames.filter(f => optionFiltersValues[f].length > 0);
@@ -169,7 +114,6 @@ const getActives = (hananas: IHanana[], optionFiltersValues: OptionFiltersState,
     };
 
     if (usingFiltersNames.length === 0) {
-        console.log('NEW 0', finalRes);
         return finalRes;
     }
  
@@ -184,7 +128,7 @@ const getActives = (hananas: IHanana[], optionFiltersValues: OptionFiltersState,
                 otherFiltersNames.forEach(name => {
                     otherFilters[name] = optionFiltersValues[name];
                 });
-                console.log(otherFilters);
+
                 if (isHananaPassFilters(hanana, { optionFilters: otherFilters})) {
                     if (result[filterName]) {
                         result[filterName].add(hanana[filterName]);
@@ -217,8 +161,6 @@ const getActives = (hananas: IHanana[], optionFiltersValues: OptionFiltersState,
     for (const filt in result) {
         finalRes[filt] = Array.from(result[filt  as keyof OptionFiltersState]);
     }
-
-    console.log('NEW', finalRes);
 
     return finalRes;
 }
@@ -262,14 +204,7 @@ const SearchPage: React.FC<IPageProps> = ({
         currentFilters,
     );
 
-// old
     const optionFilt = useAppSelector(selectOptionFilters);
-    getActiveFiltersOptions(
-        hananas,
-        optionFilt
-    );
-
-// new
     const activeFiltersValues = getActives(hananas, optionFilt, filtredHananas);
 
 
