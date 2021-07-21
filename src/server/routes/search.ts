@@ -23,6 +23,7 @@ const getBackendData = (): IHanana[]  => {
 // TODO refactor
 const getFiltersVariants = (hananas: IHanana[]): FiltersVariants => {
     let filterHostOptions = new Set<string>();
+    let filterColorOptions = new Set<string>();
     let filterBeginDateOptions = new Set<string>();
     let filterLocationOptions = new Set<string>();
     let filterMinPriceRangeOptions = [ Infinity, 0 ];
@@ -30,6 +31,7 @@ const getFiltersVariants = (hananas: IHanana[]): FiltersVariants => {
 
     hananas.forEach(hanana => {
         filterHostOptions.add(hanana.host);
+        filterColorOptions.add(hanana.color);
         filterBeginDateOptions.add(hanana.beginDate);
         filterLocationOptions.add(hanana.location);
 
@@ -40,6 +42,7 @@ const getFiltersVariants = (hananas: IHanana[]): FiltersVariants => {
 
     return {
         filterHostOptions: Array.from(filterHostOptions).sort(),
+        filterColorOptions: Array.from(filterColorOptions).sort(),
         filterBeginDateOptions: Array.from(filterBeginDateOptions).sort(),
         filterLocationOptions: Array.from(filterLocationOptions).sort(),
         filterMinPriceRangeOptions,
@@ -49,7 +52,7 @@ const getFiltersVariants = (hananas: IHanana[]): FiltersVariants => {
 
 
 const getPreloadedState = (req: Request, filrersVariants: FiltersVariants): RootStateType => {
-    const { host, beginDate, minPrice, capacity, location } = req.query;
+    const { host, beginDate, minPrice, capacity, location, color } = req.query;
     // host=АПГ,lol&beginDate=21.01.2021,07.12.2022&minPrice=0-3000&capacity=2-300
 
     const result:RootStateType = {
@@ -57,6 +60,7 @@ const getPreloadedState = (req: Request, filrersVariants: FiltersVariants): Root
             host: parseOptionsFilterValues(host, filrersVariants.filterHostOptions),
             beginDate: parseOptionsFilterValues(beginDate, filrersVariants.filterBeginDateOptions),
             location: parseOptionsFilterValues(location, filrersVariants.filterLocationOptions),
+            color: parseOptionsFilterValues(color, filrersVariants.filterColorOptions),
         },
         rangeFilters: {
             minPrice: parseRangeFilterValues(minPrice, filrersVariants.filterMinPriceRangeOptions),

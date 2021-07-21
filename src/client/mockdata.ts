@@ -8,6 +8,7 @@ export const listOfEvents =[
 			minPrice: 700,
 			host: 'АПГ',
 			location: 'Иркутск',
+			color: 'red', // TODO fake info, delete
 		},
 		
 	},
@@ -20,6 +21,7 @@ export const listOfEvents =[
 			minPrice: 1000,
 			host: 'АПГ',
 			location: 'Москва',
+			color: 'red',
 		},
 		
 	},
@@ -32,6 +34,7 @@ export const listOfEvents =[
 			minPrice: 2000,
 			host: 'Loonarbaboon',
 			location: 'Иркутск',
+			color: 'red',
 		},
 		
 	},
@@ -44,6 +47,7 @@ export const listOfEvents =[
 			minPrice: 600,
 			host: 'Loonarbaboon',
 			location: 'Москва',
+			color: 'red',
 		},
 		
 	},
@@ -56,9 +60,63 @@ export const listOfEvents =[
 			minPrice: 550,
 			host: 'Loonarbaboon',
 			location: 'Иркутск',
+			color: 'blue',
 		},
 		
-	}
+	},
+		{
+		id: 5,
+		resourceContent: {
+			title: 'Roar roar',
+			beginDate: '31.01.2020',
+			capacity: 200,
+			minPrice: 650,
+			host: 'Toptop',
+			location: 'Иркутск',
+			color: 'blue',
+		},
+		
+	},
+		{
+		id: 6,
+		resourceContent: {
+			title: 'Solo',
+			beginDate: '31.01.2020',
+			capacity: 100,
+			minPrice: 550,
+			host: 'Toptop',
+			location: 'Иркутск',
+			color: 'yellow',
+		},
+		
+	},
+		{
+		id: 7,
+		resourceContent: {
+			title: 'rip',
+			beginDate: '14.09.2018',
+			capacity: 2000,
+			minPrice: 3000,
+			host: 'III',
+			location: 'Псков',
+			color: 'blue',
+		},
+		
+	},
+		{
+		id: 8,
+		resourceContent: {
+			title: 'Атом',
+			beginDate: '10.11.2016',
+			capacity: 600,
+			minPrice: 600,
+			host: 'Toptop',
+			location: 'Иркутск',
+			color: 'blue',
+		},
+		
+	},
+
 ];
 
 export const mockDetailsOfEvent = {
