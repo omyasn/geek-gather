@@ -9,5 +9,6 @@
         "moduleResolution": "node",
         "sourceMap": true,
         "resolveJsonModule": true,
+        "downlevelIteration": true,
     }
 }

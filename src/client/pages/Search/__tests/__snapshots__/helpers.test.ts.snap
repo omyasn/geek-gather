@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`mapOfHananas 1`] = `
+Map {
+  0 => Object {
+    "beginDate": "22.06.2021",
+    "capacity": 3000,
+    "color": "red",
+    "host": "АПГ",
+    "id": 0,
+    "location": "Иркутск",
+    "minPrice": 700,
+    "title": "БПМ",
+  },
+  1 => Object {
+    "beginDate": "07.06.2018",
+    "capacity": 200,
+    "color": "red",
+    "host": "АПГ",
+    "id": 1,
+    "location": "Москва",
+    "minPrice": 1000,
+    "title": "Красная капелла: Ответный удар",
+  },
+}
+`;

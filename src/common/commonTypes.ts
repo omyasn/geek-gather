@@ -9,6 +9,7 @@ export interface IHananaProps {
 }
 
 export type IHanana = { id: number } & IHananaProps;
+export type IHananaMap = Map<number, IHanana>;
 
 export interface IBackendHanana {
     id: number;
