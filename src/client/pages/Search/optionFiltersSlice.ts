@@ -3,12 +3,11 @@ import { BrowserHistory } from 'history';
 import type { RootStateType } from './store';
 
 // TODO initialState приходит с бекенда, нельзя ли брать тип оттуда?
-// TODO тут ? для удобства, хз надо или нет
 export interface OptionFiltersState {
-    host?: string[];
-    beginDate?: string[];
-    location?: string[];
-    color?: string[];
+    host: string[];
+    beginDate: string[];
+    location: string[];
+    color: string[];
 }
 
 interface OptionFilterPayload {

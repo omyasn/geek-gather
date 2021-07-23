@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent } from 'react';
 import { Dispatch, ThunkDispatch } from '@reduxjs/toolkit';
 
 import { useAppDispatch,  useAppSelector } from './hooks';
@@ -31,10 +31,9 @@ import styles from './styles.scss';
 
 // TODO разделить логику фильтров, отрисовку страницы итд 
 
-// TODO тут ? для удобства, хз нужен или нет
 interface FiltersValues {
-    optionFilters?: OptionFiltersState;
-    rangeFilters?: RangeFiltersState;
+    optionFilters: OptionFiltersState;
+    rangeFilters: RangeFiltersState;
 }
 
 export interface FiltersVariants {
@@ -74,6 +73,8 @@ const onRangeFilterChange = (name: keyof RangeFiltersState, dispatch: any) =>
 
 const getFilteredFromSubsets = (hananas: IHanana[], filtersValues: FiltersValues): [IHanana[], any] => {
     const optionFiltersNames = Object.keys(filtersValues.optionFilters);
+    const rangesFiltersNames = Object.keys(filtersValues.rangeFilters);
+
     const usingFiltersNames = optionFiltersNames.filter(f => filtersValues.optionFilters[f].length > 0);
     const finalFiltersAvability: any = {
         host: [],
@@ -108,6 +109,34 @@ const getFilteredFromSubsets = (hananas: IHanana[], filtersValues: FiltersValues
     const filtredHananasIDs = intersection(allSets);
 
     // доступные значения пассивных фильтров
+    passiveFiltersAvailability(filtredHananasIDs, hananasMap, passiveFiltersNames, finalFiltersAvability);
+
+    activeFiltersAvability(usingFiltersNames, allSetsMap, hananasMap, finalFiltersAvability);
+
+    const filtredHananas = filtredHananasIDs.map(id => { 
+        const hanana = hananasMap.get(id);
+        let passRangeFilters = true;
+
+        // TODO надо проверять только те у которых есть значения
+        rangesFiltersNames.forEach(filterName => {
+            passRangeFilters = passRangeFilters && 
+            (
+                (!filtersValues.rangeFilters[filterName].min || filtersValues.rangeFilters[filterName].min <= Number(hanana[filterName])) &&
+                (!filtersValues.rangeFilters[filterName].max || filtersValues.rangeFilters[filterName].max >= Number(hanana[filterName]))
+            )
+        });
+
+        return passRangeFilters && hanana;
+    }).filter(i => i);
+
+    console.log('filtredHananasIDs', filtredHananasIDs);
+    console.log('finalFiltersAvability', finalFiltersAvability);
+
+    return [ filtredHananas, finalFiltersAvability]
+}
+
+
+function passiveFiltersAvailability(filtredHananasIDs: number[], hananasMap: IHananaMap, passiveFiltersNames: (keyof OptionFiltersState)[], finalFiltersAvability: any) {
     const passivResult: any = {};
     filtredHananasIDs.forEach(id => {
         const hanana = hananasMap.get(id);
@@ -115,7 +144,7 @@ const getFilteredFromSubsets = (hananas: IHanana[], filtersValues: FiltersValues
             if (passivResult[filterName]) {
                 passivResult[filterName].add(hanana[filterName]);
             } else {
-                passivResult[filterName] = new Set([ hanana[filterName] ]);
+                passivResult[filterName] = new Set([hanana[filterName]]);
             }
         });
     });
@@ -123,7 +152,9 @@ const getFilteredFromSubsets = (hananas: IHanana[], filtersValues: FiltersValues
     for (const filt in passivResult) {
         finalFiltersAvability[filt] = Array.from(passivResult[filt as keyof OptionFiltersState]);
     }
+}
 
+function activeFiltersAvability(usingFiltersNames: (keyof OptionFiltersState)[], allSetsMap: Map<string, number[]>, hananasMap: IHananaMap, finalFiltersAvability: any) {
     if (usingFiltersNames.length > 1) {
         // доступные значения для активных фильтров
         const activeResult: any = {};
@@ -150,13 +181,6 @@ const getFilteredFromSubsets = (hananas: IHanana[], filtersValues: FiltersValues
             finalFiltersAvability[filt] = Array.from(activeResult[filt as keyof OptionFiltersState]);
         }
     }
-
-    const filtredHananas = filtredHananasIDs.map(id => hananasMap.get(id));
-
-    console.log('filtredHananasIDs', filtredHananasIDs);
-    console.log('finalFiltersAvability', finalFiltersAvability);
-
-    return [ filtredHananas, finalFiltersAvability]
 }
 
     // Может это надо в стор или сделать переменной класса

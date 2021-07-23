@@ -5,10 +5,9 @@ import type { RootStateType } from './store';
 
 // TODO положить эти файлы в фича папку с компонентами
 
-// TODO тут ? для удобства, хз надо или нет
 export interface RangeFiltersState {
-    minPrice?: FilterRangeOptions;
-    capacity?: FilterRangeOptions;
+    minPrice: FilterRangeOptions;
+    capacity: FilterRangeOptions;
 }
 
 // TODO Должно приходить с бекенда
