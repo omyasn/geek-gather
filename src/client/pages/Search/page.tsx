@@ -1,12 +1,13 @@
 import * as React from 'react';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useRef } from 'react';
 import { Dispatch, ThunkDispatch } from '@reduxjs/toolkit';
 
 import { useAppDispatch,  useAppSelector } from './hooks';
 import FilterOptions from '../../components/FilterOptions/index';
 import FilterRange, { FilterRangeOptions } from '../../components/FilterRange/index';
-import { IHanana, IHananaMap } from '../../../common/commonTypes';
-import { intersection, mapOfHananas } from './helpers';
+import { IHanana } from '../../../common/commonTypes';
+
+import { makeSubsets, getFilteredFromSubsets } from './filtersLogic';
 
 import {
     addOptionWithHistory,
@@ -31,7 +32,7 @@ import styles from './styles.scss';
 
 // TODO разделить логику фильтров, отрисовку страницы итд 
 
-interface FiltersValues {
+export interface FiltersValues {
     optionFilters: OptionFiltersState;
     rangeFilters: RangeFiltersState;
 }
@@ -43,6 +44,12 @@ export interface FiltersVariants {
     filterColorOptions: string[];
     filterMinPriceRangeOptions: number[];
     filterCapacityRangeOptions: number[];  
+}
+
+export interface SubsetsStorage {
+    [key: string]: {
+        [key: string]: number[];
+    }
 }
 
 export interface IPageProps extends FiltersVariants {
@@ -71,189 +78,6 @@ const onRangeFilterChange = (name: keyof RangeFiltersState, dispatch: any) =>
 
 
 
-const getFilteredFromSubsets = (hananas: IHanana[], filtersValues: FiltersValues): [IHanana[], any] => {
-    const optionFiltersNames = Object.keys(filtersValues.optionFilters);
-    const rangesFiltersNames = Object.keys(filtersValues.rangeFilters);
-
-    let activeFiltersNames: (keyof OptionFiltersState)[] = [];
-    let passiveFiltersNames:  (keyof OptionFiltersState)[] = [];
-    const finalFiltersAvability: any = {
-        host: [],
-        beginDate: [],
-        location: [],
-        color: [],
-    };
-
-    // TODO возможно стоит везде хранить в формате мапы
-    const hananasMap = mapOfHananas(hananas);
-    const allSetsMap: Map<string, number[]> = new Map();
-
-    optionFiltersNames.forEach(f => {
-        if (filtersValues.optionFilters[f].length > 0) {
-            activeFiltersNames.push(f);
-        } else {
-            passiveFiltersNames.push(f);
-        }
-    });
-    
-    if (activeFiltersNames.length === 0) {
-        const filterdHananas = hananas.filter(hanana => passRangeFilters(rangesFiltersNames, filtersValues, hanana));
-        const filtredHananasIDs: number[] = filterdHananas.map(hanana => hanana.id);
-
-        passiveFiltersAvailability(filtredHananasIDs, hananasMap, passiveFiltersNames, finalFiltersAvability);
-
-        return [filterdHananas, finalFiltersAvability];
-    }
-
-    activeFiltersNames.forEach(filterName => {
-        let filterAllValuesSet: number[] = [];
-        filtersValues.optionFilters[filterName].forEach(
-            // можно не проверять наличие, так как после выбора этих фильтров сеты обновились и такой сет точно есть
-            // для выбранного фильтра сеты его выбранных значений надо объединить
-            value => filterAllValuesSet = filterAllValuesSet.concat(...subsets[filterName][value])
-        );
-        allSetsMap.set(filterName, filterAllValuesSet);
-    });
-    console.log('allSetsMap BEFORE range filters', allSetsMap);
-
-    //TODO для range фильтров не можем определить активность, так как в них всегда установлены граничные значения
-    rangesFiltersNames.forEach(filterName => {
-        const filteredHanans = hananas.filter(hanana => (
-            (!filtersValues.rangeFilters[filterName].min || filtersValues.rangeFilters[filterName].min <= Number(hanana[filterName])) &&
-            (!filtersValues.rangeFilters[filterName].max || filtersValues.rangeFilters[filterName].max >= Number(hanana[filterName]))
-        ));
-
-        allSetsMap.set(filterName, filteredHanans.map(hanana => hanana.id));
-    });
-
-    console.log('allSetsMap AFTER range filters', allSetsMap);
-
-    // id отфильтрованных элементов
-    const filtredHananasIDs = intersection(Array.from(allSetsMap.values()));
-
-    console.log('finalFiltersAvability', finalFiltersAvability);
-
-    // доступные значения пассивных фильтров
-    passiveFiltersAvailability(
-        filtredHananasIDs,
-        hananasMap,
-        passiveFiltersNames,
-        finalFiltersAvability
-    );
-
-    console.log('finalFiltersAvability', finalFiltersAvability);
-
-    // доступные значения активных фильтров
-    activeFiltersAvability(allSetsMap, hananasMap, finalFiltersAvability);
-
-    const filtredHananas = filtredHananasIDs.map(id => hananasMap.get(id));
-
-    console.log('filtredHananasIDs', filtredHananasIDs);
-    console.log('finalFiltersAvability', finalFiltersAvability);
-
-    return [ filtredHananas, finalFiltersAvability]
-}
-
-
-function passRangeFilters(rangesFiltersNames: (keyof RangeFiltersState)[], filtersValues: FiltersValues, hanana: IHanana) {
-    let passRangeFilters = true;
-
-    rangesFiltersNames.forEach(filterName => {
-        passRangeFilters = passRangeFilters &&
-            (
-                (!filtersValues.rangeFilters[filterName].min || filtersValues.rangeFilters[filterName].min <= Number(hanana[filterName])) &&
-                (!filtersValues.rangeFilters[filterName].max || filtersValues.rangeFilters[filterName].max >= Number(hanana[filterName]))
-            );
-    });
-
-    return passRangeFilters;
-}
-
-// TODO сделать функции чистыми!!!
-function passiveFiltersAvailability(filtredHananasIDs: number[], hananasMap: IHananaMap, passiveFiltersNames: (keyof OptionFiltersState)[], finalFiltersAvability: any) {
-    const passivResult: any = {};
-    filtredHananasIDs.forEach(id => {
-        const hanana = hananasMap.get(id);
-        passiveFiltersNames.forEach(filterName => {
-            if (passivResult[filterName]) {
-                passivResult[filterName].add(hanana[filterName]);
-            } else {
-                passivResult[filterName] = new Set([hanana[filterName]]);
-            }
-        });
-    });
-
-    for (const filt in passivResult) {
-        finalFiltersAvability[filt] = Array.from(passivResult[filt as keyof OptionFiltersState]);
-    }
-}
-
-function activeFiltersAvability(allSetsMap: Map<string, number[]>, hananasMap: IHananaMap, finalFiltersAvability: any) {
-    // TODO не работает при 1 фильтре
-    if (allSetsMap.size > 1) {
-        // доступные значения для активных фильтров
-        const activeResult: any = {};
-        for (let filterName of allSetsMap.keys()) {
-            const otherFiltersArray: Array<number>[] = [];
-            allSetsMap.forEach((value, key) => {
-                if (key !== filterName) {
-                    otherFiltersArray.push(value);
-                }
-            });
-
-            const setForValues = intersection(otherFiltersArray);
-            setForValues.forEach(id => {
-                const hanana = hananasMap.get(id);
-                if (activeResult[filterName]) {
-                    activeResult[filterName].add(hanana[filterName as keyof OptionFiltersState]);
-                } else {
-                    activeResult[filterName] = new Set([hanana[filterName as keyof OptionFiltersState]]);
-                }
-            });
-        }
-
-        for (const filt in activeResult) {
-            finalFiltersAvability[filt] = Array.from(activeResult[filt as keyof OptionFiltersState]);
-        }
-    }
-}
-
-    // Может это надо в стор или сделать переменной класса
-    // старые сабсеты надо пересчитывать только если изменился hananas
-    // возможно это надо проверять в lifecycle methods
-
-// можно использовать useRef, тогда makeSubsets должно переехать в useEffect
-// не ясно можно ли ее будет сетить внутри цикла
-const subsets:any = {}; 
-// {
-//     host: {
-//         qwe: [1, 5, 6],
-//         rew: [2,3,4]
-//     },
-//     color: {
-//         red: [1, 5, 6],
-//         blue: [2,3,4]
-//     },
-// }
-// может запихнуть это в useEffect?
-// Дополнять сабсеты можно только если не изменилс список  hananas
-const makeSubsets = (hananas: IHanana[], filtersValues: FiltersValues) => {
-    const optionFiltersNames = Object.keys(filtersValues.optionFilters);
-
-    // вообще тут можно толкьо для новых установленных фильтров
-    optionFiltersNames.map(filterName => {
-        const filterValues = filtersValues.optionFilters[filterName]; // ['red', 'blue']
-        filterValues.map(value => {
-            // если сабсет для этого значения еще не вычислен
-            if (!subsets[filterName]?.[value]) {
-                if (!subsets[filterName]) { subsets[filterName] = {}; }
-                subsets[filterName][value] = hananas.filter(hanana => (hanana[filterName] === value)).map(i => i.id);
-            }
-        });
-    });
-};
-
-
 const SearchPage: React.FC<IPageProps> = ({
     hananas,
     filterHostOptions,
@@ -262,6 +86,7 @@ const SearchPage: React.FC<IPageProps> = ({
     filterColorOptions,   
 }) => {
     const dispatch = useAppDispatch();
+    const subsetsStorage = useRef({});
 
     const filterHostValues = useAppSelector(selectFilterHost);
     const onHostFilterClick = onOptionsFilterChange('host', dispatch);
@@ -286,9 +111,10 @@ const SearchPage: React.FC<IPageProps> = ({
         rangeFilters: selectRangeFilters(state),
     }));
 
-    makeSubsets(hananas, currentFilters);
-    const [filtredHananas, activeFiltersValues] = getFilteredFromSubsets(hananas, currentFilters);
-    console.log(subsets);
+    subsetsStorage.current = makeSubsets(hananas, currentFilters, subsetsStorage.current);
+
+    const [filtredHananas, activeFiltersValues] = getFilteredFromSubsets(hananas, currentFilters, subsetsStorage.current);
+    console.log(subsetsStorage.current);
 
     return (
         <div>
