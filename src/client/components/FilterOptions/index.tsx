@@ -11,7 +11,7 @@ export interface FilterOptionsProps<T> {
 const FilterOptions: React.FC<FilterOptionsProps<string>> = ({
     name,
     filterOptions,
-    filterActiveOptions = [],
+    filterActiveOptions,
     filterValues,
     onOptionChange,
 }) => {
@@ -19,7 +19,7 @@ const FilterOptions: React.FC<FilterOptionsProps<string>> = ({
         <div>
             <p>{name}</p>
             {filterOptions.map((item) => (
-                <label key={item} style={{ color: (filterActiveOptions.length === 0 || filterActiveOptions.includes(item)) ? 'black' : 'gray' }}>
+                <label key={item} style={{ color: (filterActiveOptions && filterActiveOptions.includes(item)) ? 'black' : 'gray' }}>
                     <input
                         type="checkbox"
                         checked={filterValues.includes(item)}

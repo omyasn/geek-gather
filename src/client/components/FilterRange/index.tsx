@@ -32,6 +32,7 @@ const FilterRange: React.FC<FilterRangeProps> = ({
                     value={filterRange.min.current || filterRange.min.limit}
                     onChange={onRangeChange('min')}
                     min={filterRange.min.limit}
+                    max={filterRange.max.limit}
                 />
                 <span>{filterRange.min.limit}</span>
             </label>
@@ -42,6 +43,7 @@ const FilterRange: React.FC<FilterRangeProps> = ({
                     type="number"
                     value={filterRange.max.current || filterRange.max.limit}
                     onChange={onRangeChange('max')}
+                    min={filterRange.min.limit}
                     max={filterRange.max.limit}
                 />
                 <span>{filterRange.max.limit}</span>

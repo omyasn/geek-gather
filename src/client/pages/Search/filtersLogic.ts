@@ -6,8 +6,6 @@ import { RangeFiltersState } from './rangeFiltersSlice';
 import { FiltersValues, SubsetsStorage } from './page';
 
 // сейчас для range фильтров не добавляются сабсеты и не считаются доступные значения. Надо ли это вообще?
-
-// TODO BUG если какое-то значение делает все значения в фильтре недоступными, то там пустой массив и это считается, что все доступные
 export const getFilteredFromSubsets = (hananas: IHanana[], filtersValues: FiltersValues, subsetsStorage: SubsetsStorage): [IHanana[], any] => {
     const optionFiltersNames = Object.keys(filtersValues.optionFilters);
     const rangesFiltersNames = Object.keys(filtersValues.rangeFilters);
@@ -24,12 +22,7 @@ export const getFilteredFromSubsets = (hananas: IHanana[], filtersValues: Filter
         ));
     });
 
-    const finalFiltersAvability: any = {
-        host: [],
-        beginDate: [],
-        location: [],
-        color: [],
-    };
+    const finalFiltersAvability: any = {};
 
     // TODO возможно стоит везде хранить в формате мапы
     const hananasMap = mapOfHananas(hananas);
@@ -47,7 +40,7 @@ export const getFilteredFromSubsets = (hananas: IHanana[], filtersValues: Filter
         const filterdHananas = hananas.filter(hanana => checkAllRangeFilters(activeRangeFiltersNames, filtersValues, hanana));
         const filtredHananasIDs: number[] = filterdHananas.map(hanana => hanana.id);
 
-        passiveFiltersAvailability(filtredHananasIDs, hananasMap, passiveOptionsFiltersNames, finalFiltersAvability);
+        passiveOptionsFiltersAvailability(filtredHananasIDs, hananasMap, passiveOptionsFiltersNames, finalFiltersAvability);
 
         return [filterdHananas, finalFiltersAvability];
     }
@@ -72,7 +65,7 @@ export const getFilteredFromSubsets = (hananas: IHanana[], filtersValues: Filter
     const filtredHananasIDs = intersection(Array.from(allSetsMap.values()));
 
     // доступные значения пассивных фильтров
-    passiveFiltersAvailability(
+    passiveOptionsFiltersAvailability(
         filtredHananasIDs,
         hananasMap,
         passiveOptionsFiltersNames,
@@ -80,7 +73,7 @@ export const getFilteredFromSubsets = (hananas: IHanana[], filtersValues: Filter
     );
 
     // доступные значения активных фильтров
-    activeFiltersAvability(allSetsMap, hananasMap, finalFiltersAvability);
+    activeOptionsFiltersAvability(allSetsMap, hananasMap, finalFiltersAvability);
 
     const filtredHananas = filtredHananasIDs.map(id => hananasMap.get(id));
 
@@ -105,7 +98,7 @@ function checkRangeFilter(filtersValues: FiltersValues, filterName: (keyof Range
 }
 
 // TODO не менять finalFiltersAvability, а возвращать
-function passiveFiltersAvailability(filtredHananasIDs: number[], hananasMap: IHananaMap, passiveFiltersNames: (keyof OptionFiltersState)[], finalFiltersAvability: any) {
+function passiveOptionsFiltersAvailability(filtredHananasIDs: number[], hananasMap: IHananaMap, passiveFiltersNames: (keyof OptionFiltersState)[], finalFiltersAvability: any) {
     const passivResult: any = {};
     filtredHananasIDs.forEach(id => {
         const hanana = hananasMap.get(id);
@@ -124,7 +117,7 @@ function passiveFiltersAvailability(filtredHananasIDs: number[], hananasMap: IHa
 }
 
 // TODO не менять finalFiltersAvability, а возвращать
-function activeFiltersAvability(allSetsMap: Map<string, number[]>, hananasMap: IHananaMap, finalFiltersAvability: any) {
+function activeOptionsFiltersAvability(allSetsMap: Map<string, number[]>, hananasMap: IHananaMap, finalFiltersAvability: any) {
     if (allSetsMap.size > 1) {
         const activeResult: any = {};
         for (let filterName of allSetsMap.keys()) {
