@@ -13,12 +13,20 @@ export interface RangeFiltersState {
 // TODO Должно приходить с бекенда
 const initialState: RangeFiltersState = {
     minPrice: {
-        min: 0,
-        max: Infinity,
+        min: {
+            limit: 0,
+        },
+        max: {
+            limit: Infinity,
+        },
     },
     capacity: {
-        min: 0,
-        max: Infinity,
+        min: {
+            limit: 0,
+        },
+        max: {
+            limit: Infinity,
+        },
     },
 };
 
@@ -37,7 +45,16 @@ export const rangeFiltersSlice = createSlice({
             const name = action.payload.name;
             const value = action.payload.value;
             const edge = action.payload.edge;
-            state[name][edge] = value;
+
+            // сейчас ограничение значения в соответствии с лимитами сделано на уровне верстки в input
+            // TODO наверное стоит сделать здесь
+            state[name][edge].current = value;
+        },
+        clearAllRanges: state => {
+            for (let filter in state) {
+                state[filter as keyof RangeFiltersState].min.current = undefined;
+                state[filter as keyof RangeFiltersState].max.current = undefined;
+            }
         },
     },
 });
@@ -46,25 +63,41 @@ export const selectFilterMinPrice = (state: RootStateType) => state.rangeFilters
 export const selectFilterCapacity = (state: RootStateType) => state.rangeFilters.capacity;
 export const selectRangeFilters = (state: RootStateType) => state.rangeFilters;
 
-export const { changeRange } = rangeFiltersSlice.actions;
+export const { changeRange, clearAllRanges } = rangeFiltersSlice.actions;
 
 export const changeRangewithHistory = ({ name, edge, value }: RangeFilterPayload): ThunkAction<void, RootStateType, BrowserHistory, AnyAction> => 
     (dispatch, getState, history) => {
         dispatch(changeRange({ name, edge, value}));
 
         const query = new URLSearchParams(history.location.search);
+        const isMax = edge === 'max';
         
         if (query.has(name)) {
             const param = query.get(name);
-            const newParam = edge === 'max' ? param.replace(/(?<=-)\d+$/, `${value}`) : param.replace(/^\d+/, `${value}`);
+            const newParam = isMax ? param.replace(/(?<=-)\d+$/, `${value}`) : param.replace(/^\d+/, `${value}`);
             query.set(name, newParam);
         } else {
             const state = getState();
-            query.append(name, edge === 'max' ? `${state.rangeFilters[name].min}-${value}` : `${value}-${state.rangeFilters[name].max}`);
+            const otherEdge = isMax ? 'min' : 'max';
+            const otherEdgeValue = state.rangeFilters[name][otherEdge].current || state.rangeFilters[name][otherEdge].limit;
+            query.append(name, isMax ? `${otherEdgeValue}-${value}` : `${value}-${otherEdgeValue}`);
         }
         
         history.replace({search: `?${query.toString()}`});
         
+    };
+
+export const clearAllRangeWithHistory = (): ThunkAction<void, RootStateType, BrowserHistory, AnyAction> => 
+    (dispatch, getState, history) => {
+        dispatch(clearAllRanges());
+
+        const query = new URLSearchParams(history.location.search);
+        const state = getState();
+        const filtersNames = Object.keys(state.rangeFilters);
+
+        filtersNames.forEach(filter => query.delete(filter));
+        
+        history.replace({search: `?${query.toString()}`});  
     };
 
 export default rangeFiltersSlice.reducer;

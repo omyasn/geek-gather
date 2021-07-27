@@ -36,6 +36,11 @@ export const optionFiltersSlice = createSlice({
             const value = action.payload.value;
             state[name] = state[name].filter(item => item !== value);
         },
+        clearAllOptions: state => {
+            for (let filter in state) {
+                state[filter as keyof OptionFiltersState] = [];
+            }
+        },
     },
 });
 
@@ -45,7 +50,7 @@ export const selectFilterLocation = (state: RootStateType) => state.optionFilter
 export const selectFilterColor = (state: RootStateType) => state.optionFilters.color;
 export const selectOptionFilters = (state: RootStateType) => state.optionFilters;
 
-export const { addOption, removeOption } = optionFiltersSlice.actions;
+export const { addOption, removeOption, clearAllOptions } = optionFiltersSlice.actions;
 
 export const addOptionWithHistory = ({ name, value }:OptionFilterPayload): ThunkAction<void, RootStateType, BrowserHistory, AnyAction> => 
     (dispatch, getState, history) => {
@@ -85,7 +90,19 @@ export const removeOptionWithHistory = ({ name, value }:OptionFilterPayload): Th
         history.replace({search: `?${query.toString()}`}) 
 };
 
+export const clearAllOptionsWithHistory = (): ThunkAction<void, RootStateType, BrowserHistory, AnyAction> => 
+    (dispatch, getState, history) => {
+        dispatch(clearAllOptions());
 
+        const query = new URLSearchParams(history.location.search);
+
+        const state = getState();
+        const filtersNames = Object.keys(state.optionFilters);
+
+        filtersNames.forEach(filter => query.delete(filter));
+
+        history.replace({search: `?${query.toString()}`}) 
+};
 
 
 export default optionFiltersSlice.reducer;

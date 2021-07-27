@@ -12,6 +12,7 @@ import { makeSubsets, getFilteredFromSubsets } from './filtersLogic';
 import {
     addOptionWithHistory,
     removeOptionWithHistory,
+    clearAllOptionsWithHistory,
     selectFilterHost,
     selectFilterBeginDate,
     selectFilterLocation,
@@ -22,6 +23,7 @@ import {
 
 import {
     changeRangewithHistory,
+    clearAllRangeWithHistory,
     selectFilterCapacity,
     selectFilterMinPrice,
     selectRangeFilters,
@@ -30,7 +32,6 @@ import {
 
 import styles from './styles.scss';
 
-// TODO разделить логику фильтров, отрисовку страницы итд 
 
 export interface FiltersValues {
     optionFilters: OptionFiltersState;
@@ -76,6 +77,10 @@ const onRangeFilterChange = (name: keyof RangeFiltersState, dispatch: any) =>
         dispatch(changeRangewithHistory({ name, edge, value: Number(value)}));
     };
 
+const clearAll = (dispatch: any) => () => {
+    dispatch(clearAllOptionsWithHistory());
+    dispatch(clearAllRangeWithHistory());
+};
 
 
 const SearchPage: React.FC<IPageProps> = ({
@@ -120,6 +125,11 @@ const SearchPage: React.FC<IPageProps> = ({
         <div>
             <div className={styles.kek}>It's search Page!</div>
 
+            <div>
+                <button onClick={clearAll(dispatch)}>
+                    ClearAll
+                </button>
+            </div>
             <div>
                 <div>
                     <FilterOptions

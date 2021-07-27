@@ -2,9 +2,14 @@ import * as React from 'react';
 import styles from './styles.css';
 
 export interface FilterRangeOptions {
-    min: number;
-    max: number;
+    min: RangeEdge;
+    max: RangeEdge;
 };
+
+export interface RangeEdge {
+    limit: number;
+    current?: number;
+}
 
 export interface FilterRangeProps {
     name: string;
@@ -24,18 +29,22 @@ const FilterRange: React.FC<FilterRangeProps> = ({
                 Min: 
                 <input
                     type="number"
-                    value={filterRange.min}
+                    value={filterRange.min.current || filterRange.min.limit}
                     onChange={onRangeChange('min')}
+                    min={filterRange.min.limit}
                 />
+                <span>{filterRange.min.limit}</span>
             </label>
 
             <label>
                 Max: 
                 <input
                     type="number"
-                    value={filterRange.max}
+                    value={filterRange.max.current || filterRange.max.limit}
                     onChange={onRangeChange('max')}
+                    max={filterRange.max.limit}
                 />
+                <span>{filterRange.max.limit}</span>
             </label>
         </div>
     );
