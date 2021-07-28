@@ -10,7 +10,7 @@ export interface IHtmlPageParams {
 
 interface IParams extends IHtmlPageParams {
     rootString: string;
-    preloadedState: any; // TODO
+    preloadedState: object;
 }
 
 export default ({
@@ -43,7 +43,7 @@ export default ({
                 <div id="root">${rootString}</div>
             </body>
 
-            <script>
+            <script id="data-transfer">
                 window.__INITIAL_DATA__=${serializeJavascript(initialData)};
                 window.__PRELOADED_STATE__=${serializeJavascript(preloadedState)};
             </script>

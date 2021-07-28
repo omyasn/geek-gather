@@ -27,7 +27,6 @@ const createAppStore = (preloadedState?: RootStateType, isClient?: boolean) => {
 };
 
 
-//export type RootState = ReturnType<typeof store.getState>;
-// TODO!!!!!!!!!!!
-export type AppDispatch = any; //typeof store.dispatch;
+type Store = ReturnType<typeof createAppStore>;
+export type AppDispatch =  Store["dispatch"];
 export default createAppStore;

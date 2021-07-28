@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { renderToString } from 'react-dom/server';
+import { EnhancedStore } from '@reduxjs/toolkit';
 import BasePage from '../../client/components/BasePage';
 import getHtml, { IHtmlPageParams } from './getHtml';
 
 export interface IPageParams extends IHtmlPageParams {
-    PageComponent: React.ComponentType<object>;
-    store?: any; // TODO
+    PageComponent: React.ComponentType<any>;
+    store?: EnhancedStore<any, any>;
 }
 
 export default ({

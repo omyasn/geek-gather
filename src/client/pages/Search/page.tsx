@@ -47,9 +47,9 @@ export interface FiltersVariants {
     filterCapacityRangeOptions: number[];  
 }
 
-export interface SubsetsStorage {
-    [key: string]: {
-        [key: string]: number[];
+export type SubsetsStorage = {
+    [filterName in keyof OptionFiltersState]?: {
+        [filterValue: string]: number[];
     }
 }
 
@@ -57,8 +57,7 @@ export interface IPageProps extends FiltersVariants {
     hananas: IHanana[];
 };
 
-// TODO определить тип dispatch, скорее всего ThunkDispatch с предустановленными типами
-const onOptionsFilterChange = (name: keyof OptionFiltersState, dispatch: any) => 
+const onOptionsFilterChange = (name: keyof OptionFiltersState, dispatch: ReturnType<typeof useAppDispatch>) => 
     (value: string) => 
     ({ target }: ChangeEvent<HTMLInputElement>): void => {
         const isChecked = target.checked;
@@ -70,14 +69,14 @@ const onOptionsFilterChange = (name: keyof OptionFiltersState, dispatch: any) =>
     };
 
 // TODO определить тип dispatch, скорее всего ThunkDispatch с предустановленными типами
-const onRangeFilterChange = (name: keyof RangeFiltersState, dispatch: any) => 
+const onRangeFilterChange = (name: keyof RangeFiltersState, dispatch: ReturnType<typeof useAppDispatch>) => 
     (edge: keyof FilterRangeOptions) =>
     ({ target }: ChangeEvent<HTMLInputElement>) => {
         const value = target.value;
         dispatch(changeRangewithHistory({ name, edge, value: Number(value)}));
     };
 
-const clearAll = (dispatch: any) => () => {
+const clearAll = (dispatch: ReturnType<typeof useAppDispatch>) => () => {
     dispatch(clearAllOptionsWithHistory());
     dispatch(clearAllRangeWithHistory());
 };
