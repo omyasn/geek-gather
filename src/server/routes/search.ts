@@ -1,4 +1,5 @@
 import { RequestHandler, Request } from 'express';
+import { ParsedQs } from 'qs';
 import severRenderAndSend from '../severRenderAndSend';
 import { IPageParams } from '../html/preparePage';
 import { IBackendHanana, IHanana } from '../../common/commonTypes';
@@ -10,7 +11,7 @@ import createAppStore, { RootStateType } from '../../client/pages/Search/store';
 import { FilterRangeOptions } from '../../client/components/FilterRange';
 
 const getBackendData = (): IHanana[]  => {
-    // здесь запрос на бек, сейчас мок(cv events.ts)
+    // здесь запрос на бек, сейчас мок(events.ts)
     const backendData: IBackendHanana[] = listOfEvents;
     const allHananas = backendData.map(({id, resourceContent }) => ({
         id,
@@ -71,31 +72,31 @@ const getPreloadedState = (req: Request, filrersVariants: FiltersVariants): Root
     return result;
 };
 
-const parseOptionsFilterValues = (queryValue: any, filrerVariants: string[]): string[] => {
+const parseOptionsFilterValues = (queryValue: string | string[] | ParsedQs | ParsedQs[], filterVariants: string[]): string[] => {
     if (!queryValue || typeof queryValue !== 'string') {
         return [];
     }
 
     const values = queryValue.split(',');
-    return values.filter(val => filrerVariants.includes(val));
+    return values.filter(val => filterVariants.includes(val));
 } 
 
-const parseRangeFilterValues = (queryValue: any, filrerVariants: number[]): FilterRangeOptions => {
+const parseRangeFilterValues = (queryValue: string | string[] | ParsedQs | ParsedQs[], filterVariants: number[]): FilterRangeOptions => {
     if (!queryValue || typeof queryValue !== 'string') {
         return {
-            min: { limit: filrerVariants[0] },
-            max: { limit: filrerVariants[1] },
+            min: { limit: filterVariants[0] },
+            max: { limit: filterVariants[1] },
         };
     }
 
     const [min, max] = queryValue.split('-');
     return {
         min: {
-            limit: filrerVariants[0],
+            limit: filterVariants[0],
             current: Number(min),
         },
         max: {
-            limit: filrerVariants[1],
+            limit: filterVariants[1],
             current: Number(max),
         },
     };

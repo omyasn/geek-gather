@@ -17,9 +17,11 @@ export default ({
     const initialData = window.__INITIAL_DATA__;
     const preloadedState = window.__PRELOADED_STATE__;
 
-    // TODO их как-то надо вырезать из HTML 
     delete window.__INITIAL_DATA__;
     delete window.__PRELOADED_STATE__;
+
+    const dataTransferScript = document.getElementById('data-transfer');
+    dataTransferScript.parentNode.removeChild(dataTransferScript);
 
     const store = createAppStore ? createAppStore(preloadedState, true) : null;
     hydrate(

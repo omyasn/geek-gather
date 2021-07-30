@@ -15,15 +15,16 @@ interface FilterAvailProcessResult {
 };
 
 
-// TODO BUG!! при первом проходе все значения серые!!
-
 export const getFilteredFromSubsets = (hananas: IHanana[], filtersValues: FiltersValues, subsetsStorage: SubsetsStorage): [IHanana[], FiltersAvailability] => {
     const optionFiltersNames = Object.keys(filtersValues.optionFilters);
     const rangesFiltersNames = Object.keys(filtersValues.rangeFilters);
 
-    let activeOptionsFiltersNames: (keyof OptionFiltersState)[] = [];
-    let passiveOptionsFiltersNames: (keyof OptionFiltersState)[] = [];
-    
+    // TODO возможно стоит везде хранить в формате мапы
+    const hananasMap = mapOfHananas(hananas);
+    const allSetsMap: Map<string, number[]> = new Map();
+
+    let finalFiltersAvailability: FiltersAvailability = {};
+
     const activeRangeFiltersNames: (keyof RangeFiltersState)[] = rangesFiltersNames.filter(f => {
         const edgeNames = Object.keys(filtersValues.rangeFilters[f])
         
@@ -33,11 +34,8 @@ export const getFilteredFromSubsets = (hananas: IHanana[], filtersValues: Filter
         ));
     });
 
-    let finalFiltersAvailability: FiltersAvailability = {};
-
-    // TODO возможно стоит везде хранить в формате мапы
-    const hananasMap = mapOfHananas(hananas);
-    const allSetsMap: Map<string, number[]> = new Map();
+    let activeOptionsFiltersNames: (keyof OptionFiltersState)[] = [];
+    let passiveOptionsFiltersNames: (keyof OptionFiltersState)[] = [];
 
     optionFiltersNames.forEach(f => {
         if (filtersValues.optionFilters[f].length > 0) {
@@ -51,7 +49,7 @@ export const getFilteredFromSubsets = (hananas: IHanana[], filtersValues: Filter
         const filterdHananas = hananas.filter(hanana => checkAllRangeFilters(activeRangeFiltersNames, filtersValues, hanana));
         const filtredHananasIDs: number[] = filterdHananas.map(hanana => hanana.id);
 
-        passiveOptionsFiltersAvailability(filtredHananasIDs, hananasMap, passiveOptionsFiltersNames, finalFiltersAvailability);
+        finalFiltersAvailability = passiveOptionsFiltersAvailability(filtredHananasIDs, hananasMap, passiveOptionsFiltersNames, finalFiltersAvailability);
 
         return [filterdHananas, finalFiltersAvailability];
     }

@@ -68,7 +68,6 @@ const onOptionsFilterChange = (name: keyof OptionFiltersState, dispatch: ReturnT
         }
     };
 
-// TODO определить тип dispatch, скорее всего ThunkDispatch с предустановленными типами
 const onRangeFilterChange = (name: keyof RangeFiltersState, dispatch: ReturnType<typeof useAppDispatch>) => 
     (edge: keyof FilterRangeOptions) =>
     ({ target }: ChangeEvent<HTMLInputElement>) => {
