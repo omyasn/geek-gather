@@ -7,14 +7,15 @@ import { FiltersValues, SubsetsStorage } from './page';
 
 
 type FiltersAvailability = {
-    [key in keyof OptionFiltersState | keyof RangeFiltersState]?: string[];
+    [key in keyof OptionFiltersState]?: string[];
 };
 
-interface FilterAvailProcessResult {
+interface FilterAvailabilityProcess {
     [key: string]: Set<string>;
 };
 
 export const getFilteredFromSubsets = (hananas: IHanana[], filtersValues: FiltersValues, subsetsStorage: SubsetsStorage): [IHanana[], FiltersAvailability] => {
+    // TODO если имена фильтров будут задаваться enum, то тут можно их будет использовать
     const optionFiltersNames = Object.keys(filtersValues.optionFilters);
     const rangesFiltersNames = Object.keys(filtersValues.rangeFilters);
 
@@ -22,9 +23,8 @@ export const getFilteredFromSubsets = (hananas: IHanana[], filtersValues: Filter
     const hananasMap = mapOfHananas(hananas);
     const allSetsMap: Map<string, number[]> = new Map();
 
-    let finalFiltersAvailability: FiltersAvailability = {};
-
     const activeRangeFiltersNames: (keyof RangeFiltersState)[] = rangesFiltersNames.filter(f => {
+        // TODO можно заменить на массив [min, max], но тогда надо это описать и в типах
         const edgeNames = Object.keys(filtersValues.rangeFilters[f])
         
         return edgeNames.some(edge => (
@@ -48,7 +48,7 @@ export const getFilteredFromSubsets = (hananas: IHanana[], filtersValues: Filter
         const filterdHananas = hananas.filter(hanana => checkAllRangeFilters(activeRangeFiltersNames, filtersValues, hanana));
         const filtredHananasIDs: number[] = filterdHananas.map(hanana => hanana.id);
 
-        finalFiltersAvailability = passiveOptionsFiltersAvailability(filtredHananasIDs, hananasMap, passiveOptionsFiltersNames, finalFiltersAvailability);
+        const finalFiltersAvailability = passiveOptionsFiltersAvailability(filtredHananasIDs, hananasMap, passiveOptionsFiltersNames);
 
         return [filterdHananas, finalFiltersAvailability];
     }
@@ -73,15 +73,19 @@ export const getFilteredFromSubsets = (hananas: IHanana[], filtersValues: Filter
     const filtredHananasIDs = intersection(Array.from(allSetsMap.values()));
 
     // доступные значения пассивных фильтров
-    finalFiltersAvailability = passiveOptionsFiltersAvailability(
+    const passiveAvailability = passiveOptionsFiltersAvailability(
         filtredHananasIDs,
         hananasMap,
-        passiveOptionsFiltersNames,
-        finalFiltersAvailability
+        passiveOptionsFiltersNames
     );
 
     // доступные значения активных фильтров
-    finalFiltersAvailability = activeOptionsFiltersAvability(activeOptionsFiltersNames, allSetsMap, hananasMap, finalFiltersAvailability);
+    const activeAvailability = activeOptionsFiltersAvability(activeOptionsFiltersNames, allSetsMap, hananasMap);
+
+    const finalFiltersAvailability = {
+        ...passiveAvailability,
+        ...activeAvailability,
+    };
 
     const filtredHananas = filtredHananasIDs.map(id => hananasMap.get(id));
 
@@ -100,75 +104,77 @@ function checkAllRangeFilters(rangesFiltersNames: (keyof RangeFiltersState)[], f
     return pass;
 }
 
-
 function checkRangeFilter(filtersValues: FiltersValues, filterName: (keyof RangeFiltersState), hanana: IHanana): boolean {
-    return (!filtersValues.rangeFilters[filterName].min.current || filtersValues.rangeFilters[filterName].min.current <= Number(hanana[filterName])) &&
-        (!filtersValues.rangeFilters[filterName].max.current || filtersValues.rangeFilters[filterName].max.current >= Number(hanana[filterName]));
+    const filter = filtersValues.rangeFilters[filterName];
+    return (!filter.min.current || filter.min.current <= Number(hanana[filterName])) &&
+        (!filter.max.current || filter.max.current >= Number(hanana[filterName]));
 }
 
-function passiveOptionsFiltersAvailability(filtredHananasIDs: number[], hananasMap: IHananaMap, passiveFiltersNames: (keyof OptionFiltersState)[], finalFiltersAvailability: FiltersAvailability) {
-    const passivResult: FilterAvailProcessResult = {};
-    const newFiltersAvailability = { ...finalFiltersAvailability };
+
+function passiveOptionsFiltersAvailability(filtredHananasIDs: number[], hananasMap: IHananaMap, passiveFiltersNames: (keyof OptionFiltersState)[]): FiltersAvailability {
+    const result: FilterAvailabilityProcess = {};
+    const filtersAvailability: FiltersAvailability = {};
+
     filtredHananasIDs.forEach(id => {
         const hanana = hananasMap.get(id);
         passiveFiltersNames.forEach(filterName => {
-            if (passivResult[filterName]) {
-                passivResult[filterName].add(hanana[filterName]);
+            if (result[filterName]) {
+                result[filterName].add(hanana[filterName]);
             } else {
-                passivResult[filterName] = new Set([hanana[filterName]]);
+                result[filterName] = new Set([hanana[filterName]]);
             }
         });
     });
 
-    for (const filt in passivResult) {
-        newFiltersAvailability[filt as keyof OptionFiltersState] = Array.from(passivResult[filt as keyof OptionFiltersState]);
+    for (const filt in result) {
+        filtersAvailability[filt as keyof OptionFiltersState] = Array.from(result[filt as keyof OptionFiltersState]);
     }
 
-    return newFiltersAvailability;
+    return filtersAvailability;
 }
 
-function activeOptionsFiltersAvability( activeNames: (keyof OptionFiltersState)[], allSetsMap: Map<string, number[]>, hananasMap: IHananaMap, finalFiltersAvailability: FiltersAvailability) {
-    // Если только 1 options
-    if (allSetsMap.size === 1 && activeNames.length === 1) {
-        const newFilterAvailability = { ...finalFiltersAvailability };
-        // вообще тут должны быть все его возможные значения
-        newFilterAvailability[activeNames[0]] = null;
-        return newFilterAvailability;
+function activeOptionsFiltersAvability(activeNames: (keyof OptionFiltersState)[], allSetsMap: Map<string, number[]>, hananasMap: IHananaMap): FiltersAvailability {
+    // в нашем случае быть не может, но для полноты функции
+    if (allSetsMap.size === 0) {
+        return {};
+    }
+    
+    // если один option фильтр и 0 range. Наоборот быть не может, так как тогда 0 option фильтров и это другая ветка
+    if (allSetsMap.size === 1) {
+        const filterAvailability: FiltersAvailability = {};
+        filterAvailability[activeNames[0]] = null;
+        return filterAvailability;
     }
 
-    if (allSetsMap.size > 1) {
-        const activeResult: FilterAvailProcessResult = {};
-        const newFilterAvailability = { ...finalFiltersAvailability };
+    // allSetsMap.size > 1, allSetsMap.size === 0 не может быть, так как если есть хоть 1 активный фильтр, то будет и сет
+    const result: FilterAvailabilityProcess = {};
+    const filterAvailability: FiltersAvailability = {};
 
-        // TODO для range не надо находить активные, но он должен учавствовать в других
-        for (let filterName of allSetsMap.keys()) {
-            const otherFiltersArray: Array<number>[] = [];
-            allSetsMap.forEach((value, key) => {
-                if (key !== filterName) {
-                    otherFiltersArray.push(value);
-                }
-            });
+    activeNames.forEach(filterName => {
+        const otherFiltersArray: Array<number>[] = [];
+        allSetsMap.forEach((value, key) => {
+            if (key !== filterName) {
+                otherFiltersArray.push(value);
+            }
+        });
 
-            const setForValues = intersection(otherFiltersArray);
-            setForValues.forEach(id => {
-                const hanana = hananasMap.get(id);
-                if (activeResult[filterName]) {
-                    activeResult[filterName].add(hanana[filterName as keyof OptionFiltersState]);
-                } else {
-                    activeResult[filterName] = new Set([hanana[filterName as keyof OptionFiltersState]]);
-                }
-            });
+        const subsetForActiveValues = intersection(otherFiltersArray);
+        subsetForActiveValues.forEach(id => {
+            const hanana = hananasMap.get(id);
+            if (result[filterName]) {
+                result[filterName].add(hanana[filterName]);
+            } else {
+                result[filterName] = new Set([hanana[filterName]]);
+            }
+        });
+
+        if (result[filterName]) {
+            filterAvailability[filterName] = Array.from(result[filterName]);
         }
 
-        // тут не as keyof OptionFiltersState а еше и RangeFiltersState
-        for (const filt in activeResult) {
-            newFilterAvailability[filt as keyof OptionFiltersState] = Array.from(activeResult[filt as keyof OptionFiltersState]);
-        }
+    })
 
-        return newFilterAvailability;
-    }
-
-    return finalFiltersAvailability;
+    return filterAvailability;
 }
 
 
