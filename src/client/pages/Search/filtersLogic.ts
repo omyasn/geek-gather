@@ -14,7 +14,6 @@ interface FilterAvailProcessResult {
     [key: string]: Set<string>;
 };
 
-
 export const getFilteredFromSubsets = (hananas: IHanana[], filtersValues: FiltersValues, subsetsStorage: SubsetsStorage): [IHanana[], FiltersAvailability] => {
     const optionFiltersNames = Object.keys(filtersValues.optionFilters);
     const rangesFiltersNames = Object.keys(filtersValues.rangeFilters);
@@ -82,10 +81,11 @@ export const getFilteredFromSubsets = (hananas: IHanana[], filtersValues: Filter
     );
 
     // доступные значения активных фильтров
-    finalFiltersAvailability = activeOptionsFiltersAvability(allSetsMap, hananasMap, finalFiltersAvailability);
+    finalFiltersAvailability = activeOptionsFiltersAvability(activeOptionsFiltersNames, allSetsMap, hananasMap, finalFiltersAvailability);
 
     const filtredHananas = filtredHananasIDs.map(id => hananasMap.get(id));
 
+    console.log('finalFiltersAvailability', finalFiltersAvailability);
     return [filtredHananas, finalFiltersAvailability];
 };
 
@@ -127,10 +127,20 @@ function passiveOptionsFiltersAvailability(filtredHananasIDs: number[], hananasM
     return newFiltersAvailability;
 }
 
-function activeOptionsFiltersAvability(allSetsMap: Map<string, number[]>, hananasMap: IHananaMap, finalFiltersAvailability: FiltersAvailability) {
+function activeOptionsFiltersAvability( activeNames: (keyof OptionFiltersState)[], allSetsMap: Map<string, number[]>, hananasMap: IHananaMap, finalFiltersAvailability: FiltersAvailability) {
+    // Если только 1 options
+    if (allSetsMap.size === 1 && activeNames.length === 1) {
+        const newFilterAvailability = { ...finalFiltersAvailability };
+        // вообще тут должны быть все его возможные значения
+        newFilterAvailability[activeNames[0]] = null;
+        return newFilterAvailability;
+    }
+
     if (allSetsMap.size > 1) {
         const activeResult: FilterAvailProcessResult = {};
         const newFilterAvailability = { ...finalFiltersAvailability };
+
+        // TODO для range не надо находить активные, но он должен учавствовать в других
         for (let filterName of allSetsMap.keys()) {
             const otherFiltersArray: Array<number>[] = [];
             allSetsMap.forEach((value, key) => {
