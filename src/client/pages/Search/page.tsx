@@ -117,7 +117,6 @@ const SearchPage: React.FC<IPageProps> = ({
     subsetsStorage.current = makeSubsets(hananas, currentFilters, subsetsStorage.current);
 
     const [filtredHananas, activeFiltersValues] = getFilteredFromSubsets(hananas, currentFilters, subsetsStorage.current);
-    console.log('subsetsStorage', subsetsStorage.current);
 
     return (
         <div>

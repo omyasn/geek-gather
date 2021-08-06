@@ -134,6 +134,7 @@ function passiveOptionsFiltersAvailability(filtredHananasIDs: number[], hananasM
 }
 
 function activeOptionsFiltersAvability(activeNames: (keyof OptionFiltersState)[], allSetsMap: Map<string, number[]>, hananasMap: IHananaMap): FiltersAvailability {
+    console.log(...Array.from(arguments));
     // в нашем случае быть не может, но для полноты функции
     if (allSetsMap.size === 0) {
         return {};
@@ -174,20 +175,11 @@ function activeOptionsFiltersAvability(activeNames: (keyof OptionFiltersState)[]
 
     })
 
+    console.log(filterAvailability);
     return filterAvailability;
 }
 
 
-// {
-//     host: {
-//         host1: [1, 5, 6],
-//         apg: [2,3,4]
-//     },
-//     color: {
-//         red: [1, 5, 6],
-//         blue: [2,3,4]
-//     },
-// }
 // Дополнять сабсеты можно только если не изменилс список  hananas(сейчас он может измениться только при перезагрузке страницы, так что все норм)
 // сейчас для range фильтров не добавляются сабсеты и не считаются доступные значения. Надо ли это вообще?
 export const makeSubsets = (hananas: IHanana[], filtersValues: FiltersValues, subsetsStorage: SubsetsStorage): SubsetsStorage => {
@@ -205,4 +197,12 @@ export const makeSubsets = (hananas: IHanana[], filtersValues: FiltersValues, su
     });
 
     return newSubsets;
+};
+
+
+export const __forTest = {
+    passiveOptionsFiltersAvailability,
+    activeOptionsFiltersAvability,
+    checkAllRangeFilters,
+    checkRangeFilter,
 };
