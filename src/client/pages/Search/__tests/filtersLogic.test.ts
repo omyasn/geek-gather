@@ -161,9 +161,15 @@ describe('passiveOptionsFiltersAvailability', () => {
 
 
 describe('activeOptionsFiltersAvability', () => {
-    // it('emptySets', () => {
-    //     const result = __forTest.activeOptionsFiltersAvability(['color', ]);
+    it('empty allSetsMap', () => {
+        const result = __forTest.activeOptionsFiltersAvability(['color'], new Map(), mockHananasMap);
+        
+        expect(result).toEqual({});
+    });
 
-    // });
+    it('one set', () => {
+        const result = __forTest.activeOptionsFiltersAvability(['color'], new Map([['color', [1, 2]]]), mockHananasMap);
+        expect(result).toEqual({ color: null });
+    });
 
 });

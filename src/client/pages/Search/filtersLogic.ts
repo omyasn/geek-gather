@@ -135,7 +135,7 @@ function passiveOptionsFiltersAvailability(filtredHananasIDs: number[], hananasM
 
 function activeOptionsFiltersAvability(activeNames: (keyof OptionFiltersState)[], allSetsMap: Map<string, number[]>, hananasMap: IHananaMap): FiltersAvailability {
     console.log(...Array.from(arguments));
-    // в нашем случае быть не может, но для полноты функции
+    // в нашем случае быть не может, так как если есть хоть 1 активный фильтр, то будет и сет, но для полноты функции
     if (allSetsMap.size === 0) {
         return {};
     }
@@ -147,21 +147,15 @@ function activeOptionsFiltersAvability(activeNames: (keyof OptionFiltersState)[]
         return filterAvailability;
     }
 
-    // allSetsMap.size > 1, allSetsMap.size === 0 не может быть, так как если есть хоть 1 активный фильтр, то будет и сет
+    // allSetsMap.size > 1
     const result: FilterAvailabilityProcess = {};
     const filterAvailability: FiltersAvailability = {};
 
     activeNames.forEach(filterName => {
-        const otherFiltersArray: Array<number>[] = [];
-        allSetsMap.forEach((value, key) => {
-            if (key !== filterName) {
-                otherFiltersArray.push(value);
-            }
-        });
-
-        const subsetForActiveValues = intersection(otherFiltersArray);
+        const subsetForActiveValues = getSubsetForActiveValues(filterName, allSetsMap);
         subsetForActiveValues.forEach(id => {
             const hanana = hananasMap.get(id);
+            // TODO заменить на addOrCreateSet
             if (result[filterName]) {
                 result[filterName].add(hanana[filterName]);
             } else {
@@ -177,6 +171,27 @@ function activeOptionsFiltersAvability(activeNames: (keyof OptionFiltersState)[]
 
     console.log(filterAvailability);
     return filterAvailability;
+}
+
+function addOrCreateSet (filterName: keyof OptionFiltersState, hanana: IHanana) {
+    if (this[filterName]) {
+        this[filterName].add(hanana[filterName]);
+    } else {
+        this[filterName] = new Set([hanana[filterName]]);
+    }
+
+    return this;
+}
+
+function getSubsetForActiveValues (currentFilter: string, allSetsMap: Map<string, number[]>) {
+    const otherFiltersArray: Array<number>[] = [];
+    allSetsMap.forEach((value, key) => {
+        if (key !== currentFilter) {
+            otherFiltersArray.push(value);
+        }
+    });
+
+    return intersection(otherFiltersArray);
 }
 
 
@@ -205,4 +220,6 @@ export const __forTest = {
     activeOptionsFiltersAvability,
     checkAllRangeFilters,
     checkRangeFilter,
+    addOrCreateSet,
+    getSubsetForActiveValues,
 };
