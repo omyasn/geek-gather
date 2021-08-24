@@ -1,5 +1,5 @@
 import { IHanana, IHananaMap } from '../../../common/commonTypes';
-import { intersection, mapOfHananas } from './helpers';
+import { intersection, mapOfHananas, createOrAddToSet } from './helpers';
 
 import { OptionFiltersState } from './optionFiltersSlice';
 import { RangeFiltersState } from './rangeFiltersSlice';
@@ -89,7 +89,6 @@ export const getFilteredFromSubsets = (hananas: IHanana[], filtersValues: Filter
 
     const filtredHananas = filtredHananasIDs.map(id => hananasMap.get(id));
 
-    console.log('finalFiltersAvailability', finalFiltersAvailability);
     return [filtredHananas, finalFiltersAvailability];
 };
 
@@ -118,36 +117,29 @@ function passiveOptionsFiltersAvailability(filtredHananasIDs: number[], hananasM
     filtredHananasIDs.forEach(id => {
         const hanana = hananasMap.get(id);
         passiveFiltersNames.forEach(filterName => {
-            if (result[filterName]) {
-                result[filterName].add(hanana[filterName]);
-            } else {
-                result[filterName] = new Set([hanana[filterName]]);
-            }
+            result[filterName] = createOrAddToSet(result[filterName], hanana[filterName]);
         });
     });
 
-    for (const filt in result) {
-        filtersAvailability[filt as keyof OptionFiltersState] = Array.from(result[filt as keyof OptionFiltersState]);
+    for (const filter in result) {
+        filtersAvailability[filter as keyof OptionFiltersState] = Array.from(result[filter as keyof OptionFiltersState]);
     }
 
     return filtersAvailability;
 }
 
 function activeOptionsFiltersAvability(activeNames: (keyof OptionFiltersState)[], allSetsMap: Map<string, number[]>, hananasMap: IHananaMap): FiltersAvailability {
-    console.log(...Array.from(arguments));
-    // в нашем случае быть не может, так как если есть хоть 1 активный фильтр, то будет и сет, но для полноты функции
     if (allSetsMap.size === 0) {
         return {};
     }
     
-    // если один option фильтр и 0 range. Наоборот быть не может, так как тогда 0 option фильтров и это другая ветка
+    // 1 option, 0 range (function call onle for option > 1)
     if (allSetsMap.size === 1) {
         const filterAvailability: FiltersAvailability = {};
         filterAvailability[activeNames[0]] = null;
         return filterAvailability;
     }
 
-    // allSetsMap.size > 1
     const result: FilterAvailabilityProcess = {};
     const filterAvailability: FiltersAvailability = {};
 
@@ -155,12 +147,7 @@ function activeOptionsFiltersAvability(activeNames: (keyof OptionFiltersState)[]
         const subsetForActiveValues = getSubsetForActiveValues(filterName, allSetsMap);
         subsetForActiveValues.forEach(id => {
             const hanana = hananasMap.get(id);
-            // TODO заменить на addOrCreateSet
-            if (result[filterName]) {
-                result[filterName].add(hanana[filterName]);
-            } else {
-                result[filterName] = new Set([hanana[filterName]]);
-            }
+            result[filterName] = createOrAddToSet(result[filterName], hanana[filterName]);
         });
 
         if (result[filterName]) {
@@ -169,21 +156,10 @@ function activeOptionsFiltersAvability(activeNames: (keyof OptionFiltersState)[]
 
     })
 
-    console.log(filterAvailability);
     return filterAvailability;
 }
 
-function addOrCreateSet (filterName: keyof OptionFiltersState, hanana: IHanana) {
-    if (this[filterName]) {
-        this[filterName].add(hanana[filterName]);
-    } else {
-        this[filterName] = new Set([hanana[filterName]]);
-    }
-
-    return this;
-}
-
-function getSubsetForActiveValues (currentFilter: string, allSetsMap: Map<string, number[]>) {
+function getSubsetForActiveValues (currentFilter: string, allSetsMap: Map<string, number[]>): number[] {
     const otherFiltersArray: Array<number>[] = [];
     allSetsMap.forEach((value, key) => {
         if (key !== currentFilter) {
@@ -195,8 +171,7 @@ function getSubsetForActiveValues (currentFilter: string, allSetsMap: Map<string
 }
 
 
-// Дополнять сабсеты можно только если не изменилс список  hananas(сейчас он может измениться только при перезагрузке страницы, так что все норм)
-// сейчас для range фильтров не добавляются сабсеты и не считаются доступные значения. Надо ли это вообще?
+// create subsets only for options filters (not for range)
 export const makeSubsets = (hananas: IHanana[], filtersValues: FiltersValues, subsetsStorage: SubsetsStorage): SubsetsStorage => {
     const optionFiltersNames = Object.keys(filtersValues.optionFilters);
     const newSubsets = { ...subsetsStorage };
@@ -220,6 +195,5 @@ export const __forTest = {
     activeOptionsFiltersAvability,
     checkAllRangeFilters,
     checkRangeFilter,
-    addOrCreateSet,
     getSubsetForActiveValues,
 };

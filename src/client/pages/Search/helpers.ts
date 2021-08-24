@@ -20,3 +20,7 @@ export const mapOfHananas = (hananas: IHanana[]): IHananaMap => {
 
     return hananasMap;
 };
+
+export function createOrAddToSet<T>(container: Set<T>, value: T) {
+    return container ? container.add(value) : new Set([value]);
+}

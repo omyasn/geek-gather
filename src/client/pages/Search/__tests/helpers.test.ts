@@ -1,4 +1,4 @@
-import { intersection, mapOfHananas } from '../helpers';
+import { intersection, mapOfHananas, createOrAddToSet } from '../helpers';
 
 test('intersection', () => {
     const test = intersection([[1, 2, 4], [2, 3, 4], [4, 4, 2]]);
@@ -46,4 +46,23 @@ test('mapOfHananas', () => {
         },
     ]);
     expect(test).toMatchSnapshot();
+});
+
+
+describe('createOrAddToSet', () => {
+    it('create set', () => {
+        const result: any = {};
+        const value = 'val';
+        result.attr = createOrAddToSet(result.attr, value);
+
+        expect(result).toEqual({ attr: new Set(['val']) });
+    });
+
+    it('add to set', () => {
+        const result: any = { attr: new Set(['lol']) };
+        const value = 'kek';
+        result.attr = createOrAddToSet(result.attr, value);
+
+        expect(result).toEqual({ attr: new Set(['lol', 'kek']) });
+    });
 });

@@ -1,5 +1,6 @@
 import { makeSubsets, __forTest } from '../filtersLogic';
 import { mapOfHananas } from '../helpers';
+import rangeFiltersSlice from '../rangeFiltersSlice';
 import { mockHananas, mockFiltersValues } from './mocks';
 
 const mockHananasMap = mapOfHananas(mockHananas);
@@ -172,4 +173,332 @@ describe('activeOptionsFiltersAvability', () => {
         expect(result).toEqual({ color: null });
     });
 
+    it('two active filters', () => {
+        const result = __forTest.activeOptionsFiltersAvability(
+            ['host', 'color'],
+            new Map([
+                ['host', [2, 3, 4]], 
+                ['color', [0, 1, 2, 3]]
+            ]),
+            mockHananasMap
+        );
+        expect(result).toEqual({
+            host: ['АПГ', 'Loonarbaboon'],
+            color: ['red', 'blue'],
+        });
+    });
+
+    it('tree active filters', () => {
+        const result = __forTest.activeOptionsFiltersAvability(
+            ['host', 'location', 'color'],
+            new Map([
+                ['host', [2, 3, 4]], 
+                ['location', [0, 2, 4, 5, 6, 8]],
+                ['color', [0, 1, 2, 3, 4, 5, 7, 8]]
+            ]),
+            mockHananasMap
+        );
+        expect(result).toEqual({
+            host: ['АПГ', 'Loonarbaboon', 'Toptop'],
+            color: ['red', 'blue'],
+            location: ['Иркутск', 'Москва']
+        });
+    });
+
+    it('two active, one passive filters', () => {
+        const result = __forTest.activeOptionsFiltersAvability(
+            ['host', 'color'],
+            new Map([
+                ['host', [2, 3, 4]], 
+                ['color', [0, 1, 2, 3, 4, 5, 7, 8]],
+                ['minPrice', [1, 2, 7]]
+            ]),
+            mockHananasMap
+        );
+        expect(result).toEqual({
+            host: ['АПГ', 'Loonarbaboon', 'III'],
+            color: ['red'],
+        });
+    });
+
+});
+
+
+describe('getSubsetForActiveValues', () => {
+    it('basic', () => {
+        const result = __forTest.getSubsetForActiveValues(
+            'two',
+            new Map([
+                ['one', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]],
+                ['two', [7, 8, 9]],
+                ['three', [2, 3, 4, 5, 6, 7, 8, 9]],
+                ['four', [0, 2, 3, 9]]
+            ])
+        );
+
+        expect(result).toEqual([2, 3, 9]);
+    });
+
+    it('empty result', () => {
+        const result = __forTest.getSubsetForActiveValues(
+            'two',
+            new Map([
+                ['one', [0, 1, 2, 3]],
+                ['two', [7, 8, 9]],
+                ['three', [4, 5, 6, 7, 8, 9]],
+            ])
+        );
+
+        expect(result).toEqual([]);
+    });
+});
+
+describe('checkRangeFilter', () => {
+    it('pass, no current', () => {
+        const result = __forTest.checkRangeFilter(
+            mockFiltersValues,
+            'capacity',
+            mockHananas[0]
+        );
+
+        expect(result).toBe(true);
+    });
+
+    it('pass Max, no Min', () => {
+        const result = __forTest.checkRangeFilter(
+             {
+                ...mockFiltersValues,
+                rangeFilters: {
+                    ...mockFiltersValues.rangeFilters,
+                    capacity: {
+                        min: {
+                            limit: 0,
+                        },
+                        max: {
+                            limit: Infinity,
+                            current: 3001,
+                        },
+                    }
+                }
+            },
+            'capacity',
+            mockHananas[0]
+        );
+
+        expect(result).toBe(true);
+    });
+
+    it('pass Mix, no Max', () => {
+        const result = __forTest.checkRangeFilter(
+             {
+                ...mockFiltersValues,
+                rangeFilters: {
+                    ...mockFiltersValues.rangeFilters,
+                    capacity: {
+                        min: {
+                            limit: 0,
+                            current: 2000,
+                        },
+                        max: {
+                            limit: Infinity,
+                        },
+                    }
+                }
+            },
+            'capacity',
+            mockHananas[0]
+        );
+
+        expect(result).toBe(true);        
+    });
+
+    it('pass, has both current', () => {
+        const result = __forTest.checkRangeFilter(
+             {
+                ...mockFiltersValues,
+                rangeFilters: {
+                    ...mockFiltersValues.rangeFilters,
+                    capacity: {
+                        min: {
+                            limit: 0,
+                            current: 2000,
+                        },
+                        max: {
+                            limit: Infinity,
+                            current: 3001,
+                        },
+                    }
+                }
+            },
+            'capacity',
+            mockHananas[0]
+        );
+
+        expect(result).toBe(true);        
+    });
+
+    it('fail Min, has Max', () => {
+        const result = __forTest.checkRangeFilter(
+             {
+                ...mockFiltersValues,
+                rangeFilters: {
+                    ...mockFiltersValues.rangeFilters,
+                    capacity: {
+                        min: {
+                            limit: 0,
+                            current: 3001,
+                        },
+                        max: {
+                            limit: Infinity,
+                            current: 4001,
+                        },
+                    }
+                }
+            },
+            'capacity',
+            mockHananas[0]
+        );
+
+        expect(result).toBe(false);        
+    });
+
+    it('fail Min, no Max', () => {
+        const result = __forTest.checkRangeFilter(
+             {
+                ...mockFiltersValues,
+                rangeFilters: {
+                    ...mockFiltersValues.rangeFilters,
+                    capacity: {
+                        min: {
+                            limit: 0,
+                            current: 3001,
+                        },
+                        max: {
+                            limit: Infinity,
+                        },
+                    }
+                }
+            },
+            'capacity',
+            mockHananas[0]
+        );
+
+        expect(result).toBe(false);        
+    });
+
+    it('fail Max, no Min', () => {
+        const result = __forTest.checkRangeFilter(
+             {
+                ...mockFiltersValues,
+                rangeFilters: {
+                    ...mockFiltersValues.rangeFilters,
+                    capacity: {
+                        min: {
+                            limit: 0,
+                        },
+                        max: {
+                            limit: Infinity,
+                            current: 2000,
+                        },
+                    }
+                }
+            },
+            'capacity',
+            mockHananas[0]
+        );
+
+        expect(result).toBe(false);        
+    });
+
+    it('fail Max, has Min', () => {
+        const result = __forTest.checkRangeFilter(
+            {
+                ...mockFiltersValues,
+                rangeFilters: {
+                    ...mockFiltersValues.rangeFilters,
+                    capacity: {
+                        min: {
+                            limit: 0,
+                            current: 1000,
+                        },
+                        max: {
+                            limit: Infinity,
+                            current: 2000,
+                        },
+                    }
+                }
+            },
+            'capacity',
+            mockHananas[0]
+        );
+
+        expect(result).toBe(false);        
+    });
+});
+
+describe('checkAllRangeFilters', () => {
+    it('pass all', () => {
+        const result = __forTest.checkAllRangeFilters(
+            ['capacity', 'minPrice'],
+            {
+                ...mockFiltersValues,
+                rangeFilters: {
+                    minPrice: {
+                        min: {
+                            limit: 0,
+                            current: 600,
+                        },
+                        max: {
+                            limit: Infinity,
+                            current: 1000,
+                        },
+                    },
+                    capacity: {
+                        min: {
+                            limit: 0,
+                            current: 1000,
+                        },
+                        max: {
+                            limit: Infinity,
+                            current: 4000,
+                        },
+                    },
+                }
+            },
+            mockHananas[0]
+        );
+        expect(result).toBe(true);
+    });
+    it('fail one', () => {
+        const result = __forTest.checkAllRangeFilters(
+            ['capacity', 'minPrice'],
+            {
+                ...mockFiltersValues,
+                rangeFilters: {
+                    minPrice: {
+                        min: {
+                            limit: 0,
+                            current: 600,
+                        },
+                        max: {
+                            limit: Infinity,
+                            current: 1000,
+                        },
+                    },
+                    capacity: {
+                        min: {
+                            limit: 0,
+                            current: 1000,
+                        },
+                        max: {
+                            limit: Infinity,
+                            current: 2000,
+                        },
+                    },
+                }
+            },
+            mockHananas[0]
+        );
+        expect(result).toBe(false);
+    });
 });
