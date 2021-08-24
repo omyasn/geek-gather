@@ -12,8 +12,6 @@ export default ({
     PageComponent,
     createAppStore,
 }: Params) => {
-    console.log('CLIENT!');
-
     const initialData = window.__INITIAL_DATA__;
     const preloadedState = window.__PRELOADED_STATE__;
 

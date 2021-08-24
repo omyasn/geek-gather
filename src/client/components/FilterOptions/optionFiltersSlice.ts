@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, ThunkAction, AnyAction } from '@reduxjs/toolkit';
 import { BrowserHistory } from 'history';
-import type { RootStateType } from './store';
+import type { RootStateType } from '../../pages/Search/store';
 
 // TODO initialState приходит с бекенда, нельзя ли брать тип оттуда?
 export interface OptionFiltersState {

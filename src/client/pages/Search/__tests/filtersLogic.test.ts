@@ -1,6 +1,5 @@
 import { makeSubsets, __forTest } from '../filtersLogic';
 import { mapOfHananas } from '../helpers';
-import rangeFiltersSlice from '../rangeFiltersSlice';
 import { mockHananas, mockFiltersValues } from './mocks';
 
 const mockHananasMap = mapOfHananas(mockHananas);

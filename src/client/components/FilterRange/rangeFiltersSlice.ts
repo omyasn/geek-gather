@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, ThunkAction, AnyAction } from '@reduxjs/toolkit';
 import { BrowserHistory } from 'history';
-import { FilterRangeOptions } from '../../components/FilterRange';
-import type { RootStateType } from './store';
+import { FilterRangeOptions } from '.';
+import type { RootStateType } from '../../pages/Search/store';
 
 // TODO положить эти файлы в фича папку с компонентами
 

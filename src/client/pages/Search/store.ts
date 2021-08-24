@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
-import optionFiltersReducer from './optionFiltersSlice';
-import rangeFiltersReducer from './rangeFiltersSlice';
+import optionFiltersReducer from '../../components/FilterOptions/optionFiltersSlice';
+import rangeFiltersReducer from '../../components/FilterRange/rangeFiltersSlice';
 import { createBrowserHistory } from 'history';
 
 export interface RootStateType {

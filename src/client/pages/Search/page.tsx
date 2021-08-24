@@ -19,7 +19,7 @@ import {
     selectFilterColor,
     selectOptionFilters,
     OptionFiltersState,
-} from './optionFiltersSlice';
+} from '../../components/FilterOptions/optionFiltersSlice';
 
 import {
     changeRangewithHistory,
@@ -28,7 +28,7 @@ import {
     selectFilterMinPrice,
     selectRangeFilters,
     RangeFiltersState,
-} from './rangeFiltersSlice';
+} from '../../components/FilterRange/rangeFiltersSlice';
 
 import styles from './styles.scss';
 
