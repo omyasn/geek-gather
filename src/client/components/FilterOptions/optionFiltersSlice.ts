@@ -2,16 +2,21 @@ import { createSlice, PayloadAction, ThunkAction, AnyAction } from '@reduxjs/too
 import { BrowserHistory } from 'history';
 import type { RootStateType } from '../../pages/Search/store';
 
-// TODO initialState приходит с бекенда, нельзя ли брать тип оттуда?
-export interface OptionFiltersState {
-    host: string[];
-    beginDate: string[];
-    location: string[];
-    color: string[];
+
+export enum optionsFN {
+    HOST = 'host',
+    BEGINDATE = 'beginDate',
+    LOCATION = 'location',
+    COLOR = 'color',
+};
+
+export type OptionFiltersState = {
+    [key in optionsFN]: string[];
+    
 }
 
 interface OptionFilterPayload {
-    name: keyof OptionFiltersState;
+    name: optionsFN;
     value: string;
 }
 
@@ -44,10 +49,8 @@ export const optionFiltersSlice = createSlice({
     },
 });
 
-export const selectFilterHost = (state: RootStateType) => state.optionFilters.host;
-export const selectFilterBeginDate = (state: RootStateType) => state.optionFilters.beginDate;
-export const selectFilterLocation = (state: RootStateType) => state.optionFilters.location;
-export const selectFilterColor = (state: RootStateType) => state.optionFilters.color;
+export const selectOptionsFilter = (name: optionsFN) => (state: RootStateType) => state.optionFilters[name];
+
 export const selectOptionFilters = (state: RootStateType) => state.optionFilters;
 
 export const { addOption, removeOption, clearAllOptions } = optionFiltersSlice.actions;

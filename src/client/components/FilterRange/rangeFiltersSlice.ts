@@ -1,13 +1,15 @@
 import { createSlice, PayloadAction, ThunkAction, AnyAction } from '@reduxjs/toolkit';
 import { BrowserHistory } from 'history';
-import { FilterRangeOptions } from '.';
+import { FilterRangeOptions } from './index';
 import type { RootStateType } from '../../pages/Search/store';
 
-// TODO положить эти файлы в фича папку с компонентами
+export enum rangeFN {
+    MINPRICE = 'minPrice',
+    CAPACITY = 'capacity',
+};
 
-export interface RangeFiltersState {
-    minPrice: FilterRangeOptions;
-    capacity: FilterRangeOptions;
+export type RangeFiltersState = {
+    [key in rangeFN]: FilterRangeOptions;
 }
 
 // TODO Должно приходить с бекенда
@@ -31,7 +33,7 @@ const initialState: RangeFiltersState = {
 };
 
 interface RangeFilterPayload {
-    name: keyof RangeFiltersState;
+    name: rangeFN;
     edge: keyof FilterRangeOptions;
     value: number;
 }
@@ -59,8 +61,8 @@ export const rangeFiltersSlice = createSlice({
     },
 });
 
-export const selectFilterMinPrice = (state: RootStateType) => state.rangeFilters.minPrice;
-export const selectFilterCapacity = (state: RootStateType) => state.rangeFilters.capacity;
+export const selectRangeFilter = (name: rangeFN) => (state: RootStateType) => state.rangeFilters[name];
+
 export const selectRangeFilters = (state: RootStateType) => state.rangeFilters;
 
 export const { changeRange, clearAllRanges } = rangeFiltersSlice.actions;

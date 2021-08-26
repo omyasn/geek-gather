@@ -9,6 +9,8 @@ import SearchPage, { IPageProps, FiltersVariants } from '../../client/pages/Sear
 import { listOfEvents } from '../../client/mockdata';
 import createAppStore, { RootStateType } from '../../client/pages/Search/store';
 import { FilterRangeOptions } from '../../client/components/FilterRange';
+import { optionsFN } from '../../client/components/FilterOptions/optionFiltersSlice';
+import { rangeFN } from '../../client/components/FilterRange/rangeFiltersSlice';
 
 const getBackendData = (): IHanana[]  => {
     // здесь запрос на бек, сейчас мок(events.ts)
@@ -21,53 +23,69 @@ const getBackendData = (): IHanana[]  => {
     return allHananas;
 };
 
-// TODO refactor
+const optionsFNarr = Object.values(optionsFN);
+const rangeFNarr = Object.values(rangeFN);
+
+
+type OptionsFilterValues = {
+    [key in optionsFN]?: Set<string>;
+}
+
+type RangeFilterValues = {
+    [key in rangeFN]?: number[];
+}
+
 const getFiltersVariants = (hananas: IHanana[]): FiltersVariants => {
-    let filterHostOptions = new Set<string>();
-    let filterColorOptions = new Set<string>();
-    let filterBeginDateOptions = new Set<string>();
-    let filterLocationOptions = new Set<string>();
-    let filterMinPriceRangeOptions = [ Infinity, 0 ];
-    let filterCapacityRangeOptions = [ Infinity, 0 ];
+    const uniqueVariants: OptionsFilterValues & RangeFilterValues = {};
+    optionsFNarr.forEach(name => {
+        uniqueVariants[name] = new Set<string>();
+    });
+    rangeFNarr.forEach(name => {
+        uniqueVariants[name] = [ Infinity, 0 ];
+    });
 
     hananas.forEach(hanana => {
-        filterHostOptions.add(hanana.host);
-        filterColorOptions.add(hanana.color);
-        filterBeginDateOptions.add(hanana.beginDate);
-        filterLocationOptions.add(hanana.location);
+        optionsFNarr.forEach(name => {
+            uniqueVariants[name].add(hanana[name]);
+        });
 
-        filterMinPriceRangeOptions = setMinMax(filterMinPriceRangeOptions, hanana.minPrice);
-        filterCapacityRangeOptions = setMinMax(filterCapacityRangeOptions, hanana.capacity);
+        rangeFNarr.forEach(name => {
+            uniqueVariants[name] = setMinMax(uniqueVariants[name], hanana[name]);
+        });
+    });
+
+    const result: Partial<FiltersVariants> = {};
+    optionsFNarr.forEach(name => {
+        result[name] = Array.from(uniqueVariants[name]).sort();
+    });
+
+    rangeFNarr.forEach(name => {
+        result[name] = uniqueVariants[name];
     });
 
 
-    return {
-        filterHostOptions: Array.from(filterHostOptions).sort(),
-        filterColorOptions: Array.from(filterColorOptions).sort(),
-        filterBeginDateOptions: Array.from(filterBeginDateOptions).sort(),
-        filterLocationOptions: Array.from(filterLocationOptions).sort(),
-        filterMinPriceRangeOptions,
-        filterCapacityRangeOptions,
-    };
+    return result as FiltersVariants;
 };
 
 
 const getPreloadedState = (req: Request, filrersVariants: FiltersVariants): RootStateType => {
-    const { host, beginDate, minPrice, capacity, location, color } = req.query;
     // host=АПГ,lol&beginDate=21.01.2021,07.12.2022&minPrice=0-3000&capacity=2-300
 
-    const result: RootStateType = {
-        optionFilters: {
-            host: parseOptionsFilterValues(host, filrersVariants.filterHostOptions),
-            beginDate: parseOptionsFilterValues(beginDate, filrersVariants.filterBeginDateOptions),
-            location: parseOptionsFilterValues(location, filrersVariants.filterLocationOptions),
-            color: parseOptionsFilterValues(color, filrersVariants.filterColorOptions),
-        },
-        rangeFilters: {
-            minPrice: parseRangeFilterValues(minPrice, filrersVariants.filterMinPriceRangeOptions),
-            capacity: parseRangeFilterValues(capacity, filrersVariants.filterCapacityRangeOptions),
-        },
-    };
+    const optionFilters: { [key in optionsFN]?: string[] } = {};
+    const rangeFilters: { [key in rangeFN]?: FilterRangeOptions } = {};
+
+    optionsFNarr.forEach(name => {
+        optionFilters[name] = parseOptionsFilterValues(req.query[name], filrersVariants[name]);
+    });
+
+    rangeFNarr.forEach(name => {
+        rangeFilters[name] = parseRangeFilterValues(req.query[name], filrersVariants[name])
+    });
+
+    const result = {
+        optionFilters,
+        rangeFilters,
+    } as RootStateType;
 
     return result;
 };
@@ -119,12 +137,13 @@ const searchPage: RequestHandler = (req, res, next) => {
     const hananas = getBackendData();
     const filtersVariants = getFiltersVariants(hananas);
     const preloadedState = getPreloadedState(req, filtersVariants);
+    const initialData: IPageProps = {
+        hananas,
+        filtersVariants,
+    };
 
     const pageParams: IPageParams = {
-        initialData: {
-            hananas,
-            ...filtersVariants,
-        },
+        initialData,
         store: createAppStore(preloadedState),
         title: 'Search',
         description: 'My search',
@@ -136,3 +155,4 @@ const searchPage: RequestHandler = (req, res, next) => {
 }
 
 export default searchPage;
+
