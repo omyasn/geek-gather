@@ -56,7 +56,7 @@ const getPreloadedState = (req: Request, filrersVariants: FiltersVariants): Root
     const { host, beginDate, minPrice, capacity, location, color } = req.query;
     // host=АПГ,lol&beginDate=21.01.2021,07.12.2022&minPrice=0-3000&capacity=2-300
 
-    const result:RootStateType = {
+    const result: RootStateType = {
         optionFilters: {
             host: parseOptionsFilterValues(host, filrersVariants.filterHostOptions),
             beginDate: parseOptionsFilterValues(beginDate, filrersVariants.filterBeginDateOptions),
@@ -115,7 +115,7 @@ const setMinMax = (arr: number[], el: number): number[] => {
         return arr;
 }
 
-const search: RequestHandler = (req, res, next) => {
+const searchPage: RequestHandler = (req, res, next) => {
     const hananas = getBackendData();
     const filtersVariants = getFiltersVariants(hananas);
     const preloadedState = getPreloadedState(req, filtersVariants);
@@ -135,4 +135,4 @@ const search: RequestHandler = (req, res, next) => {
     return severRenderAndSend(req, res, next, pageParams);
 }
 
-export default search;
+export default searchPage;

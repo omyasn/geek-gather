@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Request, Response, NextFunction } from 'express';
 import preparePage, { IPageParams } from './html/preparePage';
 
