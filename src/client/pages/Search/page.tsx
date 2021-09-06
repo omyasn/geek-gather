@@ -15,11 +15,6 @@ import {
     addOptionWithHistory,
     removeOptionWithHistory,
     clearAllOptionsWithHistory,
-    // selectFilterHost,
-    // selectFilterBeginDate,
-    // selectFilterLocation,
-    // selectFilterColor,
-    selectOptionsFilter,
     selectOptionFilters,
     OptionFiltersState,
 } from '../../components/FilterOptions/optionFiltersSlice';
@@ -27,9 +22,6 @@ import {
 import {
     changeRangewithHistory,
     clearAllRangeWithHistory,
-    // selectFilterCapacity,
-    // selectFilterMinPrice,
-    selectRangeFilter,
     selectRangeFilters,
     RangeFiltersState,
 } from '../../components/FilterRange/rangeFiltersSlice';
@@ -94,25 +86,9 @@ const SearchPage: React.FC<IPageProps> = ({
 }) => {
     const dispatch = useAppDispatch();
     const subsetsStorage = useRef({});
-    // TODO использовать общий селектор selectOptionsFilters
 
-    const filterHostValues = useAppSelector(selectOptionsFilter(optionsFN.HOST));
-    const onHostFilterClick = onOptionsFilterChange(optionsFN.HOST, dispatch);
-
-    const filterBeginDateValues = useAppSelector(selectOptionsFilter(optionsFN.BEGINDATE));
-    const onBeginDateFilterClick = onOptionsFilterChange(optionsFN.BEGINDATE, dispatch);
-
-    const filterLocationValues = useAppSelector(selectOptionsFilter(optionsFN.LOCATION));
-    const onLocationFilterClick = onOptionsFilterChange(optionsFN.LOCATION, dispatch);
-    
-    const filterColorValues = useAppSelector(selectOptionsFilter(optionsFN.COLOR));
-    const onColorFilterClick = onOptionsFilterChange(optionsFN.COLOR, dispatch);
-
-    const filterMinPriceRange = useAppSelector(selectRangeFilter(rangeFN.MINPRICE));
-    const onMinPriceRangeChange = onRangeFilterChange(rangeFN.MINPRICE, dispatch);
-
-    const filterCapacityRange = useAppSelector(selectRangeFilter(rangeFN.CAPACITY));
-    const onCapacityRangeChange = onRangeFilterChange(rangeFN.CAPACITY, dispatch);
+    const optionsFiltersValues = useAppSelector(selectOptionFilters);
+    const rangeFiltersValues = useAppSelector(selectRangeFilters);
 
     const currentFilters = useAppSelector(state => ({
         optionFilters: selectOptionFilters(state),
@@ -137,45 +113,45 @@ const SearchPage: React.FC<IPageProps> = ({
                     <FilterOptions
                         name="Host"
                         filterOptions={filtersVariants[optionsFN.HOST]}
-                        filterValues={filterHostValues}
-                        filterActiveOptions={activeFiltersValues.host}
-                        onOptionChange={onHostFilterClick}
+                        filterValues={optionsFiltersValues[optionsFN.HOST]}
+                        filterActiveOptions={activeFiltersValues[optionsFN.HOST]}
+                        onOptionChange={onOptionsFilterChange(optionsFN.HOST, dispatch)}
                     />
 
                     <FilterOptions
                         name="BeginDate"
                         filterOptions={filtersVariants[optionsFN.BEGINDATE]}
-                        filterValues={filterBeginDateValues}
-                        filterActiveOptions={activeFiltersValues.beginDate}
-                        onOptionChange={onBeginDateFilterClick}
+                        filterValues={optionsFiltersValues[optionsFN.BEGINDATE]}
+                        filterActiveOptions={activeFiltersValues[optionsFN.BEGINDATE]}
+                        onOptionChange={onOptionsFilterChange(optionsFN.BEGINDATE, dispatch)}
                     />
 
                     <FilterOptions
                         name="Location"
                         filterOptions={filtersVariants[optionsFN.LOCATION]}
-                        filterValues={filterLocationValues}
-                        filterActiveOptions={activeFiltersValues.location}
-                        onOptionChange={onLocationFilterClick}
+                        filterValues={optionsFiltersValues[optionsFN.LOCATION]}
+                        filterActiveOptions={activeFiltersValues[optionsFN.LOCATION]}
+                        onOptionChange={onOptionsFilterChange(optionsFN.LOCATION, dispatch)}
                     />
 
                     <FilterOptions
                         name="Color"
                         filterOptions={filtersVariants[optionsFN.COLOR]}
-                        filterValues={filterColorValues}
-                        filterActiveOptions={activeFiltersValues.color}
-                        onOptionChange={onColorFilterClick}
+                        filterValues={optionsFiltersValues[optionsFN.COLOR]}
+                        filterActiveOptions={activeFiltersValues[optionsFN.COLOR]}
+                        onOptionChange={onOptionsFilterChange(optionsFN.COLOR, dispatch)}
                     />
                 
                     <FilterRange
                         name="MinPrice"
-                        filterRange={filterMinPriceRange}
-                        onRangeChange={onMinPriceRangeChange}
+                        filterRange={rangeFiltersValues[rangeFN.MINPRICE]}
+                        onRangeChange={onRangeFilterChange(rangeFN.MINPRICE, dispatch)}
                     />
 
                     <FilterRange
                         name="Capacity"
-                        filterRange={filterCapacityRange}
-                        onRangeChange={onCapacityRangeChange}
+                        filterRange={rangeFiltersValues[rangeFN.CAPACITY]}
+                        onRangeChange={onRangeFilterChange(rangeFN.CAPACITY, dispatch)}
                     />
                 </div>
 
