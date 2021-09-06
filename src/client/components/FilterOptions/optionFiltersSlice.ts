@@ -50,9 +50,7 @@ export const optionFiltersSlice = createSlice({
 });
 
 export const selectOptionsFilter = (name: optionsFN) => (state: RootStateType) => state.optionFilters[name];
-
 export const selectOptionFilters = (state: RootStateType) => state.optionFilters;
-
 export const { addOption, removeOption, clearAllOptions } = optionFiltersSlice.actions;
 
 export const addOptionWithHistory = ({ name, value }:OptionFilterPayload): ThunkAction<void, RootStateType, BrowserHistory, AnyAction> => 

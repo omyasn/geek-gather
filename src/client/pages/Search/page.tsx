@@ -4,9 +4,7 @@ import { Dispatch, ThunkDispatch } from '@reduxjs/toolkit';
 
 import { useAppDispatch,  useAppSelector } from './hooks';
 import FilterOptions from '../../components/FilterOptions/index';
-import { optionsFN } from '../../components/FilterOptions/optionFiltersSlice';
-import FilterRange, { FilterRangeOptions } from '../../components/FilterRange/index';
-import { rangeFN } from '../../components/FilterRange/rangeFiltersSlice';
+import FilterRange, { FilterRangeOptions, rangeEdges } from '../../components/FilterRange/index';
 import { IHanana } from '../../../common/commonTypes';
 
 import { makeSubsets, getFilteredFromSubsets } from './filtersLogic';
@@ -17,6 +15,7 @@ import {
     clearAllOptionsWithHistory,
     selectOptionFilters,
     OptionFiltersState,
+    optionsFN,
 } from '../../components/FilterOptions/optionFiltersSlice';
 
 import {
@@ -24,6 +23,7 @@ import {
     clearAllRangeWithHistory,
     selectRangeFilters,
     RangeFiltersState,
+    rangeFN,
 } from '../../components/FilterRange/rangeFiltersSlice';
 
 import styles from './styles.scss';
@@ -68,7 +68,7 @@ const onOptionsFilterChange = (name: optionsFN, dispatch: ReturnType<typeof useA
     };
 
 const onRangeFilterChange = (name: rangeFN, dispatch: ReturnType<typeof useAppDispatch>) => 
-    (edge: keyof FilterRangeOptions) =>
+    (edge: rangeEdges) =>
     ({ target }: ChangeEvent<HTMLInputElement>) => {
         const value = target.value;
         dispatch(changeRangewithHistory({ name, edge, value: Number(value)}));

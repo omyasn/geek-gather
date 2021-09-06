@@ -1,12 +1,17 @@
 import * as React from 'react';
-import styles from './styles.css';
+import styles from './styles.scss';
 
-export interface FilterRangeOptions {
-    min: RangeEdge;
-    max: RangeEdge;
+// TODO сейчас не везде заменено
+export enum rangeEdges {
+    MIN = 'min',
+    MAX = 'max',
 };
 
-export interface RangeEdge {
+export type FilterRangeOptions = {
+    [key in rangeEdges]: RangeEdgeValue;
+};
+
+export interface RangeEdgeValue {
     limit: number;
     current?: number;
 }
@@ -14,7 +19,7 @@ export interface RangeEdge {
 export interface FilterRangeProps {
     name: string;
     filterRange: FilterRangeOptions;
-    onRangeChange: (edge: keyof FilterRangeOptions) => (e: React.SyntheticEvent) => void;
+    onRangeChange: (edge: rangeEdges) => (e: React.SyntheticEvent) => void;
 }
 
 const FilterRange: React.FC<FilterRangeProps> = ({
@@ -30,7 +35,7 @@ const FilterRange: React.FC<FilterRangeProps> = ({
                 <input
                     type="number"
                     value={filterRange.min.current || filterRange.min.limit}
-                    onChange={onRangeChange('min')}
+                    onChange={onRangeChange(rangeEdges.MIN)}
                     min={filterRange.min.limit}
                     max={filterRange.max.limit}
                 />
@@ -42,7 +47,7 @@ const FilterRange: React.FC<FilterRangeProps> = ({
                 <input
                     type="number"
                     value={filterRange.max.current || filterRange.max.limit}
-                    onChange={onRangeChange('max')}
+                    onChange={onRangeChange(rangeEdges.MAX)}
                     min={filterRange.min.limit}
                     max={filterRange.max.limit}
                 />

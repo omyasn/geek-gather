@@ -23,8 +23,8 @@ const getBackendData = (): IHanana[]  => {
     return allHananas;
 };
 
-const optionsFNarr = Object.values(optionsFN);
-const rangeFNarr = Object.values(rangeFN);
+const optionsFNArr = Object.values(optionsFN);
+const rangeFNArr = Object.values(rangeFN);
 
 
 type OptionsFilterValues = {
@@ -37,29 +37,29 @@ type RangeFilterValues = {
 
 const getFiltersVariants = (hananas: IHanana[]): FiltersVariants => {
     const uniqueVariants: OptionsFilterValues & RangeFilterValues = {};
-    optionsFNarr.forEach(name => {
+    optionsFNArr.forEach(name => {
         uniqueVariants[name] = new Set<string>();
     });
-    rangeFNarr.forEach(name => {
+    rangeFNArr.forEach(name => {
         uniqueVariants[name] = [ Infinity, 0 ];
     });
 
     hananas.forEach(hanana => {
-        optionsFNarr.forEach(name => {
+        optionsFNArr.forEach(name => {
             uniqueVariants[name].add(hanana[name]);
         });
 
-        rangeFNarr.forEach(name => {
+        rangeFNArr.forEach(name => {
             uniqueVariants[name] = setMinMax(uniqueVariants[name], hanana[name]);
         });
     });
 
     const result: Partial<FiltersVariants> = {};
-    optionsFNarr.forEach(name => {
+    optionsFNArr.forEach(name => {
         result[name] = Array.from(uniqueVariants[name]).sort();
     });
 
-    rangeFNarr.forEach(name => {
+    rangeFNArr.forEach(name => {
         result[name] = uniqueVariants[name];
     });
 
@@ -74,11 +74,11 @@ const getPreloadedState = (req: Request, filrersVariants: FiltersVariants): Root
     const optionFilters: { [key in optionsFN]?: string[] } = {};
     const rangeFilters: { [key in rangeFN]?: FilterRangeOptions } = {};
 
-    optionsFNarr.forEach(name => {
+    optionsFNArr.forEach(name => {
         optionFilters[name] = parseOptionsFilterValues(req.query[name], filrersVariants[name]);
     });
 
-    rangeFNarr.forEach(name => {
+    rangeFNArr.forEach(name => {
         rangeFilters[name] = parseRangeFilterValues(req.query[name], filrersVariants[name])
     });
 
