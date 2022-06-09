@@ -1,5 +1,5 @@
-import { IHanana, IHananaMap } from '../../../common/commonTypes';
-import { intersection, mapOfHananas, createOrAddToSet } from './helpers';
+import { EventType } from '../../../common/commonTypes';
+import { intersection, mapOfEvents, createOrAddToSet } from './helpers';
 
 import { OptionFiltersState, optionsFN } from '../../components/FilterOptions/optionFiltersSlice';
 import { RangeFiltersState, rangeFN } from '../../components/FilterRange/rangeFiltersSlice';
@@ -18,7 +18,7 @@ interface FilterAvailabilityProcess {
 };
 
 // create subsets only for options filters (not for range)
-export const makeSubsets = (hananas: IHanana[], filtersValues: FiltersValues, subsetsStorage: SubsetsStorage): SubsetsStorage => {
+export const makeSubsets = (events: EventType[], filtersValues: FiltersValues, subsetsStorage: SubsetsStorage): SubsetsStorage => {
     const newSubsets = { ...subsetsStorage };
 
     optionsFNArr.map(filterName => {
@@ -26,7 +26,7 @@ export const makeSubsets = (hananas: IHanana[], filtersValues: FiltersValues, su
         filterValues.map(value => {
             if (!newSubsets[filterName]?.[value]) {
                 if (!newSubsets[filterName]) { newSubsets[filterName] = {}; }
-                newSubsets[filterName][value] = hananas.filter(hanana => (hanana[filterName] === value)).map(i => i.id);
+                newSubsets[filterName][value] = events.filter(event => (event[filterName] === value)).map(i => i.id);
             }
         });
     });
@@ -35,47 +35,47 @@ export const makeSubsets = (hananas: IHanana[], filtersValues: FiltersValues, su
 };
 
 
-export const getFilteredFromSubsets = (hananas: IHanana[], filtersValues: FiltersValues, subsetsStorage: SubsetsStorage): [IHanana[], FiltersAvailability] => {
+export const getFilteredFromSubsets = (events: EventType[], filtersValues: FiltersValues, subsetsStorage: SubsetsStorage): [EventType[], FiltersAvailability] => {
     const optionFiltersNames = optionsFNArr;
     const rangesFiltersNames = rangeFNArr;
 
-    const hananasMap = mapOfHananas(hananas);
+    const eventsMap = mapOfEvents(events);
 
     const activeRangeFiltersNames: rangeFN[] = getActiveRangeFiltersNames(rangesFiltersNames, filtersValues);
     const { activeOptionsFiltersNames, passiveOptionsFiltersNames } = divideOptionFiltersNames(optionFiltersNames, filtersValues);
 
     if (activeOptionsFiltersNames.length === 0) {
-        const filterdHananas = hananas.filter(hanana => checkAllRangeFilters(activeRangeFiltersNames, filtersValues, hanana));
-        const filtredHananasIDs: number[] = filterdHananas.map(hanana => hanana.id);
+        const filterdEvents = events.filter(event => checkAllRangeFilters(activeRangeFiltersNames, filtersValues, event));
+        const filtredEventsIDs: string[] = filterdEvents.map(event => event.id);
 
-        const finalFiltersAvailability = passiveOptionsFiltersAvailability(filtredHananasIDs, hananasMap, passiveOptionsFiltersNames);
+        const finalFiltersAvailability = passiveOptionsFiltersAvailability(filtredEventsIDs, eventsMap, passiveOptionsFiltersNames);
 
-        return [filterdHananas, finalFiltersAvailability];
+        return [filterdEvents, finalFiltersAvailability];
     }
 
-    const allSetsMap: Map<string, number[]> = fillUsedSets(activeOptionsFiltersNames, activeRangeFiltersNames, filtersValues, subsetsStorage, hananas);
+    const allSetsMap: Map<string, string[]> = fillUsedSets(activeOptionsFiltersNames, activeRangeFiltersNames, filtersValues, subsetsStorage, events);
 
-    // id отфильтрованных элементов
-    const filtredHananasIDs = intersection(Array.from(allSetsMap.values()));
+    // ids of filtred elements
+    const filtredEventsIDs = intersection(Array.from(allSetsMap.values()));
 
     // доступные значения пассивных фильтров
     const passiveAvailability = passiveOptionsFiltersAvailability(
-        filtredHananasIDs,
-        hananasMap,
+        filtredEventsIDs,
+        eventsMap,
         passiveOptionsFiltersNames
     );
 
     // доступные значения активных фильтров
-    const activeAvailability = activeOptionsFiltersAvability(activeOptionsFiltersNames, allSetsMap, hananasMap);
+    const activeAvailability = activeOptionsFiltersAvability(activeOptionsFiltersNames, allSetsMap, eventsMap);
 
     const finalFiltersAvailability = {
         ...passiveAvailability,
         ...activeAvailability,
     };
 
-    const filtredHananas = filtredHananasIDs.map(id => hananasMap.get(id));
+    const filtredEvents = filtredEventsIDs.map(id => eventsMap.get(id));
 
-    return [filtredHananas, finalFiltersAvailability];
+    return [filtredEvents, finalFiltersAvailability];
 };
 
 
@@ -84,11 +84,11 @@ function fillUsedSets(
     activeRangeFiltersNames: rangeFN[], 
     filtersValues: FiltersValues, 
     subsetsStorage: SubsetsStorage, 
-    hananas: IHanana[]
+    events: EventType[]
 ) {
-    const allSetsMap: Map<string, number[]> = new Map();
+    const allSetsMap: Map<string, string[]> = new Map();
     activeOptionsFiltersNames.forEach(filterName => {
-        let filterAllValuesSet: number[] = [];
+        let filterAllValuesSet: string[] = [];
         filtersValues.optionFilters[filterName].forEach(
             // можно не проверять наличие, так как после выбора этих фильтров сеты обновились и такой сет точно есть
             // для выбранного фильтра сеты его выбранных значений надо объединить
@@ -98,9 +98,9 @@ function fillUsedSets(
     });
 
     activeRangeFiltersNames.forEach(filterName => {
-        const filteredHanans = hananas.filter(hanana => (checkRangeFilter(filtersValues, filterName, hanana)));
+        const filteredEvents = events.filter(event => (checkRangeFilter(filtersValues, filterName, event)));
 
-        allSetsMap.set(filterName, filteredHanans.map(hanana => hanana.id));
+        allSetsMap.set(filterName, filteredEvents.map(event => event.id));
     });
     return allSetsMap;
 }
@@ -130,31 +130,31 @@ function getActiveRangeFiltersNames(rangesFiltersNames: rangeFN[], filtersValues
     });
 }
 
-function checkAllRangeFilters(rangesFiltersNames: rangeFN[], filtersValues: FiltersValues, hanana: IHanana) {
+function checkAllRangeFilters(rangesFiltersNames: rangeFN[], filtersValues: FiltersValues, event: EventType) {
     let pass = true;
 
     rangesFiltersNames.forEach(filterName => {
-        pass = pass && checkRangeFilter(filtersValues, filterName, hanana);
+        pass = pass && checkRangeFilter(filtersValues, filterName, event);
     });
 
     return pass;
 }
 
-function checkRangeFilter(filtersValues: FiltersValues, filterName: rangeFN, hanana: IHanana): boolean {
+function checkRangeFilter(filtersValues: FiltersValues, filterName: rangeFN, event: EventType): boolean {
     const filter = filtersValues.rangeFilters[filterName];
-    return (!filter.min.current || filter.min.current <= Number(hanana[filterName])) &&
-        (!filter.max.current || filter.max.current >= Number(hanana[filterName]));
+    return (!filter.min.current || filter.min.current <= Number(event[filterName])) &&
+        (!filter.max.current || filter.max.current >= Number(event[filterName]));
 }
 
 
-function passiveOptionsFiltersAvailability(filtredHananasIDs: number[], hananasMap: IHananaMap, passiveFiltersNames: optionsFN[]): FiltersAvailability {
+function passiveOptionsFiltersAvailability(filtredEventsIDs: string[], eventsMap: Map<string, EventType>, passiveFiltersNames: optionsFN[]): FiltersAvailability {
     const result: FilterAvailabilityProcess = {};
     const filtersAvailability: FiltersAvailability = {};
 
-    filtredHananasIDs.forEach(id => {
-        const hanana = hananasMap.get(id);
+    filtredEventsIDs.forEach(id => {
+        const event = eventsMap.get(id);
         passiveFiltersNames.forEach(filterName => {
-            result[filterName] = createOrAddToSet(result[filterName], hanana[filterName]);
+            result[filterName] = createOrAddToSet(result[filterName], event[filterName]);
         });
     });
 
@@ -165,7 +165,7 @@ function passiveOptionsFiltersAvailability(filtredHananasIDs: number[], hananasM
     return filtersAvailability;
 }
 
-function activeOptionsFiltersAvability(activeNames: optionsFN[], allSetsMap: Map<string, number[]>, hananasMap: IHananaMap): FiltersAvailability {
+function activeOptionsFiltersAvability(activeNames: optionsFN[], allSetsMap: Map<string, string[]>, eventsMap: Map<string, EventType>): FiltersAvailability {
     if (allSetsMap.size === 0) {
         return {};
     }
@@ -183,8 +183,8 @@ function activeOptionsFiltersAvability(activeNames: optionsFN[], allSetsMap: Map
     activeNames.forEach(filterName => {
         const subsetForActiveValues = getSubsetForActiveValues(filterName, allSetsMap);
         subsetForActiveValues.forEach(id => {
-            const hanana = hananasMap.get(id);
-            result[filterName] = createOrAddToSet(result[filterName], hanana[filterName]);
+            const event = eventsMap.get(id);
+            result[filterName] = createOrAddToSet(result[filterName], event[filterName]);
         });
 
         if (result[filterName]) {
@@ -196,8 +196,8 @@ function activeOptionsFiltersAvability(activeNames: optionsFN[], allSetsMap: Map
     return filterAvailability;
 }
 
-function getSubsetForActiveValues (currentFilter: string, allSetsMap: Map<string, number[]>): number[] {
-    const otherFiltersArray: Array<number>[] = [];
+function getSubsetForActiveValues (currentFilter: string, allSetsMap: Map<string, string[]>): string[] {
+    const otherFiltersArray: Array<string>[] = [];
     allSetsMap.forEach((value, key) => {
         if (key !== currentFilter) {
             otherFiltersArray.push(value);

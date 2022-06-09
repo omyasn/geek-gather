@@ -5,7 +5,7 @@ import { Dispatch, ThunkDispatch } from '@reduxjs/toolkit';
 import { useAppDispatch,  useAppSelector } from './hooks';
 import FilterOptions from '../../components/FilterOptions/index';
 import FilterRange, { FilterRangeOptions, rangeEdges } from '../../components/FilterRange/index';
-import { IHanana } from '../../../common/commonTypes';
+import { EventType } from "../../../common/commonTypes";
 
 import { makeSubsets, getFilteredFromSubsets } from './filtersLogic';
 
@@ -47,12 +47,12 @@ export type FiltersVariants = FilterVariantsOptions & FilterVariantsRange;
 
 export type SubsetsStorage = {
     [filterName in optionsFN]?: {
-        [filterValue: string]: number[];
+        [filterValue: string]: string[];
     }
 }
 
 export interface IPageProps {
-    hananas: IHanana[];
+    events: EventType[];
     filtersVariants: FiltersVariants;
 };
 
@@ -81,7 +81,7 @@ const clearAll = (dispatch: ReturnType<typeof useAppDispatch>) => () => {
 
 
 const SearchPage: React.FC<IPageProps> = ({
-    hananas,
+    events,
     filtersVariants,
 }) => {
     const dispatch = useAppDispatch();
@@ -95,9 +95,9 @@ const SearchPage: React.FC<IPageProps> = ({
         rangeFilters: selectRangeFilters(state),
     }));
 
-    subsetsStorage.current = makeSubsets(hananas, currentFilters, subsetsStorage.current);
+    subsetsStorage.current = makeSubsets(events, currentFilters, subsetsStorage.current);
 
-    const [filtredHananas, activeFiltersValues] = getFilteredFromSubsets(hananas, currentFilters, subsetsStorage.current);
+    const [filtredEvents, activeFiltersValues] = getFilteredFromSubsets(events, currentFilters, subsetsStorage.current);
 
     return (
         <div>
@@ -111,11 +111,11 @@ const SearchPage: React.FC<IPageProps> = ({
             <div>
                 <div>
                     <FilterOptions
-                        name="Host"
-                        filterOptions={filtersVariants[optionsFN.HOST]}
-                        filterValues={optionsFiltersValues[optionsFN.HOST]}
-                        filterActiveOptions={activeFiltersValues[optionsFN.HOST]}
-                        onOptionChange={onOptionsFilterChange(optionsFN.HOST, dispatch)}
+                        name="Owner"
+                        filterOptions={filtersVariants[optionsFN.OWNER]}
+                        filterValues={optionsFiltersValues[optionsFN.OWNER]}
+                        filterActiveOptions={activeFiltersValues[optionsFN.OWNER]}
+                        onOptionChange={onOptionsFilterChange(optionsFN.OWNER, dispatch)}
                     />
 
                     <FilterOptions
@@ -135,11 +135,19 @@ const SearchPage: React.FC<IPageProps> = ({
                     />
 
                     <FilterOptions
-                        name="Color"
-                        filterOptions={filtersVariants[optionsFN.COLOR]}
-                        filterValues={optionsFiltersValues[optionsFN.COLOR]}
-                        filterActiveOptions={activeFiltersValues[optionsFN.COLOR]}
-                        onOptionChange={onOptionsFilterChange(optionsFN.COLOR, dispatch)}
+                        name="City"
+                        filterOptions={filtersVariants[optionsFN.CITY]}
+                        filterValues={optionsFiltersValues[optionsFN.CITY]}
+                        filterActiveOptions={activeFiltersValues[optionsFN.CITY]}
+                        onOptionChange={onOptionsFilterChange(optionsFN.CITY, dispatch)}
+                    />
+
+                    <FilterOptions
+                        name="Parties"
+                        filterOptions={filtersVariants[optionsFN.PARTIES]}
+                        filterValues={optionsFiltersValues[optionsFN.PARTIES]}
+                        filterActiveOptions={activeFiltersValues[optionsFN.PARTIES]}
+                        onOptionChange={onOptionsFilterChange(optionsFN.PARTIES, dispatch)}
                     />
                 
                     <FilterRange
@@ -156,15 +164,16 @@ const SearchPage: React.FC<IPageProps> = ({
                 </div>
 
                 <div>
-                    {filtredHananas.map(hanana => (
-                        <div style={{ border: "1px solid black" }} key={hanana.id}>
-                            <h3>{hanana.title} {hanana.id}</h3>
-                            <div>{hanana.beginDate}</div>
-                            <div>Capacity: {hanana.capacity}</div>
-                            <div>MinPrice: {hanana.minPrice}</div>
-                            <div>Host: {hanana.host}</div>
-                            <div>Location: {hanana.location}</div>
-                            <div>Color: {hanana.color}</div>
+                    {filtredEvents.map(event => (
+                        <div style={{ border: "1px solid black" }} key={event.id}>
+                            <h3>{event.title} {event.id}</h3>
+                            <div>{event.beginDate}</div>
+                            <div>Capacity: {event.capacity}</div>
+                            <div>MinPrice: {event.minPrice}</div>
+                            <div>Owner: {event.owner}</div>
+                            <div>Location: {event.location}</div>
+                            <div>City: {event.city}</div>
+                            <div>Parties: {event.parties}</div>
                         </div>
                     ))}
                 </div>

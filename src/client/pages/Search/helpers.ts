@@ -1,6 +1,6 @@
-import { IHanana, IHananaMap } from '../../../common/commonTypes';
+import { EventType } from '../../../common/commonTypes';
 
-export const intersection= (arrays: Array<number>[]): number[] => {
+export const intersection= (arrays: Array<string>[]): string[] => {
     if (arrays.length === 0) { return []; }
     if (arrays.length === 1) { return arrays[0]; }
 
@@ -14,11 +14,11 @@ export const intersection= (arrays: Array<number>[]): number[] => {
     //return arrays.reduce((acc, cur) => acc.filter(i => cur.includes(i)))
 };
 
-export const mapOfHananas = (hananas: IHanana[]): IHananaMap => {
-    const hananasMap = new Map();
-    hananas.forEach(hanana => hananasMap.set(hanana.id, hanana));
+export const mapOfEvents = (events: EventType[]): Map<string, EventType> => {
+    const eventsMap = new Map();
+    events.forEach(event => eventsMap.set(event.id, event));
 
-    return hananasMap;
+    return eventsMap;
 };
 
 export function createOrAddToSet<T>(container: Set<T>, value: T) {

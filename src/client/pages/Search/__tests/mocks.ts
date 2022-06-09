@@ -1,94 +1,123 @@
 import { FiltersValues } from "../page";
+import { EventType } from "../../../../common/commonTypes";
 
-export const mockHananas = [{
-    id: 0,
-    title: 'БПМ',
+export const mockEvents: EventType[] = [{
+    id: '0',
+    title: 'title0',
     beginDate: '22.06.2021',
     capacity: 3000,
     minPrice: 700,
-    host: 'АПГ',
-    location: 'Иркутск',
-    color: 'red',
+    owner: 'APG',
+    location: 'Rotko club', //иркутск
+    city: 'Moscow', //red
+    locationLink: '',
+    parties: '',
+    ownerLink: ''
 }, {
-    id: 1,
-    title: 'Красная капелла: Ответный удар',
+    id: '1',
+    title: 'title1',
     beginDate: '07.06.2018',
     capacity: 200,
     minPrice: 1000,
-    host: 'АПГ',
-    location: 'Москва',
-    color: 'red',
+    owner: 'APG',
+    location: 'Polygon 2', //Polygon 2
+    city: 'Moscow',
+    locationLink: '',
+    parties: '',
+    ownerLink: ''
 }, {
-    id: 2,
-    title: 'Большие ходоки',
+    id: '2',
+    title: 'title2',
     beginDate: '10.11.2016',
     capacity: 200,
     minPrice: 2000,
-    host: 'Loonarbaboon',
-    location: 'Иркутск',
-    color: 'red',
+    owner: 'Loonarbaboon',
+    location: 'Rotko club',
+    city: 'Moscow',
+    locationLink: '',
+    parties: '',
+    ownerLink: ''
 }, {
-    id: 3,
-    title: 'Мир торгов',
+    id: '3',
+    title: 'title3',
     beginDate: '14.09.2018',
     capacity: 100,
     minPrice: 600,
-    host: 'Loonarbaboon',
-    location: 'Москва',
-    color: 'red',
+    owner: 'Loonarbaboon',
+    location: 'Polygon 2',
+    city: 'Moscow',
+    locationLink: '',
+    parties: '',
+    ownerLink: ''
 }, {
-    id: 4,
-    title: 'Титюли',
+    id: '4',
+    title: 'Tituli',
     beginDate: '31.01.2020',
     capacity: 100,
     minPrice: 550,
-    host: 'Loonarbaboon',
-    location: 'Иркутск',
-    color: 'blue',
+    owner: 'Loonarbaboon',
+    location: 'Rotko club',
+    city: 'Klin', //blue
+    locationLink: '',
+    parties: '',
+    ownerLink: ''
 }, {
-    id: 5,
+    id: '5',
     title: 'Roar roar',
     beginDate: '31.01.2020',
     capacity: 200,
     minPrice: 650,
-    host: 'Toptop',
-    location: 'Иркутск',
-    color: 'blue',
+    owner: 'Toptop',
+    location: 'Rotko club',
+    city: 'Klin',
+    locationLink: '',
+    parties: '',
+    ownerLink: ''
 }, {
-    id: 6,
+    id: '6',
     title: 'Solo',
     beginDate: '31.01.2020',
     capacity: 100,
     minPrice: 550,
-    host: 'Toptop',
-    location: 'Иркутск',
-    color: 'yellow',
+    owner: 'Toptop',
+    location: 'Rotko club',
+    city: 'Novgorod', //yellow
+    locationLink: '',
+    parties: '',
+    ownerLink: ''
 }, {
-    id: 7,
+    id: '7',
     title: 'rip',
     beginDate: '14.09.2018',
     capacity: 2000,
     minPrice: 3000,
-    host: 'III',
-    location: 'Псков',
-    color: 'blue',
+    owner: 'III',
+    location: 'Boom club', //Псков
+    city: 'Klin',
+    locationLink: '',
+    parties: '',
+    ownerLink: ''
 }, {
-    id: 8,
+    id: '8',
     title: 'Атом',
     beginDate: '10.11.2016',
     capacity: 600,
     minPrice: 600,
-    host: 'Toptop',
-    location: 'Иркутск',
-    color: 'blue',
+    owner: 'Toptop',
+    location: 'Rotko club',
+    city: 'Klin',
+    locationLink: '',
+    parties: '',
+    ownerLink: ''
 }];
 
 export const mockFiltersValues: FiltersValues = {
         optionFilters: {
-            host: [],
+            owner: [],
             beginDate: [],
             location: [],
-            color: [],
+            parties: [],
+            city: []
         },
     rangeFilters: {
         minPrice: {

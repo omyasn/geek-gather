@@ -1,50 +1,59 @@
-export interface IHananaProps {
-    title: string;
-    beginDate: string;
-    capacity: number;
-    minPrice: number;
-    host: string;
-    location: string;
-    color: string;
+export interface EventProps {
+  title: string;
+  beginDate: string;
+
+  location: string;
+  city: string;
+  locationLink: string;
+
+  capacity: number;
+  parties: string;
+  minPrice: number;
+
+  owner: string;
+  ownerLink: string;
+
+  private?: boolean;
+  hasQuests?: boolean;
+  ownBalls?: boolean;
 }
 
-export type IHanana = { id: number } & IHananaProps;
-export type IHananaMap = Map<number, IHanana>;
+export type EventType = { id: string } & EventProps;
 
-export interface IBackendHanana {
-    id: number;
-    resourceContent: IHananaProps;
+export interface BackendEvent {
+  id: string;
+  resourceContent: EventProps;
 }
 
 export interface IHananaDetails {
-    id: number;
-    title: string;
-    active: boolean;
-    beginDate: string; // в коде надо хранить датой
-    endDate: string;
-    capacity: number;
-    gameRules: string;
-    shortInfo: string;
-    locationId: number;
-    host: string;
-    priceInfo: string;
-    minPrice: number;
+  id: number;
+  title: string;
+  active: boolean;
+  beginDate: string; // в коде надо хранить датой
+  endDate: string;
+  capacity: number;
+  gameRules: string;
+  shortInfo: string;
+  locationId: number;
+  host: string;
+  priceInfo: string;
+  minPrice: number;
 }
 
 export interface ILocation {
-    id: number;
-    name: string;
-    info: string;
-    additionalInfo: string;
-    addressLine1: string;
-    addressLine2: string;
-    capacity: number;
-    city: string;
-    state: string;
-    country: string;
-    index: string;
-    coordinates: {
-        lat: string;
-        long: string;
-    };
+  id: number;
+  name: string;
+  info: string;
+  additionalInfo: string;
+  addressLine1: string;
+  addressLine2: string;
+  capacity: number;
+  city: string;
+  state: string;
+  country: string;
+  index: string;
+  coordinates: {
+    lat: string;
+    long: string;
+  };
 }
