@@ -6,5 +6,10 @@
 
     .item {
         margin-bottom: 0;
+        color: #000;
+
+        &.disabled {
+            color: #808080;
+        }
     }
 }

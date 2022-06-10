@@ -1,5 +1,7 @@
 import * as React from 'react';
 import styles from './styles.scss';
+import cn from 'classnames';
+import Text from '../../components/CoreComponents/Text';
 
 // TODO сейчас не везде заменено
 export enum rangeEdges {
@@ -20,17 +22,23 @@ export interface FilterRangeProps {
     name: string;
     filterRange: FilterRangeOptions;
     onRangeChange: (edge: rangeEdges) => (e: React.SyntheticEvent) => void;
+    className?: string;
 }
 
 const FilterRange: React.FC<FilterRangeProps> = ({
     name,
     filterRange,
     onRangeChange,
+    className,
 }) => {
     return (
-        <div>
-            <p className={styles.lol}>{name}</p>
-            <label>
+        <div className={cn(styles.wrapper, className)}>
+            <Text header textSize="xs" block>{name}</Text>
+            <Text 
+                tag="label"
+                block
+                className={styles.item}
+            >
                 Min: 
                 <input
                     type="number"
@@ -40,9 +48,13 @@ const FilterRange: React.FC<FilterRangeProps> = ({
                     max={filterRange.max.limit}
                 />
                 <span>{filterRange.min.limit}</span>
-            </label>
+            </Text>
 
-            <label>
+            <Text 
+                tag="label"
+                block
+                className={styles.item}
+            >
                 Max: 
                 <input
                     type="number"
@@ -52,7 +64,7 @@ const FilterRange: React.FC<FilterRangeProps> = ({
                     max={filterRange.max.limit}
                 />
                 <span>{filterRange.max.limit}</span>
-            </label>
+            </Text>
         </div>
     );
 };

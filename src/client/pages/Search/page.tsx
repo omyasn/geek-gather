@@ -4,10 +4,12 @@ import { Dispatch, ThunkDispatch } from '@reduxjs/toolkit';
 
 import { useAppDispatch,  useAppSelector } from './hooks';
 import FilterOptions from '../../components/FilterOptions/index';
+import SearchCard from '../../components/SearchCard/index';
 import FilterRange, { FilterRangeOptions, rangeEdges } from '../../components/FilterRange/index';
 import { EventType } from "../../../common/commonTypes";
 
 import { makeSubsets, getFilteredFromSubsets } from './filtersLogic';
+import Text from '../../components/CoreComponents/Text';
 
 import {
     addOptionWithHistory,
@@ -100,84 +102,74 @@ const SearchPage: React.FC<IPageProps> = ({
     const [filtredEvents, activeFiltersValues] = getFilteredFromSubsets(events, currentFilters, subsetsStorage.current);
 
     return (
-        <div>
-            <div className={styles.kek}>It's search Page!</div>
+        <div className={styles.pageWrapper}>
+            <div className={styles.headerWrapper}>
+                <Text header tag="h1">Events</Text>
+                <Text>Look up through all interesting events nearby. Use filters for more scpecific searches.</Text>
+            </div>
 
-            <div>
+            <div className={styles.filtersWrapper}>
                 <button onClick={clearAll(dispatch)}>
                     ClearAll
                 </button>
+                <FilterOptions
+                    name="Owner"
+                    filterOptions={filtersVariants[optionsFN.OWNER]}
+                    filterValues={optionsFiltersValues[optionsFN.OWNER]}
+                    filterActiveOptions={activeFiltersValues[optionsFN.OWNER]}
+                    onOptionChange={onOptionsFilterChange(optionsFN.OWNER, dispatch)}
+                />
+
+                <FilterOptions
+                    name="BeginDate"
+                    filterOptions={filtersVariants[optionsFN.BEGINDATE]}
+                    filterValues={optionsFiltersValues[optionsFN.BEGINDATE]}
+                    filterActiveOptions={activeFiltersValues[optionsFN.BEGINDATE]}
+                    onOptionChange={onOptionsFilterChange(optionsFN.BEGINDATE, dispatch)}
+                />
+
+                <FilterOptions
+                    name="Location"
+                    filterOptions={filtersVariants[optionsFN.LOCATION]}
+                    filterValues={optionsFiltersValues[optionsFN.LOCATION]}
+                    filterActiveOptions={activeFiltersValues[optionsFN.LOCATION]}
+                    onOptionChange={onOptionsFilterChange(optionsFN.LOCATION, dispatch)}
+                />
+
+                <FilterOptions
+                    name="City"
+                    filterOptions={filtersVariants[optionsFN.CITY]}
+                    filterValues={optionsFiltersValues[optionsFN.CITY]}
+                    filterActiveOptions={activeFiltersValues[optionsFN.CITY]}
+                    onOptionChange={onOptionsFilterChange(optionsFN.CITY, dispatch)}
+                />
+
+                <FilterOptions
+                    name="Parties"
+                    filterOptions={filtersVariants[optionsFN.PARTIES]}
+                    filterValues={optionsFiltersValues[optionsFN.PARTIES]}
+                    filterActiveOptions={activeFiltersValues[optionsFN.PARTIES]}
+                    onOptionChange={onOptionsFilterChange(optionsFN.PARTIES, dispatch)}
+                />
+            
+                <FilterRange
+                    name="MinPrice"
+                    filterRange={rangeFiltersValues[rangeFN.MINPRICE]}
+                    onRangeChange={onRangeFilterChange(rangeFN.MINPRICE, dispatch)}
+                />
+
+                <FilterRange
+                    name="Capacity"
+                    filterRange={rangeFiltersValues[rangeFN.CAPACITY]}
+                    onRangeChange={onRangeFilterChange(rangeFN.CAPACITY, dispatch)}
+                />
             </div>
-            <div>
-                <div>
-                    <FilterOptions
-                        name="Owner"
-                        filterOptions={filtersVariants[optionsFN.OWNER]}
-                        filterValues={optionsFiltersValues[optionsFN.OWNER]}
-                        filterActiveOptions={activeFiltersValues[optionsFN.OWNER]}
-                        onOptionChange={onOptionsFilterChange(optionsFN.OWNER, dispatch)}
-                    />
-
-                    <FilterOptions
-                        name="BeginDate"
-                        filterOptions={filtersVariants[optionsFN.BEGINDATE]}
-                        filterValues={optionsFiltersValues[optionsFN.BEGINDATE]}
-                        filterActiveOptions={activeFiltersValues[optionsFN.BEGINDATE]}
-                        onOptionChange={onOptionsFilterChange(optionsFN.BEGINDATE, dispatch)}
-                    />
-
-                    <FilterOptions
-                        name="Location"
-                        filterOptions={filtersVariants[optionsFN.LOCATION]}
-                        filterValues={optionsFiltersValues[optionsFN.LOCATION]}
-                        filterActiveOptions={activeFiltersValues[optionsFN.LOCATION]}
-                        onOptionChange={onOptionsFilterChange(optionsFN.LOCATION, dispatch)}
-                    />
-
-                    <FilterOptions
-                        name="City"
-                        filterOptions={filtersVariants[optionsFN.CITY]}
-                        filterValues={optionsFiltersValues[optionsFN.CITY]}
-                        filterActiveOptions={activeFiltersValues[optionsFN.CITY]}
-                        onOptionChange={onOptionsFilterChange(optionsFN.CITY, dispatch)}
-                    />
-
-                    <FilterOptions
-                        name="Parties"
-                        filterOptions={filtersVariants[optionsFN.PARTIES]}
-                        filterValues={optionsFiltersValues[optionsFN.PARTIES]}
-                        filterActiveOptions={activeFiltersValues[optionsFN.PARTIES]}
-                        onOptionChange={onOptionsFilterChange(optionsFN.PARTIES, dispatch)}
-                    />
-                
-                    <FilterRange
-                        name="MinPrice"
-                        filterRange={rangeFiltersValues[rangeFN.MINPRICE]}
-                        onRangeChange={onRangeFilterChange(rangeFN.MINPRICE, dispatch)}
-                    />
-
-                    <FilterRange
-                        name="Capacity"
-                        filterRange={rangeFiltersValues[rangeFN.CAPACITY]}
-                        onRangeChange={onRangeFilterChange(rangeFN.CAPACITY, dispatch)}
-                    />
-                </div>
-
-                <div>
-                    {filtredEvents.map(event => (
-                        <div style={{ border: "1px solid black" }} key={event.id}>
-                            <h3>{event.title} {event.id}</h3>
-                            <div>{event.beginDate}</div>
-                            <div>Capacity: {event.capacity}</div>
-                            <div>MinPrice: {event.minPrice}</div>
-                            <div>Owner: {event.owner}</div>
-                            <div>Location: {event.location}</div>
-                            <div>City: {event.city}</div>
-                            <div>Parties: {event.parties}</div>
-                        </div>
-                    ))}
-                </div>
+            <div className={styles.eventsWrapper}>
+                {filtredEvents.map(event => 
+                    <SearchCard key={event.id} {...event} />
+                )}
             </div>
+        
         </div>
     );
 };

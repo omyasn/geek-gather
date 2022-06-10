@@ -1,4 +1,23 @@
-.kek {
-    background-color: cyan;
-    color: darkmagenta;
+.pageWrapper {
+    display: grid;
+    grid-template-columns: minmax(270px, 26%) auto;
+    grid-template-areas:
+    "header header"
+    "filters events";
+}
+
+.headerWrapper {
+    grid-area: header;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.filtersWrapper {
+    grid-area: filters;
+    padding: 0 14px;
+}
+
+.eventsWrapper {
+    grid-area: events;
+    padding: 0 14px;
 }
