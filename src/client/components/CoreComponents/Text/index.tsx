@@ -8,12 +8,14 @@ interface Props extends React.HTMLProps<HTMLElement> {
     block?: boolean;
     textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
     tag?: 'span' | 'a' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'div' | 'p' | 'label';
+    bold?: boolean;
     className?: string;
 }
 
 const Text: React.FC<Props> = ({
     header,
     block,
+    bold,
     textSize = 'm',
     tag = 'span',
     className,
@@ -29,6 +31,7 @@ const Text: React.FC<Props> = ({
                 { 
                     [styles.header]: header,
                     [styles.block]: block,
+                    [styles.bold]: bold,
                     
                 },
                 className

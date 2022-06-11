@@ -109,9 +109,6 @@ const SearchPage: React.FC<IPageProps> = ({
             </div>
 
             <div className={styles.filtersWrapper}>
-                <button onClick={clearAll(dispatch)}>
-                    ClearAll
-                </button>
                 <FilterOptions
                     name="Owner"
                     filterOptions={filtersVariants[optionsFN.OWNER]}
@@ -163,6 +160,9 @@ const SearchPage: React.FC<IPageProps> = ({
                     filterRange={rangeFiltersValues[rangeFN.CAPACITY]}
                     onRangeChange={onRangeFilterChange(rangeFN.CAPACITY, dispatch)}
                 />
+                <button onClick={clearAll(dispatch)}>
+                    ClearAll
+                </button>
             </div>
             <div className={styles.eventsWrapper}>
                 {filtredEvents.map(event => 

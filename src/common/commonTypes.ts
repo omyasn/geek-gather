@@ -13,9 +13,9 @@ export interface EventProps {
   owner: string;
   ownerLink: string;
 
-  private?: boolean;
+  isPublic?: boolean;
   hasQuests?: boolean;
-  ownBalls?: boolean;
+  allowedOwnBalls?: boolean;
 }
 
 export type EventType = { id: string } & EventProps;

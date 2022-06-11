@@ -20,6 +20,7 @@ const FilterOptions: React.FC<FilterOptionsProps<string>> = ({
     className,
     onOptionChange,
 }) => {
+    const isDisabled = (item: string) => !((filterActiveOptions && filterActiveOptions.includes(item)) || filterActiveOptions === null)
     return (
         <div className={cn(styles.wrapper, className)}>
             <Text header textSize="xs" block>{name}</Text>
@@ -28,11 +29,12 @@ const FilterOptions: React.FC<FilterOptionsProps<string>> = ({
                     tag="label"
                     block
                     className={cn(styles.item, {
-                        [styles.disabled]: !((filterActiveOptions && filterActiveOptions.includes(item)) || filterActiveOptions === null)
+                        [styles.disabled]: isDisabled(item)
                     })}
                     key={item}
                 >
                     <input
+                        disabled={isDisabled(item)}
                         type="checkbox"
                         checked={filterValues.includes(item)}
                         value={item}

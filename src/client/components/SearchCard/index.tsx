@@ -3,6 +3,18 @@ import { EventType } from '../../../common/commonTypes';
 import cn from 'classnames';
 import styles from './styles.scss'
 import Text from '../../components/CoreComponents/Text';
+import {
+    faCalendarDay,
+    faPeopleGroup,
+    faRubleSign,
+    faLocationDot,
+    faPeopleArrowsLeftRight,
+    faClipboardQuestion,
+    faBowlingBall,
+    faUsersViewfinder,
+    faUserNinja,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
 const SearchCard: React.FC<EventType> = ({
@@ -14,18 +26,53 @@ const SearchCard: React.FC<EventType> = ({
     owner,
     location,
     city,
-    parties
+    parties,
+    hasQuests,
+    isPublic,
+    allowedOwnBalls,
 }) => {
     return (
         <div className={styles.wrapper}>
-            <Text header textSize="xs" block>{`${title} (${id})`}</Text>
-            <div>{beginDate}</div>
-            <div>Capacity: {capacity}</div>
-            <div>MinPrice: {minPrice}</div>
-            <div>Owner: {owner}</div>
-            <div>Location: {location}</div>
-            <div>City: {city}</div>
-            <div>Parties: {parties}</div>
+            <div className={styles.header}>
+                <Text className={styles.spacer} header textSize="xs">{title}</Text>
+                <Text textSize="s">{`(${id})`}</Text>
+            </div>
+            <div className={styles.left}>
+                <Text block>
+                    <FontAwesomeIcon className={styles.spacer} icon={faCalendarDay} />
+                    {beginDate}
+                </Text>
+                <Text block>
+                    <FontAwesomeIcon className={styles.spacer} icon={faLocationDot} />
+                    {`${location}, ${city}`}
+                </Text>
+                <Text block>
+                    <FontAwesomeIcon className={styles.spacer} icon={faPeopleGroup} />
+                    {`${capacity} players`}
+                </Text>
+                <Text block bold textSize="xl">
+                    <span className={styles.text}>{`from ${minPrice}`}</span>
+                    <FontAwesomeIcon icon={faRubleSign} />
+                </Text>
+            </div>
+            <div className={styles.right}>
+                <Text block>
+                    <span className={styles.spacer}>Owner:</span>
+                    <Text bold>{owner}</Text>
+                </Text>
+                <Text block>
+                    <FontAwesomeIcon className={styles.spacer} icon={faPeopleArrowsLeftRight} />
+                    {`Teams: ${parties}`}
+                </Text>
+                <div>
+                    {!!isPublic ? 
+                        <FontAwesomeIcon icon={faUsersViewfinder} title="Game by an organization" className={styles.icon} /> : 
+                        <FontAwesomeIcon icon={faUserNinja} title="Game by a person" className={styles.icon} />
+                    }
+                    {!!allowedOwnBalls && <FontAwesomeIcon icon={faBowlingBall} title="Own balls allowed" className={styles.icon} />}
+                    {!!hasQuests && <FontAwesomeIcon icon={faClipboardQuestion} title="Has quests" className={styles.icon} />}
+                </div>
+            </div>
         </div>
     );
 };

@@ -3,4 +3,36 @@
     border: 1px solid #D3D3D3;
     padding: 12px;
     margin-bottom: 14px;
+    display: grid;
+    grid-template-columns: 50% auto;
+    grid-template-areas: 
+        "header header"
+        "left right";
+}
+
+.header {
+    grid-area: header;
+    margin-bottom: 10px;
+}
+
+.left {
+    grid-area: left;
+    padding-left: 4px;
+}
+
+.right {
+    grid-area: right;
+}
+
+.text {
+    margin-right: 2px;
+}
+
+.spacer {
+    margin-right: 6px;
+}
+
+.icon {
+    margin-right: 8px;
+    font-size: 20px;
 }

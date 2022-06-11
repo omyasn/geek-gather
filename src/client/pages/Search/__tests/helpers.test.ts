@@ -31,9 +31,9 @@ test('mapOfEvents', () => {
             capacity: 400,
             parties: "2",
             minPrice: 1200,
-            private: false,
+            isPublic: false,
             hasQuests: true,
-            ownBalls: true,
+            allowedOwnBalls: true,
             location: "Raining Forest Club",
             city: "St.Peterbugr",
             locationLink: "https://google.com",
@@ -52,9 +52,9 @@ test('mapOfEvents', () => {
             capacity: 30,
             parties: "2",
             minPrice: 550,
-            private: true,
+            isPublic: true,
             hasQuests: false,
-            ownBalls: false,
+            allowedOwnBalls: false,
           },
     ]);
     expect(test).toMatchSnapshot();
