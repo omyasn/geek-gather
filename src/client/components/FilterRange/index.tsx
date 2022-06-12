@@ -46,8 +46,9 @@ const FilterRange: React.FC<FilterRangeProps> = ({
                     onChange={onRangeChange(rangeEdges.MIN)}
                     min={filterRange.min.limit}
                     max={filterRange.max.limit}
+                    className={styles.input}
                 />
-                <span>{filterRange.min.limit}</span>
+                <Text secondary textSize="s">{`limit ${filterRange.min.limit}`}</Text>
             </Text>
 
             <Text 
@@ -62,8 +63,9 @@ const FilterRange: React.FC<FilterRangeProps> = ({
                     onChange={onRangeChange(rangeEdges.MAX)}
                     min={filterRange.min.limit}
                     max={filterRange.max.limit}
+                    className={styles.input}
                 />
-                <span>{filterRange.max.limit}</span>
+                <Text secondary textSize="s">{`limit ${filterRange.max.limit}`}</Text>
             </Text>
         </div>
     );

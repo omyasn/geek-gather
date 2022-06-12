@@ -10,6 +10,7 @@ import { EventType } from "../../../common/commonTypes";
 
 import { makeSubsets, getFilteredFromSubsets } from './filtersLogic';
 import Text from '../../components/CoreComponents/Text';
+import Button from '../../components/CoreComponents/Button';
 import { formatToHumanDate } from '../../../common/helpers'
 
 import {
@@ -162,9 +163,9 @@ const SearchPage: React.FC<IPageProps> = ({
                     filterRange={rangeFiltersValues[rangeFN.CAPACITY]}
                     onRangeChange={onRangeFilterChange(rangeFN.CAPACITY, dispatch)}
                 />
-                <button onClick={clearAll(dispatch)}>
+                <Button onClick={clearAll(dispatch)}>
                     ClearAll
-                </button>
+                </Button>
             </div>
             <div className={styles.eventsWrapper}>
                 {filtredEvents.map(event => 

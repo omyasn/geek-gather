@@ -1,0 +1,15 @@
+@import '../../../theme.scss';
+
+.button {
+    color: $text-light;
+    font-size: 16px;
+    text-decoration: none;
+    padding: 8px 20px;
+    border: 1px solid $main-green;
+    border-radius: 4px;
+    background-color: rgba(17,62,33, 0.5);
+
+    &:hover {
+        background-color: rgba(17,62,33, 0.7);
+    }
+}
