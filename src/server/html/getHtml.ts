@@ -31,13 +31,14 @@ export default ({
 
                 <meta name="description" content="${description}">
 
-                <link rel="stylesheet" href="${getAssetRealPath(`css/${pageName}.css`)}">
-
-                <title>${title}</title>
-
                 <link rel="preconnect" href="https://fonts.googleapis.com">
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
                 <link href="https://fonts.googleapis.com/css2?family=Cuprum:wght@500&family=Nunito:wght@400;600&display=swap" rel="stylesheet">
+
+                <link rel="stylesheet" href="${getAssetRealPath(`fontawesome.css`)}">
+                <link rel="stylesheet" href="${getAssetRealPath(`css/${pageName}.css`)}">
+
+                <title>${title}</title>
             </head>
 
             <body style="margin: 0;">

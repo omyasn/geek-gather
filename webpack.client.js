@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const AssetsPlugin = require('assets-webpack-plugin');
+const CopyPlugin = require("copy-webpack-plugin");
 
 const isProd = process.env.NODE_ENV === 'production';
 
@@ -20,6 +21,11 @@ module.exports = {
             filename: isProd ? 'css/[name].[contenthash].css' : 'css/[name].css',
         }),
         new AssetsPlugin(),
+        new CopyPlugin({
+            patterns: [
+                path.resolve(__dirname, "static"),
+            ],
+          }),
     ],
     resolve: {
         extensions: ['.js', '.jsx', '.json', '.ts', '.tsx', '.css']

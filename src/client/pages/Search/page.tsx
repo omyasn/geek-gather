@@ -10,6 +10,7 @@ import { EventType } from "../../../common/commonTypes";
 
 import { makeSubsets, getFilteredFromSubsets } from './filtersLogic';
 import Text from '../../components/CoreComponents/Text';
+import { formatToHumanDate } from '../../../common/helpers'
 
 import {
     addOptionWithHistory,
@@ -122,6 +123,7 @@ const SearchPage: React.FC<IPageProps> = ({
                     filterOptions={filtersVariants[optionsFN.BEGINDATE]}
                     filterValues={optionsFiltersValues[optionsFN.BEGINDATE]}
                     filterActiveOptions={activeFiltersValues[optionsFN.BEGINDATE]}
+                    format={formatToHumanDate}
                     onOptionChange={onOptionsFilterChange(optionsFN.BEGINDATE, dispatch)}
                 />
 

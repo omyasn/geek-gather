@@ -3,6 +3,7 @@ import { EventType } from '../../../common/commonTypes';
 import cn from 'classnames';
 import styles from './styles.scss'
 import Text from '../../components/CoreComponents/Text';
+import Link from '../../components/CoreComponents/Link';
 import {
     faCalendarDay,
     faPeopleGroup,
@@ -15,6 +16,7 @@ import {
     faUserNinja,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { formatToHumanDate } from '../../../common/helpers'
 
 
 const SearchCard: React.FC<EventType> = ({
@@ -32,7 +34,7 @@ const SearchCard: React.FC<EventType> = ({
     allowedOwnBalls,
 }) => {
     return (
-        <div className={styles.wrapper}>
+        <a href={`/event/${id}`} className={styles.wrapper}>
             <div className={styles.header}>
                 <Text className={styles.spacer} header textSize="xs">{title}</Text>
                 <Text textSize="s">{`(${id})`}</Text>
@@ -40,7 +42,7 @@ const SearchCard: React.FC<EventType> = ({
             <div className={styles.left}>
                 <Text block>
                     <FontAwesomeIcon className={styles.spacer} icon={faCalendarDay} />
-                    {beginDate}
+                    {formatToHumanDate(beginDate)}
                 </Text>
                 <Text block>
                     <FontAwesomeIcon className={styles.spacer} icon={faLocationDot} />
@@ -73,7 +75,7 @@ const SearchCard: React.FC<EventType> = ({
                     {!!hasQuests && <FontAwesomeIcon icon={faClipboardQuestion} title="Has quests" className={styles.icon} />}
                 </div>
             </div>
-        </div>
+        </a>
     );
 };
 

@@ -45,6 +45,7 @@
     "@types/webpack-node-externals": "^2.5.1",
     "assets-webpack-plugin": "^7.1.0",
     "babel-loader": "^8.2.2",
+    "copy-webpack-plugin": "^9.1.0",
     "cross-env": "^7.0.3",
     "css-loader": "^5.2.3",
     "css-minimizer-webpack-plugin": "^2.0.0",

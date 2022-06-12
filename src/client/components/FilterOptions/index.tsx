@@ -9,6 +9,7 @@ export interface FilterOptionsProps<T> {
     filterActiveOptions?: T[];
     filterValues: T[];
     className?: string;
+    format?: (value: T) => T
     onOptionChange: (currentItem: T) => (e: React.SyntheticEvent) => void;
 }
 
@@ -19,6 +20,7 @@ const FilterOptions: React.FC<FilterOptionsProps<string>> = ({
     filterValues,
     className,
     onOptionChange,
+    format = (s) => s,
 }) => {
     const isDisabled = (item: string) => !((filterActiveOptions && filterActiveOptions.includes(item)) || filterActiveOptions === null)
     return (
@@ -40,7 +42,7 @@ const FilterOptions: React.FC<FilterOptionsProps<string>> = ({
                         value={item}
                         onChange={onOptionChange(item)}
                     />
-                    {item}
+                    {format(item)}
                 </Text>
             ))}
         </div>
