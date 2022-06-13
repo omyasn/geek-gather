@@ -26,22 +26,22 @@ interface Props {
 }
 
 const defaultNavigation: NavItem[] = [{
-        title: 'Поиск',
+        title: 'Search',
         name: 'search',
         icon: faSearch,
         url: '/search',
     }, {
-        title: 'Календарь',
+        title: 'Calendar',
         name: 'calendar',
         icon: faCalendarDay,
         url: '/calendar',
     }, {
-        title: 'Основы',
+        title: 'Basics',
         name: 'basics',
         icon: faBaseballBall,
         url: '/basics',
     }, {
-        title: 'О нас',
+        title: 'About',
         name: 'about',
         icon: faFingerprint,
         url: '/about',

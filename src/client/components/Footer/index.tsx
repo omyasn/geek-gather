@@ -10,19 +10,19 @@ interface Props {
 }
 
 const listItems = [{
-        title: 'Поиск',
+        title: 'Search',
         name: 'search',
         url: '/search',
     }, {
-        title: 'Календарь событий',
+        title: 'Event calendar',
         name: 'calendar',
         url: '/calendar',
     }, {
-        title: 'Общая информация',
+        title: 'Basic information',
         name: 'basics',
         url: '/basics',
     }, {
-        title: 'О нас',
+        title: 'About',
         name: 'about',
         url: '/about',
     }
