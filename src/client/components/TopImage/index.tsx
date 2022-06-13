@@ -10,6 +10,7 @@ interface Props {
     title: string;
     subTitle?: string;
     className?: string;
+    light?: boolean; 
 }
 
 const TopImage: React.FC<Props> = ({
@@ -17,9 +18,10 @@ const TopImage: React.FC<Props> = ({
     image,
     title,
     subTitle,
+    light,
     ...rest
 }) => (
-    <div className={cn(styles.wrapper, className)} {...rest}>
+    <div className={cn(styles.wrapper, className, {[styles.light]: light})} {...rest}>
         <img src={image} className={styles.image} />
         <div className={styles.content}>
             <Text header block textSize='xl'>{title}</Text>

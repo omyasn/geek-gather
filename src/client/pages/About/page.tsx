@@ -16,8 +16,8 @@ const AboutPage: React.FC = ({
     <div className={styles.wrapper}>
         <TopImage
             image={bg}
-            title='О нас'
-            subTitle='Кто мы и какая наша история, а также контакты'
+            title='About us'
+            subTitle='Introduction and contacts'
             className={styles.topImage}
         />
 
@@ -40,7 +40,7 @@ const AboutPage: React.FC = ({
         </div>
 
         <Text block className={styles.story}>
-            Наша история <p>создания</p> сайта &#176;
+            Our story of <p>project</p> creation &#176;
         </Text>
     </div>
 );

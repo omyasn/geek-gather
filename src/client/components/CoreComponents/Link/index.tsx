@@ -1,10 +1,10 @@
 import * as React from 'react';
 import cn from 'classnames';
 
-import Text from '../Text';
+import Text, { TextProps } from '../Text';
 import styles from './styles.scss';
 
-interface Props extends React.HTMLProps<HTMLAnchorElement> {
+interface Props extends TextProps {
     href: string;
     className?: string;
 }

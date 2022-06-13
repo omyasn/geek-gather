@@ -1,9 +1,7 @@
 import * as React from 'react';
 import { EventType } from '../../../common/commonTypes';
-import cn from 'classnames';
 import styles from './styles.scss'
 import Text from '../../components/CoreComponents/Text';
-import Link from '../../components/CoreComponents/Link';
 import {
     faCalendarDay,
     faPeopleGroup,

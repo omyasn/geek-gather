@@ -2,8 +2,7 @@ import * as React from 'react';
 import cn from 'classnames';
 
 import styles from './styles.scss';
-
-interface Props extends React.HTMLProps<HTMLElement> {
+export interface TextProps extends React.HTMLProps<HTMLElement> {
     header?: boolean;
     block?: boolean;
     textSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
@@ -14,7 +13,7 @@ interface Props extends React.HTMLProps<HTMLElement> {
     className?: string;
 }
 
-const Text: React.FC<Props> = ({
+const Text: React.FC<TextProps> = ({
     header,
     block,
     bold,

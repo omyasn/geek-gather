@@ -1,5 +1,8 @@
 .pageWrapper {
     margin-bottom: 100px;
+    width: 70%;
+    min-width: 800px;
+    margin: 0 auto;
     display: grid;
     grid-template-columns: minmax(270px, 26%) auto;
     grid-template-areas:
