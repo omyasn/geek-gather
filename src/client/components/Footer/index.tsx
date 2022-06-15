@@ -41,7 +41,7 @@ const Footer: React.FC<Props> = ({ className }) => (
                 </Link>
             ))}
         </div>
-        <div className={styles.copy}>&#169; Все права защищены</div>
+        <div className={styles.copy}>&#169; All rights reserved</div>
     </footer>
 );
 

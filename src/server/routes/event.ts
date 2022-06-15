@@ -5,16 +5,16 @@ import severRenderAndSend from '../severRenderAndSend';
 import { IPageParams } from '../html/preparePage';
 import EventPage, { IPageProps } from '../../client/pages/Event/page';
 import { mockDetailsOfEvent, mockLocationInfo } from '../../client/mockdata';
-import { IHananaDetails, ILocation } from '../../common/commonTypes';
+import { EventDetails, ILocation } from '../../common/commonTypes';
 
 interface IBackendDetails {
-    id: number;
+    id: string;
     url: string;
-    resourceContent: IHananaDetails;
+    resourceContent: EventDetails;
 }
 
 interface IBackendLocation {
-    id: number;
+    id: string;
     url: string;
     resourceContent: ILocation;
 }
@@ -26,7 +26,7 @@ interface IBackendLocation {
     const pageParams: IPageParams = {
         initialData,
         title: 'Event',
-        description: 'My event',
+        description: 'This is event',
         pageName: 'event',
         PageComponent: EventPage,
     };
@@ -34,7 +34,7 @@ interface IBackendLocation {
 };
 
 const getBackendData = (id:string):IPageProps => {
-    // TODO сейчас запросы последовательны и ждут всей инфы для загрузки страницы. Информацию о локации можно подргужать параллельно
+    // TODO make requests concurrent
 
   // const mainInfo = await fetch(`http://192.168.1.70:8010/actions/${id}`);
   // const mainInfoJson = await mainInfo.json();
@@ -42,7 +42,7 @@ const getBackendData = (id:string):IPageProps => {
   // const location = await fetch(`http://192.168.1.70:8010/locations/${mainInfoJson.resourceContent.locationId}`);
   // const locationJson = await location.json();
 
-    const details: IBackendDetails = mockDetailsOfEvent;
+    const details: IBackendDetails = mockDetailsOfEvent.find(event => event.id === id);
     const location: IBackendLocation = mockLocationInfo;
 
     return {

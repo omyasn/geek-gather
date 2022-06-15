@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { IHananaDetails, ILocation } from '../../../common/commonTypes';
+import { EventDetails, ILocation } from '../../../common/commonTypes';
+import styles from './styles.scss'
 
 export interface IPageProps {
-    details: IHananaDetails;
+    details: EventDetails;
     location: ILocation;
 }
 
@@ -10,7 +11,7 @@ const EventPage: React.FC<IPageProps> = ({
     details,
     location,
 }) => (
-    <div>
+    <div className={styles.wrapper}>
         <h1>{details.title}</h1>
 
         <div>

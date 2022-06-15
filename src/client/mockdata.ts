@@ -1,182 +1,274 @@
-export const listOfEvents =[
-	{
-		id: 0,
-		resourceContent: {
-			title: 'БПМ',
-			beginDate: '22.06.2021',
-			capacity: 3000,
-			minPrice: 700,
-			host: 'АПГ',
-			location: 'Иркутск',
-			color: 'red', // TODO fake info, delete
-		},
-		
-	},
-	{
-		id: 1,
-		resourceContent: {
-			title: 'Красная капелла: Ответный удар',
-			beginDate: '07.06.2018',
-			capacity: 200,
-			minPrice: 1000,
-			host: 'АПГ',
-			location: 'Москва',
-			color: 'red',
-		},
-		
-	},
-	{
-		id: 2,
-		resourceContent: {
-			title: 'Большие ходоки',
-			beginDate: '10.11.2016',
-			capacity: 200,
-			minPrice: 2000,
-			host: 'Loonarbaboon',
-			location: 'Иркутск',
-			color: 'red',
-		},
-		
-	},
-	{
-		id: 3,
-		resourceContent: {
-			title: 'Мир торгов',
-			beginDate: '14.09.2018',
-			capacity: 100,
-			minPrice: 600,
-			host: 'Loonarbaboon',
-			location: 'Москва',
-			color: 'red',
-		},
-		
-	},
-	{
-		id: 4,
-		resourceContent: {
-			title: 'Титюли',
-			beginDate: '31.01.2020',
-			capacity: 100,
-			minPrice: 550,
-			host: 'Loonarbaboon',
-			location: 'Иркутск',
-			color: 'blue',
-		},
-		
-	},
-		{
-		id: 5,
-		resourceContent: {
-			title: 'Roar roar',
-			beginDate: '31.01.2020',
-			capacity: 200,
-			minPrice: 650,
-			host: 'Toptop',
-			location: 'Иркутск',
-			color: 'blue',
-		},
-		
-	},
-		{
-		id: 6,
-		resourceContent: {
-			title: 'Solo',
-			beginDate: '31.01.2020',
-			capacity: 100,
-			minPrice: 550,
-			host: 'Toptop',
-			location: 'Иркутск',
-			color: 'yellow',
-		},
-		
-	},
-		{
-		id: 7,
-		resourceContent: {
-			title: 'rip',
-			beginDate: '14.09.2018',
-			capacity: 2000,
-			minPrice: 3000,
-			host: 'III',
-			location: 'Псков',
-			color: 'blue',
-		},
-		
-	},
-		{
-		id: 8,
-		resourceContent: {
-			title: 'Атом',
-			beginDate: '10.11.2016',
-			capacity: 600,
-			minPrice: 600,
-			host: 'Toptop',
-			location: 'Иркутск',
-			color: 'blue',
-		},
-		
-	},
+import { EventDetails, ILocation } from '../common/commonTypes';
 
+interface IBackendDetails {
+    id: string;
+    url: string;
+    resourceContent: EventDetails;
+}
+
+export const mockDetailsOfEvent: IBackendDetails[] = [{
+		id: 'evnt1',
+		url: '/events/evnt1',
+		resourceContent: {
+			title: "BPM: Brigades",
+			beginDate: "2022-05-23",
+	
+			capacity: 2000,
+			parties: "2",
+			minPrice: 2000,
+	
+			isPublic: true,
+			hasQuests: true,
+			allowedOwnBalls: false,
+			locationId: "Sanatorium 'Green Town'",
+			ownerId: "APG",
+
+			endDate: "2022-05-24",
+			partiesInfo: "APG",
+			priceInfo: "APG",
+			gameRules: "APG",
+			story: "APG",
+			time: '9:00'
+		},
+	},{
+		id: "evnt2",
+		url: '/events/evnt2',
+		resourceContent: {
+		  title: "Mercenaries2: Operation Flow",
+		  beginDate: "2022-05-29",
+	
+		  capacity: 300,
+		  parties: "1+1 vs 1+1",
+		  minPrice: 1500,
+	
+		  isPublic: true,
+		  hasQuests: true,
+		  allowedOwnBalls: true,
+		  locationId: "Polygon 'Star'",
+		  ownerId: "Restricted Area",
+
+		  endDate: "2022-05-29",
+		  partiesInfo: "APG",
+		  priceInfo: "APG",
+		  gameRules: "APG",
+		  story: "APG",
+		  time: '10:00'
+		},
+	  },
+	  {
+		id: "evnt3",
+		url: '/events/evnt3',
+		resourceContent: {
+		  title: "VETERANS: Banner of Victory",
+		  beginDate: "2022-06-19",
+		  capacity: 1000,
+		  parties: "2",
+		  minPrice: 900,
+	
+		  isPublic: true,
+		  hasQuests: false,
+		  allowedOwnBalls: true,
+		  locationId: "Polygon Noginsk-2",
+		  ownerId: "Real Games",
+
+		  endDate: "2022-06-20",
+		  partiesInfo: "APG",
+		  priceInfo: "APG",
+		  gameRules: "APG",
+		  story: "APG",
+		  time: '9:00'
+		},
+	  },
+	  {
+		id: "evnt4",
+		url: '/events/evnt4',
+		resourceContent: {
+		  title: "Afganistan",
+		  beginDate: "2022-07-01",
+	
+		  capacity: 400,
+		  parties: "2",
+		  minPrice: 800,
+	
+		  isPublic: true,
+		  hasQuests: false,
+		  allowedOwnBalls: true,
+		  locationId: "Polygon 'Star'",
+		  ownerId: "Restricted Area",
+
+		  endDate: "2022-07-01",
+		  partiesInfo: "APG",
+		  priceInfo: "APG",
+		  gameRules: "APG",
+		  story: "APG",
+		  time: '10:00'
+		},
+	  },
+	  {
+		id: "evnt5",
+		url: '/events/evnt5',
+		resourceContent: {
+		  title: "FALLOUT XIII",
+		  beginDate: "2022-07-21",
+	
+		  capacity: 600,
+		  parties: "3",
+		  minPrice: 1000,
+	
+		  isPublic: true,
+		  hasQuests: false,
+		  allowedOwnBalls: true,
+		  locationId: "Polygon 'RSB'",
+
+		  ownerId: "Restricted Area",
+
+		  endDate: "2022-07-21",
+		  partiesInfo: "APG",
+		  priceInfo: "APG",
+		  gameRules: "APG",
+		  story: "APG",
+		  time: '11:00'
+
+		},
+	  },
+	  {
+		id: "evnt6",
+		url: '/events/evnt6',
+		resourceContent: {
+		  title: "Stories of an Old Man",
+		  beginDate: "2022-07-30",
+	
+		  capacity: 300,
+		  parties: "2",
+		  minPrice: 1000,
+	
+		  isPublic: true,
+		  hasQuests: true,
+		  allowedOwnBalls: false,
+		  locationId: "Raining Forest Club",
+
+		  ownerId: "Legendarium",
+
+		  endDate: "2022-07-30",
+		  partiesInfo: "APG",
+		  priceInfo: "APG",
+		  gameRules: "APG",
+		  story: "APG",
+		  time: '12:00'
+
+		},
+	  },
+	  {
+		id: "evnt7",
+		url: '/events/evnt7',
+		resourceContent: {
+		  title: "Weekend Game",
+		  beginDate: "2022-06-30",
+	
+		  capacity: 20,
+		  parties: "2",
+		  minPrice: 600,
+	
+		  isPublic: false,
+		  hasQuests: false,
+		  allowedOwnBalls: false,
+		  locationId: "Bunker Club",
+
+		  ownerId: "Andrew",
+
+		  endDate: "2022-06-30",
+		  partiesInfo: "APG",
+		  priceInfo: "APG",
+		  gameRules: "APG",
+		  story: "APG",
+		  time: '13:00'
+
+		},
+	  },
+	  {
+		id: "evnt8",
+		url: '/events/evnt8',
+		resourceContent: {
+		  title: "Training",
+		  beginDate: "2022-07-07",
+		  capacity: 20,
+		  parties: "2",
+		  minPrice: 500,
+		  isPublic: false,
+		  hasQuests: false,
+		  allowedOwnBalls: false,
+		  locationId: "Bunker Club",
+
+		  ownerId: "Deadlyfang",
+
+		  endDate: "2022-07-07",
+		  partiesInfo: "APG",
+		  priceInfo: "APG",
+		  gameRules: "APG",
+		  story: "APG",
+		  time: '19:00'
+
+		},
+	  },
+	  {
+		id: "evnt9",
+		url: '/events/evnt9',
+		resourceContent: {
+		  title: "Big Bears War",
+		  beginDate: "2022-08-07",
+		  capacity: 400,
+		  parties: "2",
+		  minPrice: 1200,
+	
+		  isPublic: true,
+		  hasQuests: true,
+		  allowedOwnBalls: true,
+		  locationId: "Raining Forest Club",
+
+		  ownerId: "It Is What It Is",
+
+		  endDate: "2022-08-07",
+		  partiesInfo: "APG",
+		  priceInfo: "APG",
+		  gameRules: "APG",
+		  story: "APG",
+		  time: '11:00'
+
+		},
+	  },
+	  {
+		id: "evnt10",
+		url: '/events/evnt10',
+		resourceContent: {
+		  title: "Game for all",
+		  beginDate: "2022-08-10",
+	
+		  locationId: "Centrum Club",
+
+		  ownerId: "Peter",
+
+	
+		  capacity: 30,
+		  parties: "2",
+		  minPrice: 550,
+	
+		  isPublic: false,
+		  hasQuests: false,
+		  allowedOwnBalls: false,
+
+		  endDate: "2022-08-10",
+		  partiesInfo: "APG",
+		  priceInfo: "APG",
+		  gameRules: "APG",
+		  story: "APG",
+		  time: '15:00'
+		},
+	  },
 ];
 
-export const mockDetailsOfEvent = {
-	id: 0,
-	url: '/events/0',
-	resourceContent: {
-		id: 0,
-		title: 'БПМ - Большие Пейнтбольные Маневры',
-		active: true,
-		beginDate: '2021-07-21T10:00:00Z',
-		endDate: '2021-07-21T17:30:00Z',
-		capacity: 3000,
-		gameRules: `Стороны
-
-		"Синие" - ханский Хорезм и Черный Абдулла со своей бандой басмачей, белогвардейцев и вообще нелюбителей советской власти. В роли Абдуллы - Александр "Клюква" Клюквин.
-		
-		"Красные" - 1ый Закаспийский интернациональный пролетарский полк им. товарища Августа Бебеля и его бойцы, а также сочувствующие. В роли Сухова - Павел m8did Иванов.
-		
-		Сторонами в игре будут руководить штабы, состоящие из главкомов, командиров подразделений, связистов и т.д. Штаб получает разнообразные задачи-вводные и направляет игроков на их выполнение. Для упрощения руководства в игре опытные игроки назначаются командирами отрядов и групп и получают специальные знаки различия. Одиночные игроки могут отправиться на сборный пункт одиночек при штабе, где специально назначенные командиры поведут их в бой. Но самый верный способ - примкнуть к отряду или команде и действовать рядом с более опытными игрокми. Большинство команд заинтересовано в новых рекрутах и охотно принимают новичков под крыло.
-		
-		В ходе игры у вас будет возможность ввязаться в перестрелки, в которых участвуют сотни игроков, совершить рейды по тылам, побороться с танками или выполнить другие важные задания штаба.
-		Если БПМ-2020 – ваша первая крупная игра, прочитайте внимательно информацию на сайте, при необходимости – задайте вопросы на форуме (ссылки на вкладке "Информация"). Участие в БПМ
-
-		Принять участие в Больших Пейнтбольных Маневрах™ может любой желающий (рекомендованный возраст - с 12 лет), достаточно подать и оплатить заявку через онлайн-систему или в любом пункте приема заявок, список которых публикуется на сайте игры. В последние годы в Маневрах принимает участие от 2000 человек. Участники будут зачислены в ряды одной из сторон, в каждой будут развернуты несколько отрядов. Организаторы гарантируют выполенение пожеланий по сторонам до 16 апреля, после 16 апреля пожелания не принимаются. 
-		Стоимость участия зависит от даты подачи и оплаты заявки и колеблется от 1250 до 2800 рублей, с 17 февраля действуют скидки для групп, а также по карточкам ЧПОК и ЗЗ. В стоимость участия включен горячий обед, памятные сувениры игры, заправка воздухом и страховка от несчастного случая. Прокат снаряжения и шары оплачиваются отдельно.`,
-		
-		
-		
-		info: `В этом году Большие Маневры посвящены 50-летию создания культового фильма "Белое солнце пустыни". По нашей поросшей лесом пустыне идет домой красноармеец Федор Сухов с друзьями - Саидом, комэском Рахимовым, Петрухой, ему пытается помешать Черный Абдулла и его нукеры - Махмуд, поручик Семен, Аристарх. А еще гарем, с которым надо что-то делать, музейщик Лебедев с историчесими ценностями, таможенник Верещагин и неработающая таможня... Короче, Восток - дело тонкое!
-		Каждая сторона будет иметь свои отдельные цели и задания, а также свою штабную зону. Кто сумеет достичь лучших результатов - красная Хивинская республика или синий Хорезм - зависит только от тебя! 
-		Засады, налеты и поиски, сбор налогов, товаров, динамита и нефти, а также употребление их в дело, соревнования стрелков и подрывников, откапывание и закапывание Саида - будет все и еще немножечко. Победа зависит от выполненных заданий, а не от числа фрагов — да и кто их сосчитает на громадном поле с сотнями игроков? Играй, придумывай, пробуй новое, выполняй приказы штаба  — БПМ дает возможность попробовать любой стиль игры!
-		Что такое БПМ™? Это 
-
-— ежегодный массовый пейнтбольный фестиваль, крупнейшая сценарная пейнтбольная игра в Европе!
-— 20+ лет непрерывной истории, начиная с самых первых Маневров 1998 года «Южный Фронт»!
-— свыше 2000 участников со всей России и зарубежных гостей, рекорд — 3500 игроков!
-— до 80 гектар игровой территории с лесом, перелесками, зданиями, дорогами;
-— свыше 10 тонн шаров выстреливается на каждых БПМ!
-— 7 часов игры нон-стоп, десятки миссий, индивидуальных и командных заданий!
-— генералы, штабы, командиры, монахи, медики, отряды и банды, тайники и артефакты!
-— «тяжелое» пейнтбольное вооружение — танки, броневики, минометы, пулеметы и прочее!
-БПМ проходят ежегодно в мае в ближнем Подмосковье, игра доступна всем, рекомендуемый возраст — с 12 лет. Около 20% игроков — женщины.
-Большие Пейнтбольные Маневры™ - это имя собственное, зарегистрированный торговый знак. Организаторы Маневров -пейнтбольный клуб Гвардия и объединение АПГ.`,
-		
-
-
-		shortInfo:'Главное пейнтбольное событие года - Большие Пейнтбольные Маневры™. Регистрация начинается с 15:00 в пятницу 4 сентября. Церемония награждения и концерт – по окончании игры, примерно в 18:00.',
-		locationId: 1,
-		  
-		// этих данных нет в бд
-		host: 'АПГ',
-		priceInfo: 'Цена заявки в день игры: 2800 руб./nЦена в период с 16.01.2020 по 18.01.2020: 1250 руб./nЦена в период с 19.01.2020 по 16.02.2020: 1600 руб./nЦена в период с 17.02.2020 по 05.07.2020: 1900 руб./nЦена в период с 06.07.2020 по 05.08.2020: 2100 руб./nЦена в период с 06.08.2020 по 03.09.2020: 2300 руб.',
-		minPrice: 2300,
-
-	},
-};
-
 export const mockLocationInfo = {
-	id: 1,
-	url: '/location/1',
+	id: '1',
+	url: '/locationId/1',
 	resourceContent: {
 		id: 1,
 		name: 'Зеленый городок',

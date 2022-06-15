@@ -25,19 +25,28 @@ export interface BackendEvent {
   resourceContent: EventProps;
 }
 
-export interface IHananaDetails {
-  id: number;
+export interface EventDetails {
   title: string;
-  active: boolean;
-  beginDate: string; // в коде надо хранить датой
+  beginDate: string;
   endDate: string;
+
   capacity: number;
-  gameRules: string;
-  shortInfo: string;
-  locationId: number;
-  host: string;
-  priceInfo: string;
+  parties: string;
+  partiesInfo: string;
+
   minPrice: number;
+  priceInfo: string;
+
+  isPublic?: boolean;
+  hasQuests?: boolean;
+  allowedOwnBalls?: boolean;
+
+  ownerId: string;
+  locationId: string;
+
+  gameRules: string;
+  story: string;
+  time: string;
 }
 
 export interface ILocation {

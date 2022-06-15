@@ -3,7 +3,10 @@ import cn from 'classnames';
 import Text from '../../../components/CoreComponents/Text';
 import styles from './styles.scss';
 import {
-    faCalendarDay,
+    faPeoplePulling,
+    faMagnifyingGlassArrowRight,
+    faCircleInfo,
+    faArrowsDownToPeople,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
@@ -15,21 +18,21 @@ interface Props {
 }
 
 const advantages = [{
-    icon: faCalendarDay,
+    icon: faMagnifyingGlassArrowRight,
     title: 'Find interesting events',
-    text: 'Events all over the worls. Search with good filters.'
+    text: 'Search throught events all over the world with convenient and rich filters.'
 }, {
-    icon: faCalendarDay,
-    title: 'Find interesting events',
-    text: 'Events all over the worls. Search with good filters.'
+    icon: faCircleInfo,
+    title: 'Read full information',
+    text: 'We gather information from various sources, combine it and display in convenient format.'
 },{
-    icon: faCalendarDay,
-    title: 'Find interesting events',
-    text: 'Events all over the worls. Search with good filters.'
+    icon: faArrowsDownToPeople,
+    title: 'We support you',
+    text: `Don't understand something? Don't want to go to your first game alone? Contact us, and we can solve it together!`
 },{
-    icon: faCalendarDay,
-    title: 'Find interesting events',
-    text: 'Events all over the worls. Search with good filters.'
+    icon: faPeoplePulling,
+    title: 'Organize your own event',
+    text: 'Create your event and other people will join.'
 }]
 
 const AdvantageCard: React.FC<Props> = ({
@@ -40,7 +43,7 @@ const AdvantageCard: React.FC<Props> = ({
     <div className={cn(styles.cardWrapper)}>
         <FontAwesomeIcon className={styles.icon} icon={icon} />
         <div className={styles.text}>
-            <Text block header>{title}</Text>
+            <Text block header textSize='s'>{title}</Text>
             <Text block>{text}</Text>
         </div>
     </div>
