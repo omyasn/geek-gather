@@ -3,8 +3,6 @@ import { ParsedQs } from "qs";
 import severRenderAndSend from "../severRenderAndSend";
 import { IPageParams } from "../html/preparePage";
 import { BackendEvent, EventType } from "../../common/commonTypes";
-
-// TODO перенести файлы использующиеся на сервере из client в папку common
 import SearchPage, {
   IPageProps,
   FiltersVariants,

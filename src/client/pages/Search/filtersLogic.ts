@@ -58,7 +58,6 @@ export const getFilteredFromSubsets = (events: EventType[], filtersValues: Filte
     // ids of filtred elements
     const filtredEventsIDs = intersection(Array.from(allSetsMap.values()));
 
-    // доступные значения пассивных фильтров
     const passiveAvailability = passiveOptionsFiltersAvailability(
         filtredEventsIDs,
         eventsMap,
@@ -170,7 +169,7 @@ function activeOptionsFiltersAvability(activeNames: optionsFN[], allSetsMap: Map
         return {};
     }
     
-    // 1 option, 0 range (function call onle for option > 1)
+    // 1 option, 0 range (function call only for option > 1)
     if (allSetsMap.size === 1) {
         const filterAvailability: FiltersAvailability = {};
         filterAvailability[activeNames[0]] = null;

@@ -4,7 +4,7 @@ import { RequestHandler  } from 'express';
 import severRenderAndSend from '../severRenderAndSend';
 import { IPageParams } from '../html/preparePage';
 import EventPage, { IPageProps } from '../../client/pages/Event/page';
-import { mockDetailsOfEvent, mockLocationInfo } from '../../client/mockdata';
+import { mockDetailsOfEvent, mockLocationInfo } from '../../mockData/mockdata';
 import { EventDetails, ILocation } from '../../common/commonTypes';
 
 interface IBackendDetails {
