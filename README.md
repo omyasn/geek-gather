@@ -1,5 +1,10 @@
 // TODO write a readme
 
 # How to start 
+    npm i
     npm run dev
-Удалит папку с билдами, запустит билд сервера и клиента с вотчером и запустит сервер через nodemon (все команды выполняются параллельно).
+
+
+For production
+```
+npm run dev
